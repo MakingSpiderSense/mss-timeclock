@@ -14,10 +14,15 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, app, props, plugin }) {
-        return createApp({ render: () => h(app, props) })
+        const myApp = createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
-            .mount(el);
+
+        // Add global properties
+        myApp.config.globalProperties.$log = console.log;
+        // Mount el and return myApp
+        myApp.mount(el);
+        return myApp
     },
 });
 
