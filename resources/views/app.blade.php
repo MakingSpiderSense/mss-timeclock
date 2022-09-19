@@ -9,6 +9,9 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{ url('img/logo-timeclock.png') }}">
+
         <!-- Scripts -->
         @routes
         @vite('resources/js/app.js')
