@@ -13,10 +13,34 @@ const showingNavigationDropdown = ref(false);
 
 <!-- Template -->
 <template>
-    <div>
+    <div class="main-layout">
+        <!-- Header/Sidebar -->
+        <header>
+            <h2>Welcome Ben</h2>
+            <nav>
+                <ul>
+                    <li><a href="#">London</a></li>
+                    <li><a href="#">Paris</a></li>
+                    <li><a href="#">Tokyo</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section>
+            <slot />
+        </section>
     </div>
 </template>
 
 <!-- Styling -->
 <style lang="scss" scoped>
+@import "../../sass/app.scss";
+.main-layout {
+    display: flex;
+    background-color: $light-gray;
+    header {
+        flex-basis: 300px;
+        background-color: $white;
+        min-height: 100vh;
+    }
+}
 </style>
