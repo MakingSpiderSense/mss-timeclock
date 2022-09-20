@@ -16,6 +16,12 @@ const showingNavigationDropdown = ref(false);
     <div class="main-layout">
         <!-- Header/Sidebar -->
         <header>
+            <!-- Logo -->
+            <div class="ml-logo">
+                <Link :href="route('dashboard')">
+                    <ApplicationLogo />
+                </Link>
+            </div>
             <h2>Welcome Ben</h2>
             <nav>
                 <ul>
@@ -37,10 +43,19 @@ const showingNavigationDropdown = ref(false);
 .main-layout {
     display: flex;
     background-color: $light-gray;
+    // Header
     header {
         flex-basis: 300px;
         background-color: $white;
         min-height: 100vh;
+        padding: 25px;
+        // Logo
+        .ml-logo {
+            width: 100%;
+            max-width: 75px;
+            margin: 0 auto;
+            margin-bottom: 25px;
+        }
     }
 }
 </style>
