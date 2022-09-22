@@ -28,6 +28,11 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Add route to 'placeholder' which simply returns the string 'Placeholder page'. 
+Route::get('/placeholder', function () {
+    return 'Placeholder page';
+})->name('placeholder');
+
 require __DIR__.'/auth.php';
 
 // Clear cache without CLI
