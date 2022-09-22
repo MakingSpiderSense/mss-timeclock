@@ -1,6 +1,8 @@
 <!-- Template -->
 <template>
     <div :class="`flash-msg bg-${msgColor}-100 border border-${msgColor}-400 text-${msgColor}-700 px-4 py-3 mt-6 rounded relative`" role="alert">
+        <!-- Preload tailwind classes -->
+        <div style="display: none;" class="bg-teal-100 border-teal-400 text-teal-700 text-teal-500 bg-red-100 border-red-400 text-red-700 text-red-500 bg-yellow-100 border-yellow-400 text-yellow-700 text-yellow-500 bg-blue-100 border-blue-400 text-blue-700 text-blue-500"></div>
         <!-- Message -->
         <div class="block sm:inline">
             <slot>Flash message not found.</slot>
