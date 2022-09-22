@@ -102,7 +102,13 @@ const showingNavigationDropdown = ref(false);
                 </ul>
             </nav>
         </header>
+        <!-- Main Content -->
         <section>
+            <!-- Flash Message -->
+            <div v-if="$page.props.flash.message" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <FlashMsg :msgType="$page.props.flash.message[0]">{{ $page.props.flash.message[1] }}</FlashMsg>
+            </div>
+            <!-- Content -->
             <slot />
         </section>
     </div>
