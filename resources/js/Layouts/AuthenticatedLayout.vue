@@ -25,8 +25,7 @@ const showingNavigationDropdown = ref(false);
             <!-- Profile -->
             <div class="ml-profile">
                 <!-- Image -->
-                <div class="mlp-image">
-                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" alt="Profile Image">
+                <div class="mlp-image" style="background-image: url('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')">
                 </div>
                 <!-- Dropdown -->
                 <div class="mlp-dropdown">
@@ -138,19 +137,15 @@ const showingNavigationDropdown = ref(false);
         .ml-profile {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-evenly;
             margin-bottom: 100px;
             // Image
             .mlp-image {
-                width: 50px;
-                height: 50px;
+                min-width: 70px;
+                min-height: 70px;
                 border-radius: 50%;
-                overflow: hidden;
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
+                background-size: cover;
+                background-position: center;
             }
         }
         // Main Navigation
