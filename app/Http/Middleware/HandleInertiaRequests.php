@@ -49,6 +49,8 @@ class HandleInertiaRequests extends Middleware
             'app' => [
                 'name' => config('app.name'),
             ],
+            'laravelVersion' => app()->version(),
+            'phpVersion' => phpversion(),
         ]);
     }
 }
