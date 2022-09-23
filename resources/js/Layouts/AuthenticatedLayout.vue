@@ -6,7 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import FlashMsg from '@/Components/FlashMsg.vue';
-import { Link } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -19,7 +19,16 @@ const showingNavigationDropdown = ref(false);
             <!-- Logo -->
             <div class="ml-logo">
                 <Link :href="route('dashboard')">
-                    <ApplicationLogo />
+                    <div class="logo-text">
+                        <!-- Image -->
+                        <div class="lt-img">
+                            <ApplicationLogo />
+                        </div>
+                        <!-- Text -->
+                        <div class="lt-text">
+                            <h1>{{ $page.props.app.name }}</h1>
+                        </div>
+                    </div>
                 </Link>
             </div>
             <!-- Profile -->
@@ -129,9 +138,19 @@ const showingNavigationDropdown = ref(false);
         // Logo
         .ml-logo {
             width: 100%;
-            max-width: 75px;
             margin: 0 auto;
             margin-bottom: 75px;
+            .logo-text {
+                .lt-img {
+                    max-width: 60px;
+                }
+                .lt-text {
+                    h1 {
+                        text-align: left;
+                        font-size: 1.2rem;
+                    }
+                }
+            }
         }
         // Profile
         .ml-profile {

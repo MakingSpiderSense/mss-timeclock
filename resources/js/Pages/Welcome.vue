@@ -48,39 +48,5 @@ defineProps({
 
 <!-- Styling -->
 <style lang="scss" scoped>
-    @import "../../sass/app.scss";
-    .logo-text {
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        text-align: center;
-        .lt-img {
-            width: 100%;
-            max-width: 100px;
-        }
-        .lt-text {
-            h1 {
-                color: $black;
-                font-size: 2.5rem;
-                font-weight: 700;
-                margin: 0;
-                margin-left: 1rem;
-            }
-        }
-    }
-    @media (max-width: 500px) {
-        .logo-text {
-            flex-direction: column;
-            .lt-img {
-                max-width: 60px;
-                margin-bottom: 5px;
-            }
-            .lt-text {
-                h1 {
-                    font-size: 1.5rem;
-                    margin-left: 0;
-                }
-            }
-        }
-    }
+@import "../../sass/app.scss";
 </style>
