@@ -16,21 +16,6 @@ const showingNavigationDropdown = ref(false);
     <div class="main-layout">
         <!-- Header/Sidebar -->
         <header>
-            <!-- Logo -->
-            <div class="ml-logo">
-                <Link :href="route('dashboard')">
-                    <div class="logo-text">
-                        <!-- Image -->
-                        <div class="lt-img">
-                            <ApplicationLogo />
-                        </div>
-                        <!-- Text -->
-                        <div class="lt-text">
-                            <h1>{{ $page.props.app.name }}</h1>
-                        </div>
-                    </div>
-                </Link>
-            </div>
             <!-- Profile -->
             <div class="ml-profile">
                 <!-- Image -->
@@ -109,6 +94,28 @@ const showingNavigationDropdown = ref(false);
                     </li>
                 </ul>
             </nav>
+            <!-- Header - Bottom -->
+            <div class="header-bottom">
+                <!-- Logo -->
+                <div class="ml-logo">
+                    <Link :href="route('dashboard')">
+                        <div class="logo-text">
+                            <!-- Image -->
+                            <div class="lt-img">
+                                <ApplicationLogo />
+                            </div>
+                            <!-- Text -->
+                            <div class="lt-text">
+                                <h1>{{ $page.props.app.name }}</h1>
+                            </div>
+                        </div>
+                    </Link>
+                </div>
+                <!-- Version -->
+                <div class="mss-version text-sm text-gray-500 sm:text-right sm:ml-0">
+                    Laravel v{{ $page.props.laravelVersion }} (PHP v{{ $page.props.phpVersion }})
+                </div>
+            </div>
         </header>
         <!-- Main Content -->
         <section>
@@ -130,34 +137,18 @@ const showingNavigationDropdown = ref(false);
     background-color: $light-gray;
     // Header
     header {
+        position: relative;
         flex-basis: 300px;
         background-color: $white;
         min-height: 100vh;
         padding: 25px;
         box-shadow: 1px 0px 28px 1px rgba(0, 0, 0, .1);
-        // Logo
-        .ml-logo {
-            width: 100%;
-            margin: 0 auto;
-            margin-bottom: 75px;
-            .logo-text {
-                .lt-img {
-                    max-width: 60px;
-                }
-                .lt-text {
-                    h1 {
-                        text-align: left;
-                        font-size: 1.2rem;
-                    }
-                }
-            }
-        }
         // Profile
         .ml-profile {
             display: flex;
             align-items: center;
             justify-content: space-evenly;
-            margin-bottom: 100px;
+            margin-bottom: 50px;
             // Image
             .mlp-image {
                 min-width: 70px;
@@ -187,6 +178,35 @@ const showingNavigationDropdown = ref(false);
                 a, button {
                     font-size: 0.875rem;
                 }
+            }
+        }
+        // Header - Bottom
+        .header-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px;
+            // Logo
+            .ml-logo {
+                width: 100%;
+                margin: 0 auto;
+                margin-bottom: 15px;
+                .logo-text {
+                    .lt-img {
+                        max-width: 60px;
+                    }
+                    .lt-text {
+                        h1 {
+                            text-align: left;
+                            font-size: 1.2rem;
+                        }
+                    }
+                }
+            }
+            // Version
+            .mss-version {
+                text-align: center;
             }
         }
     }
