@@ -46,6 +46,9 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => session('message'),
             ],
+            'app' => [
+                'name' => config('app.name'),
+            ],
         ]);
     }
 }

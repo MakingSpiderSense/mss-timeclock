@@ -34,10 +34,7 @@ defineProps({
                     </div>
                     <!-- Text -->
                     <div class="lt-text">
-                        <!-- TODO: Refactor title -->
-                        <h1>
-                            MSS TimeClock
-                        </h1>
+                        <h1>{{ $page.props.app.name }}</h1>
                         <div class="text-sm text-gray-500 sm:text-right sm:ml-0">
                             Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
                         </div>
