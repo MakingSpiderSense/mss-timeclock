@@ -79,6 +79,9 @@ const showingNavigationDropdown = ref(false);
                                     Invite to organization
                                 </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">
+                                    Manage Invites
+                                </DropdownLink>
+                                <DropdownLink :href="route('placeholder')" as="button">
                                     Create a client
                                 </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">
