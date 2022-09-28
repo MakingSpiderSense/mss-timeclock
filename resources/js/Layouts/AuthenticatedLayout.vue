@@ -121,13 +121,15 @@ const showingNavigationDropdown = ref(false);
             </div>
         </header>
         <!-- Main Content -->
-        <section>
+        <section class="main-content">
             <!-- Flash Message -->
             <div v-if="$page.props.flash.message" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <FlashMsg :msgType="$page.props.flash.message[0]">{{ $page.props.flash.message[1] }}</FlashMsg>
             </div>
             <!-- Content -->
-            <slot />
+            <div class="page-container">
+                <slot />
+            </div>
         </section>
     </div>
 </template>
@@ -211,6 +213,17 @@ const showingNavigationDropdown = ref(false);
             .mss-version {
                 text-align: center;
             }
+        }
+    }
+    // Main content
+    .main-content {
+        display: flex;
+        flex-basis: 100%;
+        .page-container {
+            margin: 0 auto;
+            margin-top: 25px;
+            width: 100%;
+            max-width: 1200px;
         }
     }
 }
