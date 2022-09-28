@@ -128,6 +128,54 @@ const showingNavigationDropdown = ref(false);
             </div>
             <!-- Content -->
             <div class="page-container">
+                <!-- Current Stats: Displays on all pages -->
+                <section class="current-stats page-section">
+                    <!-- Today -->
+                    <div>
+                        <h3>Today</h3>
+                        <!-- Hours worked -->
+                        <div><span id="todayHours">7.4</span> Hours</div>
+                        <!-- Amount earned -->
+                        <div class="money-positive mb-5">$<span id="todayEarned">146.85</span> Earned</div>
+                        <!-- Heart containers -->
+                        <div class="hearts hearts-two-by-three">
+                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
+                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
+                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
+                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
+                            <div><img src="/img/heart-icon-half.png" alt="heart icon"></div>
+                            <div><img src="/img/heart-icon-empty.png" alt="heart icon"></div>
+                        </div>
+                    </div>
+                    <!-- This Month -->
+                    <div>
+                        <h3>This Month</h3>
+                        <!-- Paid hours -->
+                        <div><span id="monthPaidHours">27.3</span> Paid Hours</div>
+                        <!-- Unpaid hours -->
+                        <div><span id="monthUnpaidHours">43.2</span> Unpaid Hours</div>
+                        <!-- Hourly rate -->
+                        <div>$<span id="monthHourlyRate">43</span>/Hour</div>
+                        <!-- Average weekly hours -->
+                        <div><span id="monthWeeklyHours">34</span> Hours/Week</div>
+                        <!-- Amount earned -->
+                        <div class="money-positive">$<span id="monthAmountEarned">2,346.25</span> Earned</div>
+                    </div>
+                    <!-- Current Organization and Time -->
+                    <div>
+                        <!-- Organization Select -->
+                        <select class="mb-4" name="organziation">
+                            <option value="Making Spider Sense">Making Spider Sense</option>
+                            <option value="Unpaid">Unpaid</option>
+                        </select>
+                        <div class="text-right">
+                            <!-- Clocked-in time -->
+                            <div class="mb-5">Clocked in at <span id="clockedinTime">1:12pm</span></div>
+                            <!-- Current time on the clock -->
+                            <div class="text-5xl"><span id="timeOnClock">06:43:58</span></div>
+                        </div>
+                    </div>
+                </section>
                 <slot />
             </div>
         </section>
@@ -219,11 +267,29 @@ const showingNavigationDropdown = ref(false);
     .main-content {
         display: flex;
         flex-basis: 100%;
+        padding: 30px;
         .page-container {
             margin: 0 auto;
-            margin-top: 25px;
             width: 100%;
             max-width: 1200px;
+        }
+    }
+    // Current Stats
+    .current-stats {
+        display: flex;
+        justify-content: space-between;
+        // Hearts
+        .hearts {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            img {
+                width: 25px;
+                margin-right: 5px;
+            }
+        }
+        .money-positive {
+            color: green;
         }
     }
 }
