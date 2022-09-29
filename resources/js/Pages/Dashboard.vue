@@ -32,18 +32,49 @@ const submit = () => {
             </div>
             <!-- Form -->
             <form @submit.prevent="submit">
-                <div class="mb-4">
-                    <InputLabel for="name" value="Name" />
-                    <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
-                    <InputError class="mt-2" :message="form.errors.name" />
+                <!-- Form Input -->
+                <div class="clockin-form-input">
+                    <!-- Column 1 -->
+                    <div>
+                        <div class="mb-4">
+                            <InputLabel for="name" value="Name" />
+                            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
+                            <InputError class="mt-2" :message="form.errors.name" />
+                        </div>
+                        <div class="mb-4">
+                            <InputLabel for="email" value="Email" />
+                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
+                            <InputError class="mt-2" :message="form.errors.email" />
+                        </div>
+                    </div>
+                    <!-- Column 2 -->
+                    <div>
+                        <div class="mb-4">
+                            <InputLabel for="name" value="Name" />
+                            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
+                            <InputError class="mt-2" :message="form.errors.name" />
+                        </div>
+                        <div class="mb-4">
+                            <InputLabel for="email" value="Email" />
+                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
+                            <InputError class="mt-2" :message="form.errors.email" />
+                        </div>
+                    </div>
+                    <!-- Column 3 -->
+                    <div>
+                        <div class="mb-4">
+                            <InputLabel for="name" value="Name" />
+                            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
+                            <InputError class="mt-2" :message="form.errors.name" />
+                        </div>
+                        <div class="mb-4">
+                            <InputLabel for="email" value="Email" />
+                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
+                            <InputError class="mt-2" :message="form.errors.email" />
+                        </div>
+                    </div>
                 </div>
-
-                <div class="mb-4">
-                    <InputLabel for="email" value="Email" />
-                    <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-                    <InputError class="mt-2" :message="form.errors.email" />
-                </div>
-
+                <!-- Submit "Clock In" -->
                 <div class="flex items-center justify-end mt-4">
                     <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         Clock In
@@ -170,4 +201,12 @@ export default {
 <!-- Styling -->
 <style lang="scss" scoped>
 @import "../../sass/app.scss";
+.clockin-form-input {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    > div {
+        width: 100%;
+    }
+}
 </style>
