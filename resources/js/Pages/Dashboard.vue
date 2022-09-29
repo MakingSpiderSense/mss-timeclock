@@ -3,6 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Textarea from '@/Components/Textarea.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
@@ -31,46 +32,49 @@ const submit = () => {
                 <a href="#">Enter Manual Time</a>
             </div>
             <!-- Form -->
-            <form @submit.prevent="submit">
+            <form @submit.prevent="submit" autocomplete="off">
                 <!-- Form Input -->
                 <div class="clockin-form-input">
                     <!-- Column 1 -->
                     <div>
                         <div class="mb-4">
-                            <InputLabel for="name" value="Name" />
-                            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
-                            <InputError class="mt-2" :message="form.errors.name" />
+                            <InputLabel for="category" value="Category" />
+                            <div class="autocomplete">
+                                <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" required autofocus />
+                            </div>
+                            <InputError class="mt-2" :message="form.errors.category" />
                         </div>
                         <div class="mb-4">
-                            <InputLabel for="email" value="Email" />
-                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-                            <InputError class="mt-2" :message="form.errors.email" />
+                            <InputLabel for="subcategory" value="Subcategory" />
+                            <div class="autocomplete">
+                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" autocomplete="username" />
+                            </div>
+                            <InputError class="mt-2" :message="form.errors.subcategory" />
                         </div>
                     </div>
                     <!-- Column 2 -->
                     <div>
                         <div class="mb-4">
-                            <InputLabel for="name" value="Name" />
-                            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
-                            <InputError class="mt-2" :message="form.errors.name" />
+                            <div style="padding-top: 24px"></div>
+                            <select name="category_options" id="category_options">
+                                <option v-for="category in categories" v-bind:key="category">{{ category }}</option>
+                            </select>
+                            <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
                         <div class="mb-4">
-                            <InputLabel for="email" value="Email" />
-                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-                            <InputError class="mt-2" :message="form.errors.email" />
+                            <div style="padding-top: 24px"></div>
+                            <select name="category_options" id="category_options">
+                                <option v-for="category in categories" v-bind:key="category">{{ category }}</option>
+                            </select>
+                            <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
                     </div>
                     <!-- Column 3 -->
                     <div>
                         <div class="mb-4">
-                            <InputLabel for="name" value="Name" />
-                            <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
-                            <InputError class="mt-2" :message="form.errors.name" />
-                        </div>
-                        <div class="mb-4">
-                            <InputLabel for="email" value="Email" />
-                            <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-                            <InputError class="mt-2" :message="form.errors.email" />
+                            <InputLabel for="notes" value="Notes" />
+                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" />
+                            <InputError class="mt-2" :message="form.errors.notes" />
                         </div>
                     </div>
                 </div>
@@ -91,11 +95,11 @@ const submit = () => {
 export default {
     data() {
         return {
-            organizations: ["Apple Inc", "Advance Auto Parts", "Aetna", "Aflac", "Allstate", "Allergan", "Amazon", "American Express", "American International Group", "American Tower", "Anthem", "Aon", "Aramark", "Arch Capital Group", "Arthur J. Gallagher", "Assurant", "AT&T", "Automatic Data Processing"],
+            categories: ["Apple Inc", "Advance Auto Parts", "Aetna", "Aflac", "Allstate", "Allergan", "Amazon", "American Express", "American International Group", "American Tower", "Anthem", "Aon", "Aramark", "Arch Capital Group", "Arthur J. Gallagher", "Assurant", "AT&T", "Automatic Data Processing"],
         }
     },
     mounted() {
-        this.autocomplete(document.getElementById("name"), this.organizations);
+        this.autocomplete(document.getElementById("category"), this.categories);
     },
     methods: {
         autocomplete(inp, arr) {
@@ -208,5 +212,9 @@ export default {
     > div {
         width: 100%;
     }
+}
+select {
+    display: block;
+    width: 100%;
 }
 </style>
