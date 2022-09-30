@@ -47,7 +47,7 @@ const submit = () => {
                         <div class="mb-4">
                             <InputLabel for="subcategory" value="Subcategory" />
                             <div class="autocomplete">
-                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" autocomplete="username" />
+                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" />
                             </div>
                             <InputError class="mt-2" :message="form.errors.subcategory" />
                         </div>
@@ -56,17 +56,17 @@ const submit = () => {
                     <div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select name="category_options" id="category_options">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options">
                                 <option v-for="category in categories" v-bind:key="category">{{ category }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select name="category_options" id="category_options">
-                                <option v-for="category in categories" v-bind:key="category">{{ category }}</option>
+                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options">
+                                <option v-for="subcategory in subcategories" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
-                            <InputError class="mt-2" :message="form.errors.category_options" />
+                            <InputError class="mt-2" :message="form.errors.subcategory_options" />
                         </div>
                     </div>
                     <!-- Column 3 -->
@@ -96,10 +96,12 @@ export default {
     data() {
         return {
             categories: ["Apple Inc", "Advance Auto Parts", "Aetna", "Aflac", "Allstate", "Allergan", "Amazon", "American Express", "American International Group", "American Tower", "Anthem", "Aon", "Aramark", "Arch Capital Group", "Arthur J. Gallagher", "Assurant", "AT&T", "Automatic Data Processing"],
+            subcategories: ["Other", "Task A1", "Task A2", "Task B1", "Task B2"],
         }
     },
     mounted() {
         this.autocomplete(document.getElementById("category"), this.categories);
+        this.autocomplete(document.getElementById("subcategory"), this.subcategories);
     },
     methods: {
         autocomplete(inp, arr) {
