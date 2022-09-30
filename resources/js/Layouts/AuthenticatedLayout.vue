@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import FlashMsg from '@/Components/FlashMsg.vue';
+import Modal from '@/Components/Modal.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -179,6 +180,8 @@ const showingNavigationDropdown = ref(false);
                 <slot />
             </div>
         </section>
+        <!-- Modal -->
+        <Modal></Modal>
     </div>
 </template>
 
