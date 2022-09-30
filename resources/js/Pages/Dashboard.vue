@@ -56,14 +56,14 @@ const submit = () => {
                     <div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" @change="categoryOptionsChanged">
                                 <option v-for="category in categories" v-bind:key="category">{{ category }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" @change="subcategoryOptionsChanged">
                                 <option v-for="subcategory in subcategories" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.subcategory_options" />
@@ -104,6 +104,16 @@ export default {
         this.autocomplete(document.getElementById("subcategory"), this.subcategories);
     },
     methods: {
+        // When #category_options is changed, update #category
+        categoryOptionsChanged() {
+            const category = document.getElementById("category_options").value;
+            document.getElementById("category").value = category;
+        },
+        // When #subcategory_options is changed, update #subcategory
+        subcategoryOptionsChanged() {
+            const subcategory = document.getElementById("subcategory_options").value;
+            document.getElementById("subcategory").value = subcategory;
+        },
         autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/
