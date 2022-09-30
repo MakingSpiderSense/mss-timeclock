@@ -40,14 +40,14 @@ const submit = () => {
                         <div class="mb-4">
                             <InputLabel for="category" value="Category" />
                             <div class="autocomplete">
-                                <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" required autofocus />
+                                <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" tabindex="1" required autofocus />
                             </div>
                             <InputError class="mt-2" :message="form.errors.category" />
                         </div>
                         <div class="mb-4">
                             <InputLabel for="subcategory" value="Subcategory" />
                             <div class="autocomplete">
-                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" />
+                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" tabindex="3" />
                             </div>
                             <InputError class="mt-2" :message="form.errors.subcategory" />
                         </div>
@@ -56,14 +56,14 @@ const submit = () => {
                     <div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" @change="categoryOptionsChanged">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @change="categoryOptionsChanged">
                                 <option v-for="category in categories" v-bind:key="category">{{ category }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" @change="subcategoryOptionsChanged">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @change="subcategoryOptionsChanged">
                                 <option v-for="subcategory in subcategories" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.subcategory_options" />
@@ -73,7 +73,7 @@ const submit = () => {
                     <div>
                         <div class="mb-4">
                             <InputLabel for="notes" value="Notes" />
-                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" />
+                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" tabindex="5" />
                             <InputError class="mt-2" :message="form.errors.notes" />
                         </div>
                     </div>
