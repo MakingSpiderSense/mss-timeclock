@@ -29,10 +29,13 @@ const submit = () => {
         <section class="page-section">
             <!-- "Enter Manual Time" -->
             <div class="manual-entry mb-4 text-right">
+                <div id="manual-time-display"></div>
                 <a href="#">Enter Manual Time</a>
             </div>
             <!-- Form -->
             <form @submit.prevent="submit" autocomplete="off">
+                <!-- Hidden Field: Manual Time -->
+                <TextInput id="manualTime" type="hidden" v-model="form.manualTime" />
                 <!-- Form Input -->
                 <div class="clockin-form-input">
                     <!-- Column 1 -->
