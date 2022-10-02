@@ -30,7 +30,7 @@ const submit = () => {
             <!-- "Enter Manual Time" -->
             <div class="manual-entry mb-4 text-right">
                 <div id="manual-time-display"></div>
-                <a href="#">Enter Manual Time</a>
+                <a href="#" @click="displayModal">Enter Manual Time</a>
             </div>
             <!-- Form -->
             <form @submit.prevent="submit" autocomplete="off">
@@ -107,6 +107,28 @@ export default {
         this.autocomplete(document.getElementById("subcategory"), this.subcategories);
     },
     methods: {
+        // When "Enter Manual Time" is clicked, display the modal
+        displayModal() {
+            document.querySelector('.modal').style.display = 'flex';
+            document.querySelector('.modal-title').innerHTML = "Enter Manual Time";
+            const modalFooter = document.querySelector('.modal-footer');
+            modalFooter.innerHTML = `<button class="modal-continue">Save</button>`;
+            // Add to .modal-body
+            document.querySelector('.modal-body').innerHTML = `
+                <div class="mb-4">Enter a manual time to use when clocking in/out. This will be override the actual time.</div>
+                <input id="manual-time-input" type="time">
+            `;
+            // When "Save" is clicked, update the manual time
+            modalFooter.addEventListener('click', () => {
+                const manualTime = document.getElementById("manual-time-input").value;
+                document.getElementById("manualTime").value = manualTime;
+                const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                const manialTimeDisplay = document.getElementById("manual-time-display");
+                manialTimeDisplay.innerHTML = `${manualTimeFormatted}`;
+                manialTimeDisplay.title = "The currently set manual time";
+                document.querySelector('.modal').style.display = 'none';
+            });
+        },
         // When #category_options is changed, update #category
         categoryOptionsChanged() {
             const category = document.getElementById("category_options").value;
@@ -117,6 +139,7 @@ export default {
             const subcategory = document.getElementById("subcategory_options").value;
             document.getElementById("subcategory").value = subcategory;
         },
+        // Autocomplete function
         autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/

@@ -31,7 +31,7 @@ export default {
 </script>
 
 <!-- Styling -->
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../../sass/app.scss";
 .modal {
     position: fixed;
