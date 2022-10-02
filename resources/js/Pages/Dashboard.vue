@@ -28,7 +28,7 @@ const submit = () => {
     <AuthenticatedLayout>
         <section class="page-section">
             <!-- "Enter Manual Time" -->
-            <div class="manual-entry mb-4 text-right">
+            <div class="manual-entry mb-10 text-right">
                 <div id="manual-time-display"></div>
                 <a href="#" @click="displayModal">Enter Manual Time</a>
             </div>
