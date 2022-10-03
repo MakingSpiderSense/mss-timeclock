@@ -17,6 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('username')->unique();
+            $table->string('nickname')->nullable();
+            $table->string('avatar_url')->nullable();
+            $table->boolean('set_combined_org')->default(true);
+            $table->integer('goal_hours')->default(6);
+            $table->decimal('simple_tax_rate', 3, 3)->default(0.000);
+            $table->boolean('display_before_tax')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -21,6 +21,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
+        'nickname',
+        'avatar_url',
+        'set_combined_org',
+        'goal_hours',
+        'simple_tax_rate',
+        'display_before_tax',
     ];
 
     /**
