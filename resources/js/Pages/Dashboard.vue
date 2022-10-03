@@ -8,16 +8,15 @@ import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    terms: false,
+    manualTime: '',
+    category: '',
+    subcategory: '',
+    notes: '',
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.post(route('dashboard'), {
+        onFinish: () => form.reset('manualTime', 'category', 'subcategory', 'notes'),
     });
 };
 </script>
