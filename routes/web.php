@@ -33,6 +33,11 @@ Route::get('/placeholder', function () {
     return 'Placeholder page';
 })->name('placeholder');
 
+// Profile route
+Route::get('/profile', function () {
+    return Inertia::render('Profile/Profile');
+})->middleware(['auth', 'verified'])->name('profile');
+
 require __DIR__.'/auth.php';
 
 // Clear cache without CLI
