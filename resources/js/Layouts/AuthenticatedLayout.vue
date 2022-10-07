@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
             <!-- Profile -->
             <div class="ml-profile">
                 <!-- Image -->
-                <div class="mlp-image" style="background-image: url('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')">
+                <div class="mlp-image" style="background-image: url('/img/avatar-placeholder.png')">
                 </div>
                 <!-- Dropdown -->
                 <div class="mlp-dropdown">

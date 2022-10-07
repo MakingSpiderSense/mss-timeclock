@@ -12,7 +12,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <div class="profile-container">
                 <!-- Avator -->
                 <div class="avatar">
-                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp" alt="avatar" />
+                    <img src="/img/avatar-placeholder.png" alt="avatar" />
                 </div>
                 <!-- Other Profile Info -->
                 <div class="other-info">
