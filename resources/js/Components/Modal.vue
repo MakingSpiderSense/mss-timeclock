@@ -22,7 +22,7 @@ export default {
     methods: {
         // Close modal if user clicks on semi-transparent background or close icon
         closeModal(e) {
-            if (e.target.classList.contains('modal') || e.target.classList.contains('modal-close-icon')) {
+            if (e.target.classList.contains('modal') || e.target.classList.contains('modal-close-icon') || e.target.parentElement.classList.contains('modal-close-icon')) {
                 document.querySelector('.modal').style.display = 'none';
             }
         },
