@@ -37,6 +37,10 @@ Route::get('/placeholder', function () {
 Route::get('/profile', function () {
     return Inertia::render('Profile/Profile');
 })->middleware(['auth', 'verified'])->name('profile');
+// Edit Profile
+Route::get('/profile/edit', function () {
+    return Inertia::render('Profile/Edit');
+})->middleware(['auth', 'verified'])->name('profile.edit');
 
 require __DIR__.'/auth.php';
 
