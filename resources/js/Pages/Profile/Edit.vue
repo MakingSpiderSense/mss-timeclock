@@ -25,6 +25,12 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <section class="page-section">
+            <!-- Return Link -->
+            <div class="flex items-center justify-end mt-4">
+                <Link :href="route('profile')">
+                    Return to Profile
+                </Link>
+            </div>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <!-- Name -->
                 <div>
