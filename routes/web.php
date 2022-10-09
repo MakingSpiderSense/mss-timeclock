@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\ProfilesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Route::get('/profile', function () {
 Route::get('/profile/edit', function () {
     return Inertia::render('Profile/Edit');
 })->middleware(['auth', 'verified'])->name('profile.edit');
+// Update Profile
+Route::post('/profile/update', [ProfilesController::class, 'update'])->middleware(['auth', 'verified'])->name('profile.update');
 
 require __DIR__.'/auth.php';
 
