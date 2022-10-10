@@ -59,7 +59,7 @@ const submit = () => {
                 <!-- Profile Image -->
                 <div class="mt-4">
                     <InputLabel for="image" value="Profile Image" />
-                    <TextInput id="image" type="file" class="mt-1 block" @input="form.image = $event.target.files[0]" />
+                    <TextInput id="image" type="file" class="mt-1 block" accept=".jpeg,.png,.jpg,.gif" @input="form.image = $event.target.files[0]" />
                     <InputError class="mt-2" :message="form.errors.image" />
                 </div>
                 <!-- Submit Button -->
