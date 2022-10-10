@@ -12,7 +12,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <div class="profile-container">
                 <!-- Avator -->
                 <div class="avatar">
-                    <img src="/img/avatar-placeholder.png" alt="avatar" />
+                    <img v-if="$page.props.auth.user.avatar_url" :src="`/storage/uploads/profile/${$page.props.auth.user.avatar_url}`" alt="avatar" />
+                    <img v-else src="/img/avatar-placeholder.png" alt="default avatar" />
                 </div>
                 <!-- Other Profile Info -->
                 <div class="other-info">

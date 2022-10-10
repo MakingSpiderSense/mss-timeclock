@@ -20,8 +20,10 @@ const showingNavigationDropdown = ref(false);
             <!-- Profile -->
             <div class="ml-profile">
                 <!-- Image -->
-                <div class="mlp-image" style="background-image: url('/img/avatar-placeholder.png')">
+                <div v-if="$page.props.auth.user.avatar_url" class="mlp-image" 
+                    :style="`background-image: url('/storage/uploads/profile/${$page.props.auth.user.avatar_url}')`">
                 </div>
+                <div v-else class="mlp-image" style="background-image: url('/img/avatar-placeholder.png')"></div>
                 <!-- Dropdown -->
                 <div class="mlp-dropdown">
                     <Dropdown align="left" width="48">
