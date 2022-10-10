@@ -84,4 +84,13 @@ export default {
 <!-- Styling -->
 <style lang="scss" scoped>
 @import "../../../sass/app.scss";
+#image {
+    border-radius: 0;
+    box-shadow: none;
+    cursor: pointer;
+}
+input[type=file],
+input[type=file]::-webkit-file-upload-button {
+    cursor: pointer; 
+}
 </style>
