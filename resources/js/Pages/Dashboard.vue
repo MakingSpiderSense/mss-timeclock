@@ -29,7 +29,7 @@ const submit = () => {
             <!-- "Enter Manual Time" -->
             <div class="manual-entry mb-10 text-right">
                 <div id="manual-time-display"></div>
-                <a href="#" @click="displayModal">Enter Manual Time</a>
+                <a href="#" @click="displayModalEnterManualTime">Enter Manual Time</a>
             </div>
             <!-- Form -->
             <form @submit.prevent="submit" autocomplete="off">
@@ -107,7 +107,7 @@ export default {
     },
     methods: {
         // When "Enter Manual Time" is clicked, display the modal
-        displayModal() {
+        displayModalEnterManualTime() {
             document.querySelector('.modal').style.display = 'flex';
             document.querySelector('.modal-title').innerHTML = "Enter Manual Time";
             const modalFooter = document.querySelector('.modal-footer');
