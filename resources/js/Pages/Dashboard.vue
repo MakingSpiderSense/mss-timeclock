@@ -118,15 +118,18 @@ export default {
                 <input id="manual-time-input" type="time">
             `;
             // When "Save" is clicked, update the manual time
-            modalFooter.addEventListener('click', () => {
+            modalFooter.addEventListener('click', saveTime);
+            function saveTime() {
                 const manualTime = document.getElementById("manual-time-input").value;
                 document.getElementById("manualTime").value = manualTime;
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
                 const manialTimeDisplay = document.getElementById("manual-time-display");
                 manialTimeDisplay.innerHTML = `${manualTimeFormatted}`;
                 manialTimeDisplay.title = "The currently set manual time";
+                // Close modal and remove event listener
                 document.querySelector('.modal').style.display = 'none';
-            });
+                modalFooter.removeEventListener('click', saveTime);
+            }
         },
         // When #category_options is changed, update #category
         categoryOptionsChanged() {
