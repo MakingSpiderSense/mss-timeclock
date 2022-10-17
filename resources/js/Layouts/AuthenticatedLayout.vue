@@ -75,7 +75,7 @@ const showingNavigationDropdown = ref(false);
                             </template>
                             <!-- Dropdown Links -->
                             <template #content>
-                                <DropdownLink :href="route('placeholder')" as="button">
+                                <DropdownLink preserve-state as="button" @click="modalOrgCreate">
                                     Create an organization
                                 </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">
@@ -203,6 +203,24 @@ export default {
             // Set currentModal to the new value
             this.currentModal = newVal.title;
         }
+    },
+    methods: {
+        modalOrgCreate() {
+            this.currentModal = "OrgCreate";
+            document.querySelector('.modal').style.display = "flex";
+            document.querySelector('.modal-title').innerHTML = "Create Organization";
+            const modalFooter = document.querySelector('.modal-footer');
+            modalFooter.innerHTML = `<button class="modal-continue">Save</button>`;
+            modalFooter.addEventListener('click', saveOrg);
+            function saveOrg() {
+                // const orgName = document.getElementById("org-name-input");
+                // console.log(orgName);
+
+                // Close modal and remove event listener
+                document.querySelector('.modal').style.display = 'none';
+                modalFooter.removeEventListener('click', saveOrg);
+            }
+        },
     },
 }
 </script>
