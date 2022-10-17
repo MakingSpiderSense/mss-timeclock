@@ -183,9 +183,30 @@ const showingNavigationDropdown = ref(false);
             </div>
         </section>
         <!-- Modal -->
-        <Modal></Modal>
+        <Modal :currentModal="currentModal"></Modal>
     </div>
 </template>
+
+
+<!-- Scripts -->
+<script>
+export default {
+    props: ['pageModal'],
+    data() {
+        return {
+            currentModal: this.pageModal.title ? this.pageModal.title : "",
+        }
+    },
+    watch: {
+        // Watch for changes to the pageModal prop
+        pageModal(newVal) {
+            // Set currentModal to the new value
+            this.currentModal = newVal.title;
+        }
+    },
+}
+</script>
+
 
 <!-- Styling -->
 <style lang="scss" scoped>

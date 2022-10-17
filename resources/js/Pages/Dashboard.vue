@@ -24,12 +24,12 @@ const submit = () => {
 <template>
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :pageModal="pageModal">
         <section class="page-section">
             <!-- "Enter Manual Time" -->
             <div class="manual-entry mb-10 text-right">
                 <div id="manual-time-display"></div>
-                <a href="#" @click="displayModalEnterManualTime">Enter Manual Time</a>
+                <a href="#" @click="modalEnterManualTime">Enter Manual Time</a>
             </div>
             <!-- Form -->
             <form @submit.prevent="submit" autocomplete="off">
@@ -99,6 +99,10 @@ export default {
         return {
             categories: ["Apple Inc", "Advance Auto Parts", "Aetna", "Aflac", "Allstate", "Allergan", "Amazon", "American Express", "American International Group", "American Tower", "Anthem", "Aon", "Aramark", "Arch Capital Group", "Arthur J. Gallagher", "Assurant", "AT&T", "Automatic Data Processing"],
             subcategories: ["Other", "Task A1", "Task A2", "Task B1", "Task B2"],
+            pageModal: {
+                title: 'ManualTimeSet',
+                count: 0,
+            },
         }
     },
     mounted() {
@@ -107,16 +111,16 @@ export default {
     },
     methods: {
         // When "Enter Manual Time" is clicked, display the modal
-        displayModalEnterManualTime() {
+        modalEnterManualTime() {
             document.querySelector('.modal').style.display = 'flex';
             document.querySelector('.modal-title').innerHTML = "Enter Manual Time";
             const modalFooter = document.querySelector('.modal-footer');
             modalFooter.innerHTML = `<button class="modal-continue">Save</button>`;
-            // Add to .modal-body
-            document.querySelector('.modal-body').innerHTML = `
-                <div class="mb-4">Enter a manual time to use when clocking in/out. This will be override the actual time.</div>
-                <input id="manual-time-input" type="time">
-            `;
+            // Update modal body (the count is a workaround to trigger the watcher even if the value is the same)
+            this.pageModal = {
+                title: 'ManualTimeSet',
+                count: this.pageModal.count + 1,
+            };
             // When "Save" is clicked, update the manual time
             modalFooter.addEventListener('click', saveTime);
             function saveTime() {

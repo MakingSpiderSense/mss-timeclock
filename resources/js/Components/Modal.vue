@@ -1,5 +1,5 @@
 <!-- Template -->
-<!-- Description: Set ".modal" display to "flex" when you want it to show up. You can add buttons to the footer using javascript. For "Save", "Okay", "Submit", or "Continue", use class ".modal-continue". For "Cancel" or "Close", use class ".modal-close". Add content to the ".modal-body" via javascript. -->
+<!-- Description: Set ".modal" display to "flex" when you want it to show up. You can add buttons to the footer using javascript. For "Save", "Okay", "Submit", or "Continue", use class ".modal-continue". For "Cancel" or "Close", use class ".modal-close". Add content to the body by updating currentModal from the parent. -->
 <template>
     <div class="modal" @click="closeModal">
         <div class="modal-content">
@@ -9,7 +9,9 @@
                     <svg class="modal-close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13.414 12l5.293 5.293-1.414 1.414-5.293-5.293-5.293 5.293-1.414-1.414L10.586 12 5.293 6.707l1.414-1.414L12 10.586l5.293-5.293 1.414 1.414L13.414 12z"/></svg>
                 </button>
             </div>
-            <div class="modal-body"></div>
+            <div class="modal-body">
+                <component :is="currentModal"></component>
+            </div>
             <div class="modal-footer"></div>
         </div>
     </div>
@@ -17,8 +19,15 @@
 
 <!-- Scripts -->
 <script>
+import OrgCreate from '@/Modals/OrgCreate.vue';
+import ManualTimeSet from '@/Modals/ManualTimeSet.vue';
 export default {
     name: 'Modal',
+    props: ['currentModal'],
+    components: {
+        OrgCreate, 
+        ManualTimeSet,
+    },
     methods: {
         // Close modal if user clicks on semi-transparent background or close icon
         closeModal(e) {
