@@ -194,7 +194,7 @@ export default {
     props: ['pageModal'],
     data() {
         return {
-            currentModal: this.pageModal ? this.pageModal.title : "",
+            currentModal: this.pageModal ? this.pageModal.title : "Default",
         }
     },
     watch: {

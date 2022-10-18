@@ -19,12 +19,14 @@
 
 <!-- Scripts -->
 <script>
+import Default from '@/Modals/Default.vue';
 import OrgCreate from '@/Modals/OrgCreate.vue';
 import ManualTimeSet from '@/Modals/ManualTimeSet.vue';
 export default {
     name: 'Modal',
     props: ['currentModal'],
     components: {
+        Default,
         OrgCreate, 
         ManualTimeSet,
     },
