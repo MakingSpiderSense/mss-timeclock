@@ -48,4 +48,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function subscriptions()
+    {
+        // Sets up relationship with Organization model.
+        // "A user can subscribe to many organizations."
+        return $this->belongsToMany(Organization::class);
+    }
 }
