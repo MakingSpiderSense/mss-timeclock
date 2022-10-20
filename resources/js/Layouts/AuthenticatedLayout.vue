@@ -210,15 +210,14 @@ export default {
             document.querySelector('.modal').style.display = "flex";
             document.querySelector('.modal-title').innerHTML = "Create Organization";
             const modalFooter = document.querySelector('.modal-footer');
-            modalFooter.innerHTML = `<button class="modal-continue">Save</button>`;
+            modalFooter.innerHTML = `<button form="form_org_create" class="modal-continue" type="submit">Save</button>`;
             modalFooter.addEventListener('click', saveOrg);
             function saveOrg() {
-                // const orgName = document.getElementById("org-name-input");
-                // console.log(orgName);
-
                 // Close modal and remove event listener
-                document.querySelector('.modal').style.display = 'none';
-                modalFooter.removeEventListener('click', saveOrg);
+                if (document.querySelector('#org_name').value != "") {
+                    document.querySelector('.modal').style.display = 'none';
+                    modalFooter.removeEventListener('click', saveOrg);
+                }
             }
         },
     },

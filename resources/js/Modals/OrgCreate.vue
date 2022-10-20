@@ -5,12 +5,13 @@ import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 
 const form = useForm({
-    orgCreate: '',
+    org_name: '',
 });
 
 const submit = () => {
-    form.post(route('placeholder'), {
-        onFinish: () => form.reset('orgCreate'),
+    form.post(route('organizations.store'), {
+        // Todo: Form does not reset after submit. Fix.
+        onFinish: () => form.reset('org_name'),
     });
 };
 </script>
@@ -20,9 +21,12 @@ const submit = () => {
     <div id="modalbody-org-create">
         <div class="mb-4">Add a new organization below. Please note that at this time, organizations can only be edited or deleted directly from the database.</div>
         <div>
-            <InputLabel for="orgCreate" value="Organization Name" />
-            <TextInput id="org_create" type="text" class="mt-1 block w-full" v-model="form.orgCreate" required />
-            <InputError class="mt-2" :message="form.errors.orgCreate" />
+            <!-- Form -->
+            <form id="form_org_create" @submit.prevent="submit" autocomplete="off">
+                <InputLabel for="org_name" value="Organization Name" />
+                <TextInput id="org_name" type="text" class="mt-1 block w-full" v-model="form.org_name" required />
+                <InputError class="mt-2" :message="form.errors.org_name" />
+            </form>
         </div>
     </div>
 </template>

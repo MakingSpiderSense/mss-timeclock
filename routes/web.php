@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrganizationsController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -44,6 +45,9 @@ Route::get('/profile/edit', function () {
 })->middleware(['auth', 'verified'])->name('profile.edit');
 // Update Profile
 Route::post('/profile/update', [ProfilesController::class, 'update'])->middleware(['auth', 'verified'])->name('profile.update');
+
+// Organizations route
+Route::post('/organization', [OrganizationsController::class, 'store'])->name('organizations.store');
 
 require __DIR__.'/auth.php';
 

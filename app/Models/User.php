@@ -53,6 +53,6 @@ class User extends Authenticatable
     {
         // Sets up relationship with Organization model.
         // "A user can subscribe to many organizations."
-        return $this->belongsToMany(Organization::class);
+        return $this->belongsToMany(Organization::class, 'user_org_subscriptions', 'user_id', 'org_id');
     }
 }
