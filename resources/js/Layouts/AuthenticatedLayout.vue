@@ -125,12 +125,12 @@ const showingNavigationDropdown = ref(false);
         </header>
         <!-- Main Content -->
         <section class="main-content">
-            <!-- Flash Message -->
-            <div v-if="$page.props.flash.message" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <FlashMsg :msgType="$page.props.flash.message[0]">{{ $page.props.flash.message[1] }}</FlashMsg>
-            </div>
             <!-- Content -->
             <div class="page-container">
+                <!-- Flash Message -->
+                <div v-if="$page.props.flash.message" class="max-w-7xl mx-auto">
+                    <FlashMsg :msgType="$page.props.flash.message[0]">{{ $page.props.flash.message[1] }}</FlashMsg>
+                </div>
                 <!-- Current Stats: Displays on all pages -->
                 <section class="current-stats page-section">
                     <!-- Today -->
