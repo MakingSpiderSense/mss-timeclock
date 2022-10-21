@@ -84,7 +84,7 @@ const showingNavigationDropdown = ref(false);
                                 <DropdownLink :href="route('placeholder')" as="button">
                                     Manage Invites
                                 </DropdownLink>
-                                <DropdownLink :href="route('placeholder')" as="button">
+                                <DropdownLink preserve-state as="button" @click="modalClientCreate">
                                     Create a client
                                 </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">
@@ -217,6 +217,21 @@ export default {
                 if (document.querySelector('#org_name').value != "") {
                     document.querySelector('.modal').style.display = 'none';
                     modalFooter.removeEventListener('click', saveOrg);
+                }
+            }
+        },
+        modalClientCreate() {
+            this.currentModal = "ClientCreate";
+            document.querySelector('.modal').style.display = "flex";
+            document.querySelector('.modal-title').innerHTML = "Create Client";
+            const modalFooter = document.querySelector('.modal-footer');
+            modalFooter.innerHTML = `<button form="form_client_create" class="modal-continue" type="submit">Save</button>`;
+            modalFooter.addEventListener('click', saveClient);
+            function saveClient() {
+                // Close modal and remove event listener
+                if (document.querySelector('#client_name').value != "") {
+                    document.querySelector('.modal').style.display = 'none';
+                    modalFooter.removeEventListener('click', saveClient);
                 }
             }
         },

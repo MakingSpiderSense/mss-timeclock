@@ -20,6 +20,7 @@
 <!-- Scripts -->
 <script>
 import Default from '@/Modals/Default.vue';
+import ClientCreate from '@/Modals/ClientCreate.vue';
 import OrgCreate from '@/Modals/OrgCreate.vue';
 import ManualTimeSet from '@/Modals/ManualTimeSet.vue';
 export default {
@@ -27,7 +28,8 @@ export default {
     props: ['currentModal'],
     components: {
         Default,
-        OrgCreate, 
+        ClientCreate,
+        OrgCreate,
         ManualTimeSet,
     },
     methods: {
