@@ -18,7 +18,7 @@ const submit = () => {
 
 <!-- Template -->
 <template>
-    <div id="modalbody-org-create">
+    <div>
         <div class="mb-4">Add a new organization below. Please note that at this time, organizations can only be edited or deleted directly from the database.</div>
         <div>
             <!-- Form -->
