@@ -81,7 +81,7 @@ const showingNavigationDropdown = ref(false);
                                 <DropdownLink :href="route('placeholder')" as="button">
                                     Invite to organization
                                 </DropdownLink>
-                                <DropdownLink :href="route('placeholder')" as="button">
+                                <DropdownLink preserve-state as="button" @click="invitesManage">
                                     Manage Invites
                                 </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">
@@ -215,6 +215,19 @@ export default {
                     document.querySelector('.modal').style.display = 'none';
                     modalFooter.removeEventListener('click', saveOrg);
                 }
+            }
+        },
+        invitesManage() {
+            this.currentModal = "InvitesManage";
+            document.querySelector('.modal').style.display = "flex";
+            document.querySelector('.modal-title').innerHTML = "Manage Invites";
+            const modalFooter = document.querySelector('.modal-footer');
+            modalFooter.innerHTML = `<button class="modal-close">Close</button>`;
+            modalFooter.querySelector('button').addEventListener('click', closeModal);
+            function closeModal() {
+                // Close modal and remove event listener
+                document.querySelector('.modal').style.display = 'none';
+                modalFooter.removeEventListener('click', closeModal);
             }
         },
     },
