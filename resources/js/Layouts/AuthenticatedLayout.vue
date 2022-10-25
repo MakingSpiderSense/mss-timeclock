@@ -84,9 +84,6 @@ const showingNavigationDropdown = ref(false);
                                 <DropdownLink :href="route('placeholder')" as="button">
                                     Manage Invites
                                 </DropdownLink>
-                                <DropdownLink preserve-state as="button" @click="modalCategoryCreate">
-                                    Create a category
-                                </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">
                                     Edit hourly rates
                                 </DropdownLink>
@@ -217,21 +214,6 @@ export default {
                 if (document.querySelector('#org_name').value != "") {
                     document.querySelector('.modal').style.display = 'none';
                     modalFooter.removeEventListener('click', saveOrg);
-                }
-            }
-        },
-        modalCategoryCreate() {
-            this.currentModal = "CategoryCreate";
-            document.querySelector('.modal').style.display = "flex";
-            document.querySelector('.modal-title').innerHTML = "Create Category";
-            const modalFooter = document.querySelector('.modal-footer');
-            modalFooter.innerHTML = `<button form="form_category_create" class="modal-continue" type="submit">Save</button>`;
-            modalFooter.addEventListener('click', saveCategory);
-            function saveCategory() {
-                // Close modal and remove event listener
-                if (document.querySelector('#category_name').value != "") {
-                    document.querySelector('.modal').style.display = 'none';
-                    modalFooter.removeEventListener('click', saveCategory);
                 }
             }
         },
