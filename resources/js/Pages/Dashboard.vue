@@ -115,7 +115,7 @@ export default {
             document.querySelector('.modal').style.display = 'flex';
             document.querySelector('.modal-title').innerHTML = "Enter Manual Time";
             const modalFooter = document.querySelector('.modal-footer');
-            modalFooter.innerHTML = `<button class="modal-continue">Save</button>`;
+            modalFooter.innerHTML = `<button class="btn modal-continue">Save</button>`;
             // Update modal body (the count is a workaround to trigger the watcher even if the value is the same)
             this.pageModal = {
                 title: 'ManualTimeSet',

@@ -105,11 +105,6 @@ export default {
                 margin-left: 10px;
                 position: relative;
                 background-color: #eeeeeecc;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: .3s;
                 &:hover {
                     background-color: #eeeeee;
                 }
@@ -117,13 +112,8 @@ export default {
             .modal-continue {
                 margin-left: 10px;
                 background-color: #{$color2}cc;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 5px;
                 color: $white;
-                cursor: pointer;
                 margin-right: 10px;
-                transition: .3s;
                 &:hover {
                     background-color: $color2;
                 }

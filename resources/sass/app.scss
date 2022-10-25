@@ -38,6 +38,14 @@ a {
   color: $color1;
 }
 
+// Buttons
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .3s;
+}
+
 // Forms
 main input {
     margin-bottom: 20px;

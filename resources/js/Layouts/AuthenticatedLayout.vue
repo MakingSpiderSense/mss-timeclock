@@ -207,7 +207,7 @@ export default {
             document.querySelector('.modal').style.display = "flex";
             document.querySelector('.modal-title').innerHTML = "Create Organization";
             const modalFooter = document.querySelector('.modal-footer');
-            modalFooter.innerHTML = `<button form="form_org_create" class="modal-continue" type="submit">Save</button>`;
+            modalFooter.innerHTML = `<button form="form_org_create" class="btn modal-continue" type="submit">Save</button>`;
             modalFooter.addEventListener('click', saveOrg);
             function saveOrg() {
                 // Close modal and remove event listener
@@ -222,7 +222,7 @@ export default {
             document.querySelector('.modal').style.display = "flex";
             document.querySelector('.modal-title').innerHTML = "Manage Invites";
             const modalFooter = document.querySelector('.modal-footer');
-            modalFooter.innerHTML = `<button class="modal-close">Close</button>`;
+            modalFooter.innerHTML = `<button class="btn modal-close">Close</button>`;
             modalFooter.querySelector('button').addEventListener('click', closeModal);
             function closeModal() {
                 // Close modal and remove event listener
