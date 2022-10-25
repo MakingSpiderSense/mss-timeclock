@@ -122,7 +122,7 @@ export default {
                 count: this.pageModal.count + 1,
             };
             // When "Save" is clicked, update the manual time
-            modalFooter.addEventListener('click', saveTime);
+            modalFooter.querySelector('button').addEventListener('click', saveTime);
             function saveTime() {
                 const manualTime = document.getElementById("manual-time-input").value;
                 document.getElementById("manualTime").value = manualTime;

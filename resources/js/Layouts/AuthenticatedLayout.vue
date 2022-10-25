@@ -208,7 +208,7 @@ export default {
             document.querySelector('.modal-title').innerHTML = "Create Organization";
             const modalFooter = document.querySelector('.modal-footer');
             modalFooter.innerHTML = `<button form="form_org_create" class="btn modal-continue" type="submit">Save</button>`;
-            modalFooter.addEventListener('click', saveOrg);
+            modalFooter.querySelector('button').addEventListener('click', saveOrg);
             function saveOrg() {
                 // Close modal and remove event listener
                 if (document.querySelector('#org_name').value != "") {
