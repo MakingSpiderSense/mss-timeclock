@@ -17,6 +17,8 @@ $color3: #F4E285;
 $black: #1B2F33;
 $white: white;
 $light-gray: #ebebeb;
+$danger: #e74958;
+$success: #4caf50;
 
 // Headings
 h1, h2, h3, h4, h5, h6 {
@@ -44,6 +46,20 @@ a {
     border-radius: 5px;
     cursor: pointer;
     transition: .3s;
+}
+.btn-danger {
+    background-color: $danger;
+    color: $white;
+    &:hover {
+        background-color: darken($danger, 10%);
+    }
+}
+.btn-success {
+    background-color: $success;
+    color: $white;
+    &:hover {
+        background-color: darken($success, 10%);
+    }
 }
 
 // Forms
