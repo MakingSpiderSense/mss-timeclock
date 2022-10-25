@@ -19,4 +19,11 @@ class Category extends Model
         // "A category has one organization."
         return $this->hasOne(Organization::class);
     }
+
+    public function categories()
+    {
+        // Sets up relationship with Subcategory model.
+        // "An category can have many subcategories."
+        return $this->hasMany(Subcategory::class)->orderBy('name');
+    }
 }
