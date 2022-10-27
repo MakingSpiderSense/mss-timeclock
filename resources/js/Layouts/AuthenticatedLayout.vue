@@ -211,7 +211,7 @@ export default {
             modalFooter.querySelector('button').addEventListener('click', saveOrg);
             function saveOrg() {
                 // Close modal and remove event listener
-                if (document.querySelector('#org_name').value != "") {
+                if (document.querySelector('#org_name').checkValidity()) {
                     document.querySelector('.modal').style.display = 'none';
                     modalFooter.removeEventListener('click', saveOrg);
                 }
@@ -239,7 +239,7 @@ export default {
             modalFooter.querySelector('button').addEventListener('click', saveInvite);
             function saveInvite() {
                 // Close modal and remove event listener
-                if (document.querySelector('#invite_email').value != "") {
+                if (document.querySelector('#invite_email').checkValidity()) {
                     document.querySelector('.modal').style.display = 'none';
                     modalFooter.removeEventListener('click', saveInvite);
                 }

@@ -24,7 +24,7 @@ const submit = () => {
             <!-- Form -->
             <form id="form_org_invite" @submit.prevent="submit" autocomplete="off">
                 <InputLabel for="invite_email" value="User Email" />
-                <TextInput id="invite_email" type="text" class="mt-1 block w-full" v-model="form.invite_email" required />
+                <TextInput id="invite_email" type="email" class="mt-1 block w-full" v-model="form.invite_email" required />
                 <InputError class="mt-2" :message="form.errors.invite_email" />
             </form>
         </div>
