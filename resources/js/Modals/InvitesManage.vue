@@ -8,16 +8,16 @@
             <div class="invite">
                 <div class="inv-org">Wayne Enterprise</div>
                 <div class="inv-choice">
-                    <button class="btn btn-danger">Decline</button>
                     <button class="btn btn-success">Accept</button>
+                    <button class="btn btn-danger">Decline</button>
                 </div>
             </div>
             <!-- Invite -->
             <div class="invite">
                 <div class="inv-org">Acme Corp</div>
                 <div class="inv-choice">
-                    <button class="btn btn-danger">Decline</button>
                     <button class="btn btn-success">Accept</button>
+                    <button class="btn btn-danger">Decline</button>
                 </div>
             </div>
         </div>
