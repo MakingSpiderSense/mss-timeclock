@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('org_id');
             $table->string('role')->default('user');
+            $table->string('status')->default('subscribed');
             $table->timestamps();
         });
     }
