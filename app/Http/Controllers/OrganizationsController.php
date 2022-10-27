@@ -35,4 +35,12 @@ class OrganizationsController extends Controller
         // Redirect to the profile page of logged in user
         return redirect('/dashboard')->with('message', ['success', 'Organization created successfully.']);
     }
+
+    // Invite a user to the organization
+    public function invite()
+    {   
+        // Redirect to the profile page of logged in user
+        return redirect('/dashboard')->with('message', ['success', 'User invited to [organization].']);
+        
+    }
 }

@@ -78,10 +78,10 @@ const showingNavigationDropdown = ref(false);
                                 <DropdownLink preserve-state as="button" @click="modalOrgCreate">
                                     Create an organization
                                 </DropdownLink>
-                                <DropdownLink :href="route('placeholder')" as="button">
+                                <DropdownLink preserve-state as="button" @click="modalInvitesCreate">
                                     Invite to organization
                                 </DropdownLink>
-                                <DropdownLink preserve-state as="button" @click="invitesManage">
+                                <DropdownLink preserve-state as="button" @click="modalInvitesManage">
                                     Manage Invites
                                 </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">
@@ -217,7 +217,7 @@ export default {
                 }
             }
         },
-        invitesManage() {
+        modalInvitesManage() {
             this.currentModal = "InvitesManage";
             document.querySelector('.modal').style.display = "flex";
             document.querySelector('.modal-title').innerHTML = "Manage Invites";
@@ -228,6 +228,21 @@ export default {
                 // Close modal and remove event listener
                 document.querySelector('.modal').style.display = 'none';
                 modalFooter.removeEventListener('click', closeModal);
+            }
+        },
+        modalInvitesCreate() {
+            this.currentModal = "InvitesCreate";
+            document.querySelector('.modal').style.display = "flex";
+            document.querySelector('.modal-title').innerHTML = "Invite to Organization";
+            const modalFooter = document.querySelector('.modal-footer');
+            modalFooter.innerHTML = `<button form="form_org_invite" class="btn modal-continue" type="submit">Save</button>`;
+            modalFooter.querySelector('button').addEventListener('click', saveInvite);
+            function saveInvite() {
+                // Close modal and remove event listener
+                if (document.querySelector('#invite_email').value != "") {
+                    document.querySelector('.modal').style.display = 'none';
+                    modalFooter.removeEventListener('click', saveInvite);
+                }
             }
         },
     },

@@ -23,6 +23,7 @@ import Default from '@/Modals/Default.vue';
 import OrgCreate from '@/Modals/OrgCreate.vue';
 import ManualTimeSet from '@/Modals/ManualTimeSet.vue';
 import InvitesManage from '@/Modals/InvitesManage.vue';
+import InvitesCreate from '@/Modals/InvitesCreate.vue';
 export default {
     name: 'Modal',
     props: ['currentModal'],
@@ -31,6 +32,7 @@ export default {
         OrgCreate,
         ManualTimeSet,
         InvitesManage,
+        InvitesCreate,
     },
     methods: {
         // Close modal if user clicks on semi-transparent background or close icon
