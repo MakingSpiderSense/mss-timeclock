@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Validator;
 
 class OrganizationsController extends Controller
 {
@@ -14,13 +15,19 @@ class OrganizationsController extends Controller
     }
     
     // Store the organization
-    public function store()
+    public function store(Request $request)
     {
         // Validate the request
         // Note: Below, we use this array to post data to the database. If there is any data missing from the array, such as data that doesn't need to be validated, we can add it to the array as a key, but leave the value an empty string.
-        $data = request()->validate([
-            'org_name' => 'required|string|max:255',
-        ]);
+        $rules = [
+            'org_name' => 'required|string|max:255|unique:organizations,name',
+        ];
+        // We use the Validator::make method so that we can output the errors as a flash message, similar to how we flash success messages. If we don't use this, we can simply set $data = request()->validate($rules);.
+        $validator = Validator::make( $request->all(), $rules );
+        if ( $validator->fails() ) {
+            return redirect('/dashboard')->with('message', ['error', $validator->errors()->first()]);
+        }
+        $data = request();
         
         // Create the organization
         Organization::create([
