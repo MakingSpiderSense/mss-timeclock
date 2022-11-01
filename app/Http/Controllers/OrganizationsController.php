@@ -51,10 +51,20 @@ class OrganizationsController extends Controller
         $test_org_id = 3;
         $test_org_name = Organization::where('id', $test_org_id)->first()->name;
 
+        // Make sure that the User::where('email', $data['invite_email'])->first() is not already subscribed or invited to the organization.
+        $check_if_subscribed_or_invited = function($attribute, $value, $fail) use ($test_org_id) {
+            $user_to_invite = User::where('email', $value)->first();
+            if (!$user_to_invite) {
+                return;
+            } else if ( $user_to_invite->subscriptions()->where('org_id', $test_org_id)->exists() ) {
+                $fail('The user is already invited or subscribed to the organization.');
+            }
+        };
+
         // Validate the request
         // Note: Below, we use this array to post data to the database. If there is any data missing from the array, such as data that doesn't need to be validated, we can add it to the array as a key, but leave the value an empty string.
         $rules = [
-            'invite_email' => 'required|email|max:255|exists:users,email',
+            'invite_email' => ['required', 'email', 'max:255', 'exists:users,email', $check_if_subscribed_or_invited],
         ];
         // We use the Validator::make method so that we can output the errors as a flash message, similar to how we flash success messages. If we don't use this, we can simply set $data = request()->validate($rules);.
         $validator = Validator::make( $request->all(), $rules );
@@ -69,6 +79,5 @@ class OrganizationsController extends Controller
         $invited_user->subscriptions()->attach($test_org_id, ['role' => 'user', 'status' => 'invited', 'created_at' => now(), 'updated_at' => now()]);
         // Redirect to the profile page of logged in user
         return redirect('/dashboard')->with('message', ['success', "User invited to $test_org_name."]);
-        
     }
 }
