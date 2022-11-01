@@ -1,7 +1,7 @@
 <!-- Template -->
 <!-- Description: Set ".modal" display to "flex" when you want it to show up. You can add buttons to the footer using javascript. For "Save", "Okay", "Submit", or "Continue", use class ".modal-continue". For "Cancel" or "Close", use class ".modal-close". Add content to the body by updating currentModal from the parent. -->
 <template>
-    <div class="modal" @click="closeModal">
+    <div class="modal" @mousedown="closeModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title"></h2>
