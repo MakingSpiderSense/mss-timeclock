@@ -49,6 +49,7 @@ Route::post('/profile/update', [ProfilesController::class, 'update'])->middlewar
 // Organizations route
 Route::post('/organization', [OrganizationsController::class, 'store'])->name('organizations.store');
 Route::post('/organization/invite', [OrganizationsController::class, 'invite'])->name('organizations.invite');
+Route::get('/organization/invite-list', [OrganizationsController::class, 'show_invitations'])->name('organizations.invite-list');
 
 require __DIR__.'/auth.php';
 

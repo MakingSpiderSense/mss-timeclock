@@ -6,6 +6,7 @@ use Validator;
 use App\Models\User;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class OrganizationsController extends Controller
 {
@@ -79,5 +80,12 @@ class OrganizationsController extends Controller
         $invited_user->subscriptions()->attach($test_org_id, ['role' => 'user', 'status' => 'invited', 'created_at' => now(), 'updated_at' => now()]);
         // Redirect to the profile page of logged in user
         return redirect('/dashboard')->with('message', ['success', "User invited to $test_org_name."]);
+    }
+
+    // Retrieve the logged in user's invitations
+    public function show_invitations() {
+        // Retrieve all rows from the user_org_subscriptions table where the user_id is the logged in user's id and the status is 'invited'.
+        $invitations = auth()->user()->subscriptions()->where('status', 'invited')->get();
+        return $invitations;
     }
 }
