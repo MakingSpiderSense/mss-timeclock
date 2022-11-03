@@ -88,4 +88,18 @@ class OrganizationsController extends Controller
         $invitations = auth()->user()->subscriptions()->where('status', 'invited')->get();
         return $invitations;
     }
+
+    // Accept an invitation
+    public function accept_invitation(Request $request) {
+        // Update the user_org_subscriptions table to change the status from 'invited' to 'subscribed' for the logged in user and the organization id passed in the request.
+        auth()->user()->subscriptions()->updateExistingPivot($request->org_id, ['status' => 'subscribed']);
+        return 'Invitation accepted.';
+    }
+
+    // Decline an invitation
+    public function decline_invitation(Request $request) {
+        // Delete the row from the user_org_subscriptions table for the logged in user and the organization id passed in the request.
+        auth()->user()->subscriptions()->detach($request->org_id);
+        return 'Invitation declined.';
+    }
 }

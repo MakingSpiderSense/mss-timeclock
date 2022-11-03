@@ -50,6 +50,8 @@ Route::post('/profile/update', [ProfilesController::class, 'update'])->middlewar
 Route::post('/organization', [OrganizationsController::class, 'store'])->name('organizations.store');
 Route::post('/organization/invite', [OrganizationsController::class, 'invite'])->name('organizations.invite');
 Route::get('/organization/invite-list', [OrganizationsController::class, 'show_invitations'])->name('organizations.invite-list');
+Route::post('/organization/invite-accept/{org_id}', [OrganizationsController::class, 'accept_invitation'])->name('organizations.invite-accept');
+Route::post('/organization/invite-decline/{org_id}', [OrganizationsController::class, 'decline_invitation'])->name('organizations.invite-decline');
 
 require __DIR__.'/auth.php';
 

@@ -8,8 +8,8 @@
             <div class="invite" v-for="organization in invites" :key="organization">
                 <div class="inv-org">{{ organization.name }}</div>
                 <div class="inv-choice">
-                    <button class="btn btn-success" :data-org="organization.id">Accept</button>
-                    <button class="btn btn-danger" :data-org="organization.id">Decline</button>
+                    <button class="btn btn-success" @click="acceptInvite(organization.id)">Accept</button>
+                    <button class="btn btn-danger" @click="declineInvite(organization.id)">Decline</button>
                 </div>
             </div>
         </div>
@@ -33,11 +33,31 @@ export default {
         this.loadInvites();
     },
     methods:{
+        // Load invites
         loadInvites() {
-            // Load invites
             axios.get(route('organizations.invite-list')).then(res=>{
                 if (res.status==200) {
                     this.invites = res.data;
+                }
+            }).catch(err=>{
+                console.log(err);
+            });
+        },
+        // Accept invite
+        acceptInvite(organization) {
+            axios.post(route('organizations.invite-accept', {'org_id': organization})).then(res=>{
+                if (res.status==200) {
+                    this.loadInvites();
+                }
+            }).catch(err=>{
+                console.log(err);
+            });
+        },
+        // Decline invite
+        declineInvite(organization) {
+            axios.post(route('organizations.invite-decline', {'org_id': organization})).then(res=>{
+                if (res.status==200) {
+                    this.loadInvites();
                 }
             }).catch(err=>{
                 console.log(err);
