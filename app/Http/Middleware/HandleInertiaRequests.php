@@ -40,7 +40,8 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 // If user is logged in, set 'organizations' all organizations the user has subscribed to, otherwise set 'organizations' to null. Sort the organizations by name.
                 'organizations' =>  auth()->user() ? Organization::whereHas('subscribers', function ($query) {
-                    $query->where('user_id', auth()->user()->id);
+                    // Get all organizations that the user is subscribed to (not invited).
+                    $query->where('user_id', auth()->user()->id)->where('status', '!=', 'invited');
                 })->orderBy('name')->get() : null,
             ],
             'ziggy' => function () use ($request) {
