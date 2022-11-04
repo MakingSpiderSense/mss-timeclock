@@ -24,6 +24,7 @@ class User extends Authenticatable
         'username',
         'nickname',
         'avatar_url',
+        'active_org_id',
         'set_combined_org',
         'goal_hours',
         'simple_tax_rate',

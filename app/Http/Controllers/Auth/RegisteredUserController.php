@@ -42,16 +42,17 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Create an organization called "Unpaid" in the "organizations" table
+        $organization = Organization::create([
+            'name' => 'Unpaid',
+        ]);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-        ]);
-
-        // Create an organization called "Unpaid" in the "organizations" table
-        $organization = Organization::create([
-            'name' => 'Unpaid',
+            'active_org_id' => $organization->id,
         ]);
 
         // Subscribe the user to the organization with the role "admin"
