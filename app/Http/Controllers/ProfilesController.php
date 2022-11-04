@@ -21,7 +21,7 @@ class ProfilesController extends Controller
             'name' => 'required|string|max:255',
             // Make sure the email is unique, but ignore the current user's email. Also make sure it's a valid email.
             'email' => 'required|email|max:255|unique:users,email,' . auth()->user()->id,
-            'nickname' => 'required|max:255',
+            'nickname' => 'max:255',
             'username' => 'required|max:255|unique:users,username,' . auth()->user()->id,
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:128', // 128 KB
         ]);
