@@ -38,10 +38,10 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
-                // Set 'organizations' all organizations the user has subscribed to
-                'organizations' => Organization::whereHas('subscribers', function ($query) {
+                // If user is logged in, set 'organizations' all organizations the user has subscribed to, otherwise set 'organizations' to null
+                'organizations' =>  auth()->user() ? Organization::whereHas('subscribers', function ($query) {
                     $query->where('user_id', auth()->user()->id);
-                })->get(),
+                })->get() : null,
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
