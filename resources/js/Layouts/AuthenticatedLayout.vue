@@ -259,8 +259,21 @@ export default {
             // Make change to active organization in database
             this.$inertia.post(`/organization/active/${organizationId}`);
         },
+        // Set the option to 'selected' if the organization is the active organization
+        setOptionSelected() {
+            const activeOrgId = this.$page.props.auth.user.active_org_id;
+            const options = document.querySelectorAll('select[name="organization"] option');
+            options.forEach(option => {
+                if (option.value == activeOrgId) {
+                    option.setAttribute('selected', 'selected');
+                } else {
+                    option.removeAttribute('selected');
+                }
+            });
+        },
     },
     mounted() {
+        this.setOptionSelected();
         // console.log(usePage().props.value.auth.organizations);
     },
 }
