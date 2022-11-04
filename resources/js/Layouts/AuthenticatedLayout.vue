@@ -162,11 +162,12 @@ const showingNavigationDropdown = ref(false);
                         <div class="money-positive">$<span id="monthAmountEarned">2,346.25</span> Earned</div>
                     </div>
                     <!-- Current Organization and Time -->
-                    <div>
+                    <div class="text-right">
                         <!-- Organization Select -->
                         <select class="mb-4" name="organization">
-                            <option value="Making Spider Sense">Making Spider Sense</option>
-                            <option value="Unpaid">Unpaid</option>
+                            <option v-for="organization in $page.props.auth.organizations" :key="organization.id" :value="organization.id">
+                                {{ organization.name }}
+                            </option>
                         </select>
                         <div class="text-right">
                             <!-- Clocked-in time -->
@@ -187,6 +188,7 @@ const showingNavigationDropdown = ref(false);
 
 <!-- Scripts -->
 <script>
+import { usePage } from '@inertiajs/inertia-vue3';
 export default {
     props: ['pageModal'],
     data() {
@@ -245,6 +247,9 @@ export default {
                 }
             }
         },
+    },
+    mounted() {
+        // console.log(usePage().props.value.auth.organizations);
     },
 }
 </script>
