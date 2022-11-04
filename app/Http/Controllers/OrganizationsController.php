@@ -52,7 +52,7 @@ class OrganizationsController extends Controller
         $test_org_id = 3;
         $test_org_name = Organization::where('id', $test_org_id)->first()->name;
 
-        // Make sure that the User::where('email', $data['invite_email'])->first() is not already subscribed or invited to the organization.
+        // Make sure that the user is not already subscribed or invited to the organization.
         $check_if_subscribed_or_invited = function($attribute, $value, $fail) use ($test_org_id) {
             $user_to_invite = User::where('email', $value)->first();
             if (!$user_to_invite) {
