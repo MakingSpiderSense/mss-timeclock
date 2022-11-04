@@ -164,13 +164,13 @@ const showingNavigationDropdown = ref(false);
                     <!-- Current Organization and Time -->
                     <div>
                         <!-- Organization Select -->
-                        <select class="mb-4" name="organziation">
+                        <select class="mb-4" name="organization">
                             <option value="Making Spider Sense">Making Spider Sense</option>
                             <option value="Unpaid">Unpaid</option>
                         </select>
                         <div class="text-right">
                             <!-- Clocked-in time -->
-                            <div class="mb-5">Clocked in at <span id="clockedinTime">1:12pm</span></div>
+                            <div class="mb-5">Clocked in at <span id="clockedInTime">1:12pm</span></div>
                             <!-- Current time on the clock -->
                             <div class="text-5xl"><span id="timeOnClock">06:43:58</span></div>
                         </div>
