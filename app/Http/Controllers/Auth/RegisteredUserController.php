@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Organization;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -47,6 +48,14 @@ class RegisteredUserController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
         ]);
+
+        // Create an organization called "Unpaid" in the "organizations" table
+        $organization = Organization::create([
+            'name' => 'Unpaid',
+        ]);
+
+        // Subscribe the user to the organization with the role "admin"
+        $user->subscriptions()->attach($organization->id, ['role' => 'admin', 'created_at' => now(), 'updated_at' => now()]);
 
         event(new Registered($user));
 
