@@ -25,12 +25,12 @@ export default {
         closeFlashMsg() {
             const flashMsg = document.querySelector('.flash-msg');
             flashMsg.style.display = 'none';
-        }
+        },
     },
     computed: {
         msgColor() {
             return this.msgType === 'success' ? 'teal' : this.msgType === 'error' ? 'red' : this.msgType === 'warning' ? 'yellow' : 'blue';
-        }
+        },
     }
 }
 </script>

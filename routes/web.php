@@ -52,6 +52,7 @@ Route::post('/organization/invite', [OrganizationsController::class, 'invite'])-
 Route::get('/organization/invite-list', [OrganizationsController::class, 'show_invitations'])->name('organizations.invite-list');
 Route::post('/organization/invite-accept/{org_id}', [OrganizationsController::class, 'accept_invitation'])->name('organizations.invite-accept');
 Route::post('/organization/invite-decline/{org_id}', [OrganizationsController::class, 'decline_invitation'])->name('organizations.invite-decline');
+Route::post('/organization/active/{org_id}', [OrganizationsController::class, 'set_active'])->name('organizations.active');
 
 require __DIR__.'/auth.php';
 

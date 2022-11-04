@@ -164,7 +164,7 @@ const showingNavigationDropdown = ref(false);
                     <!-- Current Organization and Time -->
                     <div class="text-right">
                         <!-- Organization Select -->
-                        <select class="mb-4" name="organization">
+                        <select class="mb-4" name="organization" @change="updateActiveOrganization()">
                             <option v-for="organization in $page.props.auth.organizations" :key="organization.id" :value="organization.id">
                                 {{ organization.name }}
                             </option>
@@ -249,6 +249,15 @@ export default {
                     modalFooter.removeEventListener('click', saveInvite);
                 }
             }
+        },
+        // Update active organization by posting to /organization/active/{id}
+        updateActiveOrganization() {
+            const flashMsg = document.querySelector('.flash-msg');
+            const organizationId = document.querySelector('select[name="organization"]').value;
+            // Restore flash message
+            if (flashMsg) { flashMsg.style.display = 'block'; }
+            // Make change to active organization in database
+            this.$inertia.post(`/organization/active/${organizationId}`);
         },
     },
     mounted() {

@@ -102,4 +102,17 @@ class OrganizationsController extends Controller
         auth()->user()->subscriptions()->detach($request->org_id);
         return 'Invitation declined.';
     }
+
+    // Set active organization to the organization id passed in the request
+    public function set_active(Request $request) {
+        // Check if the logged in user is subscribed to the organization id passed in the request.
+        if ( auth()->user()->subscriptions()->where('org_id', $request->org_id)->where('status', '!=', 'invited')->exists() ) {
+            // Update the active_org_id column in the users table to the organization id passed in the request.
+            auth()->user()->update(['active_org_id' => $request->org_id]);
+            $org_name = Organization::where('id', $request->org_id)->first()->name;
+            return redirect()->back()->with('message', ['success', "Active organization set to $org_name"]);
+        } else {
+            return redirect()->back()->with('message', ['error', 'You are not subscribed to that organization.']);
+        }
+    }
 }
