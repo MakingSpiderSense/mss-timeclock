@@ -204,6 +204,7 @@ export default {
         }
     },
     methods: {
+        // Swap modal body to OrgCreate
         modalOrgCreate() {
             this.currentModal = "OrgCreate";
             document.querySelector('.modal').style.display = "flex";
@@ -219,6 +220,7 @@ export default {
                 }
             }
         },
+        // Swap modal body to InvitesManage
         modalInvitesManage() {
             this.currentModal = "InvitesManage";
             document.querySelector('.modal').style.display = "flex";
@@ -232,6 +234,7 @@ export default {
                 modalFooter.removeEventListener('click', closeModal);
             }
         },
+        // Swap modal body to InviteCreate
         modalInvitesCreate() {
             this.currentModal = "InvitesCreate";
             document.querySelector('.modal').style.display = "flex";
