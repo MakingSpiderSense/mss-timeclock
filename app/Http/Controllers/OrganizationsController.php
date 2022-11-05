@@ -48,16 +48,16 @@ class OrganizationsController extends Controller
     // Invite a user to the organization
     public function invite(Request $request)
     {   
-        // Todo: Make this dynamic based on current organization
-        $test_org_id = 3;
-        $test_org_name = Organization::where('id', $test_org_id)->first()->name;
+        // Get the logged in user's active_org_id
+        $active_org_id = auth()->user()->active_org_id;
+        $active_org_name = Organization::where('id', $active_org_id)->first()->name;
 
         // Make sure that the user is not already subscribed or invited to the organization.
-        $check_if_subscribed_or_invited = function($attribute, $value, $fail) use ($test_org_id) {
+        $check_if_subscribed_or_invited = function($attribute, $value, $fail) use ($active_org_id) {
             $user_to_invite = User::where('email', $value)->first();
             if (!$user_to_invite) {
                 return;
-            } else if ( $user_to_invite->subscriptions()->where('org_id', $test_org_id)->exists() ) {
+            } else if ( $user_to_invite->subscriptions()->where('org_id', $active_org_id)->exists() ) {
                 $fail('The user is already invited or subscribed to the organization.');
             }
         };
@@ -77,9 +77,9 @@ class OrganizationsController extends Controller
         // Subscribe the user to the organization
         $invited_user = User::where('email', $data['invite_email'])->first();
         // Attach the user to the organization with the role of admin and include created_at and updated_at timestamps.
-        $invited_user->subscriptions()->attach($test_org_id, ['role' => 'user', 'status' => 'invited', 'created_at' => now(), 'updated_at' => now()]);
+        $invited_user->subscriptions()->attach($active_org_id, ['role' => 'user', 'status' => 'invited', 'created_at' => now(), 'updated_at' => now()]);
         // Redirect to the profile page of logged in user
-        return redirect('/dashboard')->with('message', ['success', "User invited to $test_org_name."]);
+        return redirect('/dashboard')->with('message', ['success', "User invited to $active_org_name."]);
     }
 
     // Retrieve the logged in user's invitations

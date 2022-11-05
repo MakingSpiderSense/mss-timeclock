@@ -43,6 +43,8 @@ class HandleInertiaRequests extends Middleware
                     // Get all organizations that the user is subscribed to (not invited).
                     $query->where('user_id', auth()->user()->id)->where('status', '!=', 'invited');
                 })->orderBy('name')->get() : null,
+                // Look up the name of the organization with the active_org_id
+                'active_org_name' => auth()->user() ? Organization::where('id', auth()->user()->active_org_id)->first()->name : null,
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [

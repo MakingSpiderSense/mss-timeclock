@@ -19,7 +19,7 @@ const submit = () => {
 <!-- Template -->
 <template>
     <div>
-        <div class="mb-4">Invite a user to [organization]. Please note that once invited, you cannot uninvite them.</div>
+        <div class="mb-4">Invite a user to <strong>{{ $page.props.auth.active_org_name }}</strong>. Please note that once invited, you cannot un-invite them.</div>
         <div>
             <!-- Form -->
             <form id="form_org_invite" @submit.prevent="submit" autocomplete="off">
