@@ -84,7 +84,7 @@ const showingNavigationDropdown = ref(false);
                                 <DropdownLink preserve-state as="button" @click="modalInvitesManage">
                                     Manage Invites
                                 </DropdownLink>
-                                <DropdownLink :href="route('placeholder')" as="button">
+                                <DropdownLink :href="route('hourly-rates')" as="button">
                                     Edit hourly rates
                                 </DropdownLink>
                             </template>

@@ -35,7 +35,7 @@ Route::get('/placeholder', function () {
     return 'Placeholder page';
 })->name('placeholder');
 
-// Profile route
+// Profile routes
 Route::get('/profile', function () {
     return Inertia::render('Profile/Profile');
 })->middleware(['auth', 'verified'])->name('profile');
@@ -46,13 +46,18 @@ Route::get('/profile/edit', function () {
 // Update Profile
 Route::post('/profile/update', [ProfilesController::class, 'update'])->middleware(['auth', 'verified'])->name('profile.update');
 
-// Organizations route
+// Organization routes
 Route::post('/organization', [OrganizationsController::class, 'store'])->name('organizations.store');
 Route::post('/organization/invite', [OrganizationsController::class, 'invite'])->name('organizations.invite');
 Route::get('/organization/invite-list', [OrganizationsController::class, 'show_invitations'])->name('organizations.invite-list');
 Route::post('/organization/invite-accept/{org_id}', [OrganizationsController::class, 'accept_invitation'])->name('organizations.invite-accept');
 Route::post('/organization/invite-decline/{org_id}', [OrganizationsController::class, 'decline_invitation'])->name('organizations.invite-decline');
 Route::post('/organization/active/{org_id}', [OrganizationsController::class, 'set_active'])->name('organizations.active');
+
+// Hourly Rates route
+Route::get('/hourly-rates', function () {
+    return Inertia::render('Rates');
+})->middleware(['auth', 'verified'])->name('hourly-rates');
 
 require __DIR__.'/auth.php';
 
