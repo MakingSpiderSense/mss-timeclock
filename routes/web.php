@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\OrganizationsController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\ClockInOutController;
+use App\Http\Controllers\OrganizationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,9 @@ Route::get('/organization/invite-list', [OrganizationsController::class, 'show_i
 Route::post('/organization/invite-accept/{org_id}', [OrganizationsController::class, 'accept_invitation'])->name('organizations.invite-accept');
 Route::post('/organization/invite-decline/{org_id}', [OrganizationsController::class, 'decline_invitation'])->name('organizations.invite-decline');
 Route::post('/organization/active/{org_id}', [OrganizationsController::class, 'set_active'])->name('organizations.active');
+
+// Clock In/Out routes
+Route::post('/clock-in', [ClockInOutController::class, 'clockIn'])->name('clock-in');
 
 // Hourly Rates route
 Route::get('/hourly-rates', function () {

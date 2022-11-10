@@ -15,7 +15,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('dashboard'), {
+    form.post(route('clock-in'), {
         onFinish: () => form.reset('manualTime', 'category', 'subcategory', 'notes'),
     });
 };
