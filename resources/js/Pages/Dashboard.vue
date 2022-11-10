@@ -127,9 +127,9 @@ export default {
                 const manualTime = document.getElementById("manual-time-input").value;
                 document.getElementById("manualTime").value = manualTime;
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-                const manialTimeDisplay = document.getElementById("manual-time-display");
-                manialTimeDisplay.innerHTML = `${manualTimeFormatted}`;
-                manialTimeDisplay.title = "The currently set manual time";
+                const manualTimeDisplay = document.getElementById("manual-time-display");
+                manualTimeDisplay.innerHTML = `${manualTimeFormatted}`;
+                manualTimeDisplay.title = "The currently set manual time";
                 // Close modal and remove event listener
                 document.querySelector('.modal').style.display = 'none';
                 modalFooter.removeEventListener('click', saveTime);
