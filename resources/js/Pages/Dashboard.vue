@@ -4,21 +4,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Textarea from '@/Components/Textarea.vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-
-const form = useForm({
-    manualTime: '',
-    category: '',
-    subcategory: '',
-    notes: '',
-});
-
-const submit = () => {
-    form.post(route('clock-in'), {
-        onFinish: () => form.reset('manualTime', 'category', 'subcategory', 'notes'),
-    });
-};
 </script>
 
 <template>
@@ -94,6 +81,20 @@ const submit = () => {
 
 <!-- Scripts -->
 <script>
+import { useForm } from '@inertiajs/inertia-vue3';
+
+const form = useForm({
+    manualTime: '',
+    category: '',
+    subcategory: '',
+    notes: '',
+});
+const submit = () => {
+    form.post(route('clock-in'), {
+        onFinish: () => form.reset('manualTime', 'category', 'subcategory', 'notes'),
+    });
+};
+
 export default {
     data() {
         return {
@@ -125,7 +126,7 @@ export default {
             modalFooter.querySelector('button').addEventListener('click', saveTime);
             function saveTime() {
                 const manualTime = document.getElementById("manual-time-input").value;
-                document.getElementById("manualTime").value = manualTime;
+                form.manualTime = manualTime;
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
                 const manualTimeDisplay = document.getElementById("manual-time-display");
                 manualTimeDisplay.innerHTML = `${manualTimeFormatted}`;
@@ -138,12 +139,12 @@ export default {
         // When #category_options is changed, update #category
         categoryOptionsChanged() {
             const category = document.getElementById("category_options").value;
-            document.getElementById("category").value = category;
+            form.category = category;
         },
         // When #subcategory_options is changed, update #subcategory
         subcategoryOptionsChanged() {
             const subcategory = document.getElementById("subcategory_options").value;
-            document.getElementById("subcategory").value = subcategory;
+            form.subcategory = subcategory;
         },
         // Autocomplete function
         autocomplete(inp, arr) {
