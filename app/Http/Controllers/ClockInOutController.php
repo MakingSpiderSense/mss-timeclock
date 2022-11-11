@@ -10,6 +10,13 @@ class ClockInOutController extends Controller
     public function clockIn(Request $request)
     {
         // Validate request
-       dd('Clocked In');
+        $request->validate([
+            'category' => 'required|string|max:255',
+            'manualTime' => 'nullable|date_format:H:i',
+            'subcategory' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
+        ]);
+
+        dd($request->all());
     }
 }
