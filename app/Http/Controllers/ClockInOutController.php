@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ClockInOutController extends Controller
@@ -23,6 +24,15 @@ class ClockInOutController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        dd($request->all());
+        // If the category name doesn't exist in the "categories" table for the logged in user's active organization, create it.
+        Category::firstOrCreate([
+            'name' => $request->category, 
+            'org_id' => auth()->user()->active_org_id
+        ]);
+
+        // Get the category id where name is equal to the category name and the org_id is equal to the logged in user's active organization id
+        $category_id = Category::where('name', $request->category)->where('org_id', auth()->user()->active_org_id)->first()->id;
+
+        dd($category_id);
     }
 }
