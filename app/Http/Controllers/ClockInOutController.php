@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 class ClockInOutController extends Controller
 {
+    public function __construct()
+    {
+        // Force the user to be logged in to access these functions. This will redirect them to the login page if they are not.
+        $this->middleware('auth');
+    }
+
     // Clock in
     public function clockIn(Request $request)
     {
