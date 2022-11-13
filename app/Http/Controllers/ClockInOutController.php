@@ -37,16 +37,20 @@ class ClockInOutController extends Controller
         $subcategory_id = null;
 
         // Store the subcategory (if applicable)
-        // If the subcategory is not null...
-        if ($request->subcategory) {
-            // If the subcategory name doesn't exist in the "subcategories" table for the $category_id, create it.
-            Subcategory::firstOrCreate([
-                'name' => $request->subcategory, 
-                'category_id' => $category_id
-            ]);
-            // Get the subcategory id where name is equal to the subcategory name and the category_id is equal to the $category_id
-            $subcategory_id = Subcategory::where('name', $request->subcategory)->where('category_id', $category_id)->first()->id;
+        // If the subcategory is not null, set it to the request. Otherwise, set it to "Other".
+        if ($request->subcategory != null) {
+            $subcategory_name = $request->subcategory;
+        } else {
+            $subcategory_name = "Other";
         }
+        // If the subcategory name doesn't exist in the "subcategories" table for the $category_id, create it.
+        Subcategory::firstOrCreate([
+            'name' => $subcategory_name, 
+            'category_id' => $category_id
+        ]);
+        // Get the subcategory id where name is equal to the subcategory name and the category_id is equal to the $category_id
+        $subcategory_id = Subcategory::where('name', $subcategory_name)->where('category_id', $category_id)->first()->id;
+
         dd($category_id, $subcategory_id);
     }
 }
