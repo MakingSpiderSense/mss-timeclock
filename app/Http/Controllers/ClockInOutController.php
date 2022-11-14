@@ -14,6 +14,23 @@ class ClockInOutController extends Controller
         $this->middleware('auth');
     }
 
+    // Index function
+    public function index()
+    {
+        // Get the user's current organization's id
+        $current_org_id = auth()->user()->active_org_id;
+        // Get the user's current organization's categories
+        $categories = Category::where('org_id', $current_org_id)->get();
+        // For each category, get the subcategories
+        foreach ($categories as $category) {
+            $category->subcategories = Subcategory::where('category_id', $category->id)->get();
+        }
+        // Inertia render dashboard view with categories and subcategories
+        return inertia('Dashboard', [
+            'categoriesObj' => $categories,
+        ]);
+    }
+
     // Clock in
     public function clockIn(Request $request)
     {

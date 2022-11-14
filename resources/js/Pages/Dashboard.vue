@@ -46,7 +46,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
                             <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @change="categoryOptionsChanged">
-                                <option v-for="category in categories" v-bind:key="category">{{ category }}</option>
+                                <option v-for="category in this.categoriesArray" v-bind:key="category">{{ category }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
@@ -96,9 +96,12 @@ const submit = () => {
 };
 
 export default {
+    props: {
+        categoriesObj: Object,
+    },
     data() {
         return {
-            categories: ["Apple Inc", "Advance Auto Parts", "Aetna", "Aflac", "Allstate", "Allergan", "Amazon", "American Express", "American International Group", "American Tower", "Anthem", "Aon", "Aramark", "Arch Capital Group", "Arthur J. Gallagher", "Assurant", "AT&T", "Automatic Data Processing"],
+            categoriesArray: [],
             subcategories: ["Other", "Task A1", "Task A2", "Task B1", "Task B2"],
             pageModal: {
                 title: 'ManualTimeSet',
@@ -107,6 +110,10 @@ export default {
         }
     },
     mounted() {
+        // Create categoriesArray from categories object with the name of each category
+        this.categoriesObj.forEach(category => {
+            this.categoriesArray.push(category.name);
+        });
         this.autocomplete(document.getElementById("category"), this.categories);
         this.autocomplete(document.getElementById("subcategory"), this.subcategories);
     },

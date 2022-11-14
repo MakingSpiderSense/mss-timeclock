@@ -27,9 +27,10 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard
+Route::get('/dashboard',  [ClockInOutController::class, 'index'])->name('dashboard');
+// Clock In/Out
+Route::post('/clock-in', [ClockInOutController::class, 'clockIn'])->name('clock-in');
 
 // Add route to 'placeholder' which simply returns the string 'Placeholder page'. 
 Route::get('/placeholder', function () {
@@ -54,9 +55,6 @@ Route::get('/organization/invite-list', [OrganizationsController::class, 'show_i
 Route::post('/organization/invite-accept/{org_id}', [OrganizationsController::class, 'accept_invitation'])->name('organizations.invite-accept');
 Route::post('/organization/invite-decline/{org_id}', [OrganizationsController::class, 'decline_invitation'])->name('organizations.invite-decline');
 Route::post('/organization/active/{org_id}', [OrganizationsController::class, 'set_active'])->name('organizations.active');
-
-// Clock In/Out routes
-Route::post('/clock-in', [ClockInOutController::class, 'clockIn'])->name('clock-in');
 
 // Hourly Rates route
 Route::get('/hourly-rates', function () {
