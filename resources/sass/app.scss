@@ -69,6 +69,10 @@ a {
 main input {
     margin-bottom: 20px;
 }
+// Select
+select {
+    cursor: pointer;
+}
 // Forms: Autocomplete
 .autocomplete {
     /*the container must be positioned relative:*/
