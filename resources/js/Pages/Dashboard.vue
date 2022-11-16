@@ -45,7 +45,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @change="categoryOptionsChanged">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @click="categoryOptionsChanged">
                                 <option disabled selected value>-- Select --</option>
                                 <option v-for="category in this.categoriesArray" v-bind:key="category">{{ category }}</option>
                             </select>
@@ -53,7 +53,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         </div>
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @change="subcategoryOptionsChanged">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @click="subcategoryOptionsChanged">
                                 <option disabled selected value>-- Select --</option>
                                 <option v-for="subcategory in subcategories" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
