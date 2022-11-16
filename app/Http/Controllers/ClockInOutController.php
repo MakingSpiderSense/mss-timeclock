@@ -19,11 +19,11 @@ class ClockInOutController extends Controller
     {
         // Get the user's current organization's id
         $current_org_id = auth()->user()->active_org_id;
-        // Get the user's current organization's categories
-        $categories = Category::where('org_id', $current_org_id)->get();
-        // For each category, get the subcategories
+        // Get the user's current organization's categories and sort them by name
+        $categories = Category::where('org_id', $current_org_id)->orderBy('name')->get();
+        // For each category, get the subcategories and sort them by name
         foreach ($categories as $category) {
-            $category->subcategories = Subcategory::where('category_id', $category->id)->get();
+            $category->subcategories = Subcategory::where('category_id', $category->id)->orderBy('name')->get();
         }
         // Inertia render dashboard view with categories and subcategories
         return inertia('Dashboard', [
@@ -41,6 +41,8 @@ class ClockInOutController extends Controller
             'subcategory' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
+
+        // dd($request->category, $request->manualTime, $request->subcategory, $request->notes);
 
         // Store the category (if applicable)
         // If the category name doesn't exist in the "categories" table for the logged in user's active organization, create it.
