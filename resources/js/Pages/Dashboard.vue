@@ -114,7 +114,7 @@ export default {
         this.categoriesObj.forEach(category => {
             this.categoriesArray.push(category.name);
         });
-        this.autocomplete(document.getElementById("category"), this.categories);
+        this.autocomplete(document.getElementById("category"), this.categoriesArray);
         this.autocomplete(document.getElementById("subcategory"), this.subcategories);
     },
     methods: {
