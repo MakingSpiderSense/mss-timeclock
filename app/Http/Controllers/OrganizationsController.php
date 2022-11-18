@@ -110,7 +110,9 @@ class OrganizationsController extends Controller
             // Update the active_org_id column in the users table to the organization id passed in the request.
             auth()->user()->update(['active_org_id' => $request->org_id]);
             $org_name = Organization::where('id', $request->org_id)->first()->name;
-            return redirect()->back()->with('message', ['success', "Active organization set to $org_name"]);
+            // Note: When I tried redirecting to the dashboard, the categories were not updated. I couldn't figure out how to update that data. I feel like there should be a way to do a full page refresh to the dashboard, which should update the categories, but I can't find any info on how to do so. So for now, I'm just redirecting to a refresh page for 1 second so you can see the success message, then back to the dashboard.
+            // Todo: Figure out how to do a full page refresh to the dashboard.
+            return redirect()->route('refresh')->with('message', ['success', "Active organization set to $org_name"]);
         } else {
             return redirect()->back()->with('message', ['error', 'You are not subscribed to that organization.']);
         }
