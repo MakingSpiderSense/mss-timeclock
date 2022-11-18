@@ -31,10 +31,6 @@ Route::get('/', function () {
 Route::get('/dashboard',  [ClockInOutController::class, 'index'])->name('dashboard');
 // Clock In/Out
 Route::post('/clock-in', [ClockInOutController::class, 'clockIn'])->name('clock-in');
-// Refresh
-Route::get('/refresh', function () {
-    return Inertia::render('Refresh');
-})->name('refresh');
 
 // Add route to 'placeholder' which simply returns the string 'Placeholder page'. 
 Route::get('/placeholder', function () {

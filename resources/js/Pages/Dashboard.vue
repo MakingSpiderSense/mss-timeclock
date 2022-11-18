@@ -112,12 +112,10 @@ export default {
         }
     },
     mounted() {
-        // Create categoriesArray from categories object with the name of each category
-        this.categoriesObj.forEach(category => {
-            this.categoriesArray.push(category.name);
-        });
-        this.autocomplete(document.getElementById("category"), this.categoriesArray);
-        this.autocomplete(document.getElementById("subcategory"), this.subcategories);
+        this.updateCategoryOptions();
+    },
+    updated() {
+        this.updateCategoryOptions();
     },
     methods: {
         // When "Enter Manual Time" is clicked, display the modal
@@ -144,6 +142,16 @@ export default {
                 document.querySelector('.modal').style.display = 'none';
                 modalFooter.removeEventListener('click', saveTime);
             }
+        },
+        // Update category select list
+        updateCategoryOptions() {
+            // Create categoriesArray from categories object with the name of each category
+            this.categoriesArray = [];
+            this.categoriesObj.forEach(category => {
+                this.categoriesArray.push(category.name);
+            });
+            this.autocomplete(document.getElementById("category"), this.categoriesArray);
+            this.autocomplete(document.getElementById("subcategory"), this.subcategories);
         },
         // When #category_options is changed, update #category
         categoryOptionsChanged() {
