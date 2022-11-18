@@ -55,7 +55,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <div style="padding-top: 24px"></div>
                             <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @click="subcategoryOptionsChanged">
                                 <option disabled selected value>-- Select --</option>
-                                <option v-for="subcategory in subcategories" v-bind:key="subcategory">{{ subcategory }}</option>
+                                <option v-for="subcategory in subcategoriesArray" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.subcategory_options" />
                         </div>
@@ -104,7 +104,7 @@ export default {
     data() {
         return {
             categoriesArray: [],
-            subcategories: ["Other", "Task A1", "Task A2", "Task B1", "Task B2"],
+            subcategoriesArray: [],
             pageModal: {
                 title: 'ManualTimeSet',
                 count: 0,
@@ -145,23 +145,41 @@ export default {
         },
         // Update category select list
         updateCategoryOptions() {
-            // Create categoriesArray from categories object with the name of each category
-            this.categoriesArray = [];
+            // Create categoriesFullArray from categories object with the name of each category
+            this.categoriesFullArray = [];
             this.categoriesObj.forEach(category => {
-                this.categoriesArray.push(category.name);
+                // Create subcategories array from each category
+                let subcategories = [];
+                category.subcategories.forEach(subcategory => {
+                    subcategories.push(subcategory.name);
+                });
+                this.categoriesFullArray.push([category.name, subcategories]);
             });
+            this.categoriesArray = this.categoriesFullArray.map(value => value[0]);
             this.autocomplete(document.getElementById("category"), this.categoriesArray);
-            this.autocomplete(document.getElementById("subcategory"), this.subcategories);
+            this.autocomplete(document.getElementById("subcategory"), this.subcategoriesArray);
         },
-        // When #category_options is changed, update #category
-        categoryOptionsChanged() {
+        // When category is changed, update the subcategory select list
+        updateSubcategoryOptions() {
             const category = document.getElementById("category_options").value;
-            form.category = category;
+            // Filter the categoriesFullArray array to get the subcategories array of the selected category
+            this.subcategoriesArray = this.categoriesFullArray.filter(value => value[0] == category)[0][1];
+            this.autocomplete(document.getElementById("subcategory"), this.subcategoriesArray);
         },
-        // When #subcategory_options is changed, update #subcategory
+        // When #category_options is changed, update form.category and subcategory options
+        categoryOptionsChanged() {
+            const category = document.getElementById("category_options");
+            if (category.value) {
+                form.category = category.value;
+                this.updateSubcategoryOptions();
+            }
+        },
+        // When #subcategory_options is changed, update form.subcategory
         subcategoryOptionsChanged() {
-            const subcategory = document.getElementById("subcategory_options").value;
-            form.subcategory = subcategory;
+            const subcategory = document.getElementById("subcategory_options");
+            if (subcategory.value) {
+                form.subcategory = subcategory.value;
+            }
         },
         // Autocomplete function
         autocomplete(inp, arr) {
