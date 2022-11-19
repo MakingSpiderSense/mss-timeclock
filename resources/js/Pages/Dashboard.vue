@@ -26,6 +26,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 <div class="clockin-form-input">
                     <!-- Column 1 -->
                     <div>
+                        <!-- Category Text Input -->
                         <div class="mb-4">
                             <InputLabel for="category" value="Category" />
                             <div class="autocomplete">
@@ -33,6 +34,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             </div>
                             <InputError class="mt-2" :message="form.errors.category" />
                         </div>
+                        <!-- Subcategory Text Input -->
                         <div class="mb-4">
                             <InputLabel for="subcategory" value="Subcategory" />
                             <div class="autocomplete">
@@ -43,6 +45,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </div>
                     <!-- Column 2 -->
                     <div>
+                        <!-- Category Dropdown Select -->
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
                             <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @click="categoryOptionsChanged">
@@ -51,6 +54,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
+                        <!-- Subcategory Dropdown Select -->
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
                             <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @click="subcategoryOptionsChanged">
@@ -62,6 +66,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </div>
                     <!-- Column 3 -->
                     <div>
+                        <!-- Notes -->
                         <div class="mb-4">
                             <InputLabel for="notes" value="Notes" />
                             <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" tabindex="5" />
