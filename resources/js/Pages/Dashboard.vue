@@ -169,8 +169,13 @@ export default {
             console.log("updateSubcategoryOptions");
             const category = document.getElementById("category").value;
             console.log(category);
-            // Filter the categoriesFullArray array to get the subcategories array of the selected category
-            this.subcategoriesArray = this.categoriesFullArray.filter(value => value[0] == category)[0][1];
+            // Check if category exists in this.categoriesArray
+            if (this.categoriesArray.includes(category)) {
+                // If so, filter the categoriesFullArray array to get the subcategories array of the selected category
+                this.subcategoriesArray = this.categoriesFullArray.filter(value => value[0] === category)[0][1];
+            } else {
+                this.subcategoriesArray = [];
+            }
             this.autocomplete(document.getElementById("subcategory"), this.subcategoriesArray);
         },
         // When #category_options is changed, update form.category and subcategory options
