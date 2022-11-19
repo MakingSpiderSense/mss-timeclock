@@ -30,7 +30,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <div class="mb-4">
                             <InputLabel for="category" value="Category" />
                             <div class="autocomplete">
-                                <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" tabindex="1" required autofocus />
+                                <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" @input="updateSubcategoryOptions" tabindex="1" required autofocus />
                             </div>
                             <InputError class="mt-2" :message="form.errors.category" />
                         </div>
@@ -166,24 +166,28 @@ export default {
         },
         // When category is changed, update the subcategory select list
         updateSubcategoryOptions() {
-            const category = document.getElementById("category_options").value;
+            console.log("updateSubcategoryOptions");
+            const category = document.getElementById("category").value;
+            console.log(category);
             // Filter the categoriesFullArray array to get the subcategories array of the selected category
             this.subcategoriesArray = this.categoriesFullArray.filter(value => value[0] == category)[0][1];
             this.autocomplete(document.getElementById("subcategory"), this.subcategoriesArray);
         },
         // When #category_options is changed, update form.category and subcategory options
         categoryOptionsChanged() {
-            const category = document.getElementById("category_options");
-            if (category.value) {
-                form.category = category.value;
+            const categoryInput = document.getElementById("category");
+            const categoryOptions = document.getElementById("category_options");
+            if (categoryOptions.value) {
+                form.category = categoryOptions.value;
+                categoryInput.value = categoryOptions.value;
                 this.updateSubcategoryOptions();
             }
         },
         // When #subcategory_options is changed, update form.subcategory
         subcategoryOptionsChanged() {
-            const subcategory = document.getElementById("subcategory_options");
-            if (subcategory.value) {
-                form.subcategory = subcategory.value;
+            const subcategoryOptions = document.getElementById("subcategory_options");
+            if (subcategoryOptions.value) {
+                form.subcategory = subcategoryOptions.value;
             }
         },
         // Autocomplete function
