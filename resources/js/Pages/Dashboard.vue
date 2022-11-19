@@ -166,9 +166,7 @@ export default {
         },
         // When category is changed, update the subcategory select list
         updateSubcategoryOptions() {
-            console.log("updateSubcategoryOptions");
             const category = document.getElementById("category").value;
-            console.log(category);
             // Check if category exists in this.categoriesArray
             if (this.categoriesArray.includes(category)) {
                 // If so, filter the categoriesFullArray array to get the subcategories array of the selected category
