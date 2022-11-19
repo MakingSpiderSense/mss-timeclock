@@ -197,6 +197,8 @@ export default {
         },
         // Autocomplete function
         autocomplete(inp, arr) {
+            // Cache the this keyword so it can be used inside the event listener
+            let _this = this;
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/
             var currentFocus;
@@ -230,6 +232,7 @@ export default {
                             inp.value = this.getElementsByTagName("input")[0].value;
                             if (inp.id == "category") {
                                 form.category = inp.value;
+                                _this.updateSubcategoryOptions();
                             } else if (inp.id == "subcategory") {
                                 form.subcategory = inp.value;
                             }
