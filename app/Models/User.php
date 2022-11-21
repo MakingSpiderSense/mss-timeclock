@@ -56,4 +56,11 @@ class User extends Authenticatable
         // "A user can subscribe to many organizations."
         return $this->belongsToMany(Organization::class, 'user_org_subscriptions', 'user_id', 'org_id');
     }
+
+    public function tempLogs()
+    {
+        // Sets up relationship with TempLog model.
+        // "A user can have many temp logs."
+        return $this->hasMany(TempLog::class);
+    }
 }
