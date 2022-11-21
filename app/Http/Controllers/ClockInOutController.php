@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Subcategory;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 
 class ClockInOutController extends Controller
@@ -42,7 +43,7 @@ class ClockInOutController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // dd($request->category, $request->manualTime, $request->subcategory, $request->notes);
+        // dd($request->category, $request->subcategory, $request->manualTime, $request->notes);
 
         // Store the category (if applicable)
         // If the category name doesn't exist in the "categories" table for the logged in user's active organization, create it.
@@ -70,6 +71,32 @@ class ClockInOutController extends Controller
         // Get the subcategory id where name is equal to the subcategory name and the category_id is equal to the $category_id
         $subcategory_id = Subcategory::where('name', $subcategory_name)->where('category_id', $category_id)->first()->id;
 
-        dd($category_id, $subcategory_id);
+        // dd($category_id, $subcategory_id);
+
+        // Store the clock in time
+        // If the manual time is not null, set it to the request. Otherwise, set it to the current time.
+        if ($request->manualTime != null) {
+            // Note: This needs work. We need to pass in the client's date and timezone and convert it to UTC. ---> var now = new Date();
+            $clock_in = $request->manualTime;
+            // Convert to date (UTC)
+            $clock_in = date('Y-m-d H:i:s', strtotime($clock_in));
+            dd($clock_in);
+        } else {
+            $clock_in = now();
+        }
+        // Create a new temp log with the user_id, subcategory_id, clock_in, and notes
+        auth()->user()->tempLogs()->create([
+            'subcategory_id' => $subcategory_id,
+            'clock_in' => $clock_in,
+            'notes' => $request->notes,
+        ]);
+
+        // Get name of organization based on the user's auth()->user()->active_org_id
+        $org_id = auth()->user()->active_org_id;
+        // Look up the organization name based on the org_id
+        $org_name = Organization::where('id', $org_id)->first()->name;
+
+        // Redirect to dashboard with success message, "Clocked into [organization name] > [category name] > [subcategory name] successfully."
+        return redirect()->back()->with('message', ['success', 'Clocked into "' . $org_name . ' > ' . $request->category . ' > ' . $subcategory_name . '" successfully.']);
     }
 }
