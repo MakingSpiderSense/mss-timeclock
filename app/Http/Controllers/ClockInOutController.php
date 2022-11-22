@@ -38,7 +38,7 @@ class ClockInOutController extends Controller
         // Validate request
         $request->validate([
             'category' => 'required|string|max:255',
-            'manualTime' => 'nullable|date_format:H:i',
+            'manualTime' => 'nullable|date_format:Y-m-d H:i:s',
             'subcategory' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
@@ -78,9 +78,6 @@ class ClockInOutController extends Controller
         if ($request->manualTime != null) {
             // Note: This needs work. We need to pass in the client's date and timezone and convert it to UTC. ---> var now = new Date();
             $clock_in = $request->manualTime;
-            // Convert to date (UTC)
-            $clock_in = date('Y-m-d H:i:s', strtotime($clock_in));
-            dd($clock_in);
         } else {
             $clock_in = now();
         }

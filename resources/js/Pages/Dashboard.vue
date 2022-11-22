@@ -17,6 +17,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <div class="manual-entry mb-10 text-right">
                 <div id="manual-time-display"></div>
                 <a href="#" @click="modalEnterManualTime">Enter Manual Time</a>
+                <InputError class="mt-2" :message="form.errors.manualTime" />
             </div>
             <!-- Form -->
             <form @submit.prevent="submit" autocomplete="off">
@@ -138,14 +139,38 @@ export default {
             modalFooter.querySelector('button').addEventListener('click', saveTime);
             function saveTime() {
                 const manualTime = document.getElementById("manual-time-input").value;
-                form.manualTime = manualTime;
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                // Get the current date and time and format it (e.g. "YYYY-MM-DD HH:MM:SS")
+                const now = new Date();
+                const nowFormatted = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+                // Get the user's timezone
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                // Update the date/time to keep the date, but change the time to the manual time
+                const nowFormattedSplit = nowFormatted.split(" ");
+                const nowFormattedDate = nowFormattedSplit[0];
+                const manualTimeSplit = manualTime.split(":");
+                const manualTimeHours = manualTimeSplit[0];
+                const manualTimeMinutes = manualTimeSplit[1];
+                const manualTimeSeconds = "00";
+                const nowFormattedNew = `${nowFormattedDate} ${manualTimeHours}:${manualTimeMinutes}:${manualTimeSeconds}`;
+                // Display the manual time back to the user
                 const manualTimeDisplay = document.getElementById("manual-time-display");
-                manualTimeDisplay.innerHTML = `${manualTimeFormatted}`;
+                manualTimeDisplay.innerHTML = `${nowFormattedNew + " " + timezone} (${manualTimeFormatted})`;
                 manualTimeDisplay.title = "The currently set manual time";
+                // Convert the date to UTC
+                let dateTimeUTC = (new Date(`${nowFormattedNew}`).toUTCString());
+                // Remove " GMT" from the end of dateTimeUTC
+                dateTimeUTC = dateTimeUTC.slice(0, -4);
+                // Format dateTimeUTC to "YYYY-MM-DD HH:MM:SS"
+                const dateTimeUTCFormatted = new Date(dateTimeUTC).getFullYear() + "-" + twoDigits((new Date(dateTimeUTC).getMonth() + 1)) + "-" + twoDigits(new Date(dateTimeUTC).getDate()) + " " + twoDigits(new Date(dateTimeUTC).getHours()) + ":" + twoDigits(new Date(dateTimeUTC).getMinutes()) + ":00";
+                // Set the form.manualTime to the new UTC time
+                form.manualTime = dateTimeUTCFormatted;
                 // Close modal and remove event listener
                 document.querySelector('.modal').style.display = 'none';
                 modalFooter.removeEventListener('click', saveTime);
+            }
+            function twoDigits(n) {
+                return ("0" + n).slice(-2);
             }
         },
         // Update category select list
