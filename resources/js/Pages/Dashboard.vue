@@ -75,10 +75,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         </div>
                     </div>
                 </div>
-                <!-- Submit "Clock In" -->
+                <!-- Submit "Clock In/Out" -->
                 <div class="flex items-center justify-end mt-4">
                     <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Clock In
+                        {{ clockInOutButton }}
                     </PrimaryButton>
                 </div>
             </form>
@@ -90,6 +90,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 <!-- Scripts -->
 <script>
 import { useForm } from '@inertiajs/inertia-vue3';
+import { usePage } from '@inertiajs/inertia-vue3';
 
 const form = useForm({
     manualTime: '',
@@ -115,6 +116,7 @@ export default {
                 title: 'ManualTimeSet',
                 count: 0,
             },
+            clockedInState: usePage().props.value.auth.clocked_in,
         }
     },
     mounted() {
@@ -122,8 +124,18 @@ export default {
     },
     updated() {
         this.updateCategoryOptions();
+        this.changeClockInOutState();
+    },
+    computed: {
+        clockInOutButton() {
+            return this.clockedInState ? 'Clock Out' : 'Clock In';
+        },
     },
     methods: {
+        // Perform an actions when user clocks in or out
+        changeClockInOutState() {
+            this.clockedInState = usePage().props.value.auth.clocked_in;
+        },
         // When "Enter Manual Time" is clicked, display the modal
         modalEnterManualTime() {
             document.querySelector('.modal').style.display = 'flex';

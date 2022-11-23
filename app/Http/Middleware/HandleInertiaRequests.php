@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 use App\Models\Organization;
@@ -45,6 +46,8 @@ class HandleInertiaRequests extends Middleware
                 })->orderBy('name')->get() : null,
                 // Look up the name of the organization with the active_org_id
                 'active_org_name' => auth()->user() ? Organization::where('id', auth()->user()->active_org_id)->first()->name : null,
+                // Look up the clocked_in state of the user
+                'clocked_in' => auth()->user() ? User::where('id', auth()->user()->id)->first()->clocked_in : null,
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
