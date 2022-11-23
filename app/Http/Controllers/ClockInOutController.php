@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Organization;
@@ -44,6 +45,15 @@ class ClockInOutController extends Controller
         ]);
 
         // dd($request->category, $request->subcategory, $request->manualTime, $request->notes);
+
+        // Check to see if they are already clocked in, if not, update the user's clocked_in field to true
+        if (auth()->user()->clocked_in == false) {
+            // Update the user's clocked_in field to true
+            User::where('id', auth()->user()->id)->update(['clocked_in' => true]);
+        } else {
+            // If they are already clocked in, return an error
+            return redirect()->back()->with('message', ['error', 'You are already clocked in.']);
+        }
 
         // Store the category (if applicable)
         // If the category name doesn't exist in the "categories" table for the logged in user's active organization, create it.
