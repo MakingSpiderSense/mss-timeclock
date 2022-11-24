@@ -13,11 +13,18 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
     <AuthenticatedLayout :pageModal="pageModal">
         <section class="page-section">
-            <!-- "Enter Manual Time" -->
-            <div class="manual-entry mb-10 text-right">
-                <div id="manual-time-display"></div>
-                <a href="#" @click="modalEnterManualTime">Enter Manual Time</a>
-                <InputError class="mt-2" :message="form.errors.manualTime" />
+            <!-- Top Row -->
+            <div class="top-row mb-10 text-right">
+                <!-- Clocked in state -->
+                <div v-if="clockedInState" class="current-category">
+                    Clocked In
+                </div>
+                <!-- "Enter Manual Time" -->
+                <div class="manual-entry">
+                    <div id="manual-time-display"></div>
+                    <a href="#" @click="modalEnterManualTime">Enter Manual Time</a>
+                    <InputError class="mt-2" :message="form.errors.manualTime" />
+                </div>
             </div>
             <!-- Form -->
             <form @submit.prevent="submit" autocomplete="off">
