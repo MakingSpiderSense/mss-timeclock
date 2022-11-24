@@ -21,4 +21,11 @@ class Subcategory extends Model
         // "A subcategory has one category."
         return $this->hasOne(Category::class);
     }
+
+    public function temp_logs()
+    {
+        // Sets up relationship with TempLog model.
+        // "A subcategory has many temp logs."
+        return $this->hasMany(TempLog::class);
+    }
 }

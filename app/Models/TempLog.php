@@ -24,4 +24,11 @@ class TempLog extends Model
         // "A temp log belongs to a user."
         return $this->belongsTo(User::class);
     }
+
+    public function subcategory()
+    {
+        // Sets up relationship with Subcategory model.
+        // "A temp log belongs to a subcategory."
+        return $this->belongsTo(Subcategory::class);
+    }
 }
