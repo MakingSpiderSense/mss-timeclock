@@ -164,7 +164,7 @@ const showingNavigationDropdown = ref(false);
                     <!-- Current Organization and Time -->
                     <div class="text-right">
                         <!-- Organization Select -->
-                        <select class="mb-4" name="organization" @change="updateActiveOrganization()">
+                        <select class="mb-4" name="organization" @change="updateActiveOrganization()" :disabled="clockedInState" :title="organizationDropdownTitle">
                             <option v-for="organization in $page.props.auth.organizations" :key="organization.id" :value="organization.id">
                                 {{ organization.name }}
                             </option>
@@ -194,6 +194,7 @@ export default {
     data() {
         return {
             currentModal: this.pageModal ? this.pageModal.title : "Default",
+            clockedInState: usePage().props.value.auth.clocked_in,
         }
     },
     watch: {
@@ -203,7 +204,20 @@ export default {
             this.currentModal = newVal.title;
         }
     },
+    updated() {
+        this.changeClockInOutState();
+    },
+    computed: {
+        // Set title attribute of organization dropdown
+        organizationDropdownTitle() {
+            return this.clockedInState ? "You cannot change organizations while clocked in" : "Change organization";
+        }
+    },
     methods: {
+        // Perform any actions when user clocks in or out
+        changeClockInOutState() {
+            this.clockedInState = usePage().props.value.auth.clocked_in;
+        },
         // Swap modal body to OrgCreate
         modalOrgCreate() {
             this.currentModal = "OrgCreate";

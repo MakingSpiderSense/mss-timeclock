@@ -105,6 +105,10 @@ class OrganizationsController extends Controller
 
     // Set active organization to the organization id passed in the request
     public function set_active(Request $request) {
+        // Make sure the user is not already clocked in
+        if ( auth()->user()->clocked_in ) {
+            return redirect('/dashboard')->with('message', ['error', 'You must clock out before changing organizations.']);
+        }
         // Check if the logged in user is subscribed to the organization id passed in the request.
         if ( auth()->user()->subscriptions()->where('org_id', $request->org_id)->where('status', '!=', 'invited')->exists() ) {
             // Update the active_org_id column in the users table to the organization id passed in the request.

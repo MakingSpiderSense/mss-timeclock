@@ -132,7 +132,7 @@ export default {
         },
     },
     methods: {
-        // Perform an actions when user clocks in or out
+        // Perform any actions when user clocks in or out
         changeClockInOutState() {
             this.clockedInState = usePage().props.value.auth.clocked_in;
         },
