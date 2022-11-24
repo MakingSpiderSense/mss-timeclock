@@ -17,7 +17,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <div class="top-row mb-10 text-right">
                 <!-- Clocked in state -->
                 <div v-if="clockedInState" class="current-category">
-                    Clocked In
+                    Clocked into <em>{{ $page.props.auth.temp_log.row.subcategory.category.name }}</em> > <em>{{ $page.props.auth.temp_log.row.subcategory.name }}</em>
                 </div>
                 <!-- "Enter Manual Time" -->
                 <div class="manual-entry">
