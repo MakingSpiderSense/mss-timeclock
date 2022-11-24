@@ -21,7 +21,7 @@ class Category extends Model
         return $this->hasOne(Organization::class);
     }
 
-    public function categories()
+    public function subcategory()
     {
         // Sets up relationship with Subcategory model.
         // "An category can have many subcategories."
