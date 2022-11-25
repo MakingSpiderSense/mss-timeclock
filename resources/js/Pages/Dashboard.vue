@@ -132,6 +132,7 @@ export default {
     updated() {
         this.updateCategoryOptions();
         this.changeClockInOutState();
+        this.clearManualTime();
     },
     computed: {
         clockInOutButton() {
@@ -142,6 +143,11 @@ export default {
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
             this.clockedInState = usePage().props.value.auth.clocked_in;
+        },
+        // Clear the manual time field
+        clearManualTime() {
+            this.form.manualTime = '';
+            document.getElementById("manual-time-display").innerHTML = '';
         },
         // When "Enter Manual Time" is clicked, display the modal
         modalEnterManualTime() {
