@@ -30,7 +30,7 @@ Route::get('/', function () {
 // Dashboard
 Route::get('/dashboard',  [ClockInOutController::class, 'index'])->name('dashboard');
 // Clock In/Out
-Route::post('/clock-in', [ClockInOutController::class, 'clockIn'])->name('clock-in');
+Route::post('/clock-in-out', [ClockInOutController::class, 'clockInOut'])->name('clock-in-out');
 
 // Add route to 'placeholder' which simply returns the string 'Placeholder page'. 
 Route::get('/placeholder', function () {

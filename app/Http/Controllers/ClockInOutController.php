@@ -33,6 +33,19 @@ class ClockInOutController extends Controller
         ]);
     }
 
+    // Clock in/out
+    public function clockInOut(Request $request)
+    {
+        // Check if the user is currently clocked in
+        if (auth()->user()->clocked_in) {
+            // If they are, clock them out
+            $this->clockOut($request);
+        } else {
+            // If they are not, clock them in
+            $this->clockIn($request);
+        }
+    }
+
     // Clock in
     public function clockIn(Request $request)
     {
@@ -105,5 +118,10 @@ class ClockInOutController extends Controller
 
         // Redirect to dashboard with success message, "Clocked into [organization name] > [category name] > [subcategory name] successfully."
         return redirect()->back()->with('message', ['success', 'Clocked into "' . $org_name . ' > ' . $request->category . ' > ' . $subcategory_name . '" successfully.']);
+    }
+
+    // Clock out
+    public function clockOut(Request $request) {
+        dd('User is clocked in. Clock them out!');
     }
 }
