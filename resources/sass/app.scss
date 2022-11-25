@@ -73,6 +73,12 @@ main input {
 select {
     cursor: pointer;
 }
+// Disabled input
+select, input, textarea {
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
 // Forms: Autocomplete
 .autocomplete {
     /*the container must be positioned relative:*/
