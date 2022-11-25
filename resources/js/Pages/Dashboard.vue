@@ -38,7 +38,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <div class="mb-4">
                             <InputLabel for="category" value="Category" />
                             <div class="autocomplete">
-                                <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" @input="updateSubcategoryOptions" tabindex="1" required autofocus />
+                                <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" @input="updateSubcategoryOptions" :disabled="clockedInState" tabindex="1" required autofocus />
                             </div>
                             <InputError class="mt-2" :message="form.errors.category" />
                         </div>
@@ -46,7 +46,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <div class="mb-4">
                             <InputLabel for="subcategory" value="Subcategory" />
                             <div class="autocomplete">
-                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" tabindex="3" />
+                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" tabindex="3" :disabled="clockedInState" />
                             </div>
                             <InputError class="mt-2" :message="form.errors.subcategory" />
                         </div>
@@ -56,7 +56,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <!-- Category Dropdown Select -->
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @click="categoryOptionsChanged">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @click="categoryOptionsChanged" :disabled="clockedInState">
                                 <option disabled selected value>-- Select --</option>
                                 <option v-for="category in this.categoriesArray" v-bind:key="category">{{ category }}</option>
                             </select>
@@ -65,7 +65,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <!-- Subcategory Dropdown Select -->
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @click="subcategoryOptionsChanged">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @click="subcategoryOptionsChanged" :disabled="clockedInState">
                                 <option disabled selected value>-- Select --</option>
                                 <option v-for="subcategory in subcategoriesArray" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
@@ -77,7 +77,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <!-- Notes -->
                         <div class="mb-4">
                             <InputLabel for="notes" value="Notes" />
-                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" tabindex="5" />
+                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" tabindex="5" :disabled="clockedInState" />
                             <InputError class="mt-2" :message="form.errors.notes" />
                         </div>
                     </div>
