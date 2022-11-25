@@ -157,6 +157,11 @@ class ClockInOutController extends Controller
 
         // Get the difference in minutes between the clock_out and clock_in times
         $diff_in_minutes = $clock_out->diffInMinutes($clock_in);
+        // Get hours and minutes
+        $hours = floor($diff_in_minutes / 60);
+        $hours_label_suffix = $hours == 1 ? '' : 's';
+        $minutes = $diff_in_minutes % 60;
+        $minutes_label_suffix = $minutes == 1 ? '' : 's';
 
         // Update the user's clocked_in field to true
         User::where('id', auth()->user()->id)->update(['clocked_in' => false]);
@@ -165,9 +170,10 @@ class ClockInOutController extends Controller
         $temp_log->update([
             'clock_in' => DB::raw('clock_in'),
             'clock_out' => $clock_out,
+            'minutes' => $diff_in_minutes,
         ]);
 
         // Redirect to dashboard with success message, "Clocked have clocked out. Good work!"
-        return redirect()->back()->with('message', ['success', 'Clocked have clocked out. Good work!']);
+        return redirect()->back()->with('message', ['success', "Clocked have clocked out with $hours hour$hours_label_suffix and $minutes minute$minutes_label_suffix on the clock. Good work!"]);
     }
 }

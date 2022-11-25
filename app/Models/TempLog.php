@@ -15,6 +15,7 @@ class TempLog extends Model
         'subcategory_id',
         'clock_in',
         'clock_out',
+        'minutes',
         'notes',
     ];
 
