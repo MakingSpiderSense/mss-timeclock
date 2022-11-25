@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Organization;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
 class ClockInOutController extends Controller
@@ -128,24 +129,38 @@ class ClockInOutController extends Controller
             'manualTime' => 'nullable|date_format:Y-m-d H:i:s',
         ]);
 
-        // Check to see if they are already clocked out. If not, update the user's clocked_in field to true
-        if (auth()->user()->clocked_in == true) {
-            // Update the user's clocked_in field to true
-            User::where('id', auth()->user()->id)->update(['clocked_in' => false]);
-        } else {
-            // If they are already clocked in, return an error
+        // Check to see if they are already clocked out.
+        if (auth()->user()->clocked_in == false) {
             return redirect()->back()->with('message', ['error', 'You are already clocked out.']);
         }
 
-        // Store the clock out time
+        // Get the temp log entry for the user
+        $temp_log = TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->orderBy('created_at', 'desc')->first();
+
+        // Set $clock_in to the temp log's clock_in time
+        $clock_in = $temp_log->clock_in;
+        $clock_in = Carbon::parse($clock_in);
+
         // If the manual time is not null, set it to the request. Otherwise, set it to the current time.
         if ($request->manualTime != null) {
             $clock_out = $request->manualTime;
+            // Convert from string to Carbon object
+            $clock_out = Carbon::parse($clock_out);
         } else {
             $clock_out = now();
         }
-        // Update the clocked in temp log with the clock_out time
-        $temp_log = TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->orderBy('created_at', 'desc')->first();
+
+        // If the clock_out is before the clock_in, return an error
+        if ($clock_out->lt($clock_in)) {
+            return redirect()->back()->with('message', ['error', 'The clock out time cannot be before the clock in time.']);
+        }
+
+        // Get the difference in minutes between the clock_out and clock_in times
+        $diff_in_minutes = $clock_out->diffInMinutes($clock_in);
+
+        // Update the user's clocked_in field to true
+        User::where('id', auth()->user()->id)->update(['clocked_in' => false]);
+
         // Update the temp log with the clock_out time, but do not update the clocked_in timestamp
         $temp_log->update([
             'clock_in' => DB::raw('clock_in'),
