@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\TempLog;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Organization;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ClockInOutController extends Controller
@@ -99,7 +101,6 @@ class ClockInOutController extends Controller
         // Store the clock in time
         // If the manual time is not null, set it to the request. Otherwise, set it to the current time.
         if ($request->manualTime != null) {
-            // Note: This needs work. We need to pass in the client's date and timezone and convert it to UTC. ---> var now = new Date();
             $clock_in = $request->manualTime;
         } else {
             $clock_in = now();
@@ -122,6 +123,36 @@ class ClockInOutController extends Controller
 
     // Clock out
     public function clockOut(Request $request) {
-        dd('User is clocked in. Clock them out!');
+        // Validate request
+        $request->validate([
+            'manualTime' => 'nullable|date_format:Y-m-d H:i:s',
+        ]);
+
+        // Check to see if they are already clocked out. If not, update the user's clocked_in field to true
+        if (auth()->user()->clocked_in == true) {
+            // Update the user's clocked_in field to true
+            User::where('id', auth()->user()->id)->update(['clocked_in' => false]);
+        } else {
+            // If they are already clocked in, return an error
+            return redirect()->back()->with('message', ['error', 'You are already clocked out.']);
+        }
+
+        // Store the clock out time
+        // If the manual time is not null, set it to the request. Otherwise, set it to the current time.
+        if ($request->manualTime != null) {
+            $clock_out = $request->manualTime;
+        } else {
+            $clock_out = now();
+        }
+        // Update the clocked in temp log with the clock_out time
+        $temp_log = TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->orderBy('created_at', 'desc')->first();
+        // Update the temp log with the clock_out time, but do not update the clocked_in timestamp
+        $temp_log->update([
+            'clock_in' => DB::raw('clock_in'),
+            'clock_out' => $clock_out,
+        ]);
+
+        // Redirect to dashboard with success message, "Clocked have clocked out. Good work!"
+        return redirect()->back()->with('message', ['success', 'Clocked have clocked out. Good work!']);
     }
 }
