@@ -195,6 +195,7 @@ export default {
         return {
             currentModal: this.pageModal ? this.pageModal.title : "Default",
             clockedInState: usePage().props.value.auth.clocked_in,
+            flashMsg: null,
         }
     },
     watch: {
@@ -202,10 +203,15 @@ export default {
         pageModal(newVal) {
             // Set currentModal to the new value
             this.currentModal = newVal.title;
-        }
+        },
+        flashMsg(newVal) {
+            // Display the flash message
+            document.querySelector('.flash-msg').style.display = 'block';
+        },
     },
     updated() {
         this.changeClockInOutState();
+        this.flashMsg = usePage().props.value.flash.message;
     },
     computed: {
         // Set title attribute of organization dropdown
