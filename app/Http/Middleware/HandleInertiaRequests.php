@@ -40,9 +40,11 @@ class HandleInertiaRequests extends Middleware
     {
         // Set $temp_log to entry TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->first(), but order by created_at desc, and join with subcategories table by subcategory_id and then categories table by category_id
         $temp_log = TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->orderBy('created_at', 'desc')->first();
-        $temp_log->subcategory = $temp_log->subcategory()->first();
-        // Set $temp_log->subcategory->category to entry Category::where('id', $temp_log->subcategory->category_id)->first()
-        $temp_log->subcategory->category = Category::where('id', $temp_log->subcategory->category_id)->first();
+        if ($temp_log) {
+            $temp_log->subcategory = $temp_log->subcategory()->first();
+            // Set $temp_log->subcategory->category to entry Category::where('id', $temp_log->subcategory->category_id)->first()
+            $temp_log->subcategory->category = Category::where('id', $temp_log->subcategory->category_id)->first();
+        }
         // Return sharable props...
         return array_merge(parent::share($request), [
             'auth' => [
