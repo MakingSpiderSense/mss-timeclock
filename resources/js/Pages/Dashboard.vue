@@ -77,7 +77,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <!-- Notes -->
                         <div class="mb-4">
                             <InputLabel for="notes" value="Notes" />
-                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" tabindex="5" :disabled="clockedInState" />
+                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" tabindex="5" />
                             <InputError class="mt-2" :message="form.errors.notes" />
                         </div>
                     </div>
@@ -128,6 +128,7 @@ export default {
     },
     mounted() {
         this.updateCategoryOptions();
+        this.getNotes();
     },
     updated() {
         this.updateCategoryOptions();
@@ -148,6 +149,12 @@ export default {
         clearManualTime() {
             this.form.manualTime = '';
             document.getElementById("manual-time-display").innerHTML = '';
+        },
+        // Pull in the notes from the clock in record
+        getNotes() {
+            const notesDB = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.notes : "";
+            const notesInput = document.getElementById("notes");
+            notesInput.value = notesDB;
         },
         // When "Enter Manual Time" is clicked, display the modal
         modalEnterManualTime() {

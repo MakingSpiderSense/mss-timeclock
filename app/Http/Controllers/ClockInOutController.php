@@ -127,6 +127,7 @@ class ClockInOutController extends Controller
         // Validate request
         $request->validate([
             'manualTime' => 'nullable|date_format:Y-m-d H:i:s',
+            'notes' => 'nullable|string',
         ]);
 
         // Check to see if they are already clocked out.
@@ -171,6 +172,7 @@ class ClockInOutController extends Controller
             'clock_in' => DB::raw('clock_in'),
             'clock_out' => $clock_out,
             'minutes' => $diff_in_minutes,
+            'notes' => $request->notes,
         ]);
 
         // Redirect to dashboard with success message, "Clocked have clocked out. Good work!"
