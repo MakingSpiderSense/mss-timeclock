@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\ClockInOutController;
+use App\Http\Controllers\HourlyRatesController;
 use App\Http\Controllers\OrganizationsController;
 
 /*
@@ -57,9 +58,7 @@ Route::post('/organization/invite-decline/{org_id}', [OrganizationsController::c
 Route::post('/organization/active/{org_id}', [OrganizationsController::class, 'set_active'])->name('organizations.active');
 
 // Hourly Rates route
-Route::get('/hourly-rates', function () {
-    return Inertia::render('Rates');
-})->middleware(['auth', 'verified'])->name('hourly-rates');
+Route::get('/hourly-rates',  [HourlyRatesController::class, 'index'])->name('hourly-rates');
 
 require __DIR__.'/auth.php';
 
