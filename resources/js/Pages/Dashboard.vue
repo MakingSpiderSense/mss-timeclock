@@ -17,7 +17,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <div class="top-row mb-10 text-right">
                 <!-- Clocked in state -->
                 <div v-if="clockedInState" class="current-category">
-                    Clocked into <em>{{ $page.props.auth.temp_log.row.subcategory.category.name }}</em> > <em>{{ $page.props.auth.temp_log.row.subcategory.name }}</em>
+                    Clocked into <em>{{ clockedInCategory }}</em> > <em>{{ clockedInSubcategory }}</em>
                 </div>
                 <!-- "Enter Manual Time" -->
                 <div class="manual-entry">
@@ -124,6 +124,8 @@ export default {
                 count: 0,
             },
             clockedInState: usePage().props.value.auth.clocked_in,
+            clockedInCategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.category.name : '',
+            clockedInSubcategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '',
         }
     },
     mounted() {
@@ -134,6 +136,8 @@ export default {
         this.updateCategoryOptions();
         this.changeClockInOutState();
         this.clearManualTime();
+        this.clockedInCategory = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.category.name : '';
+        this.clockedInSubcategory = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '';
     },
     computed: {
         clockInOutButton() {
