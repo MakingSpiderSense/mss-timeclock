@@ -126,7 +126,7 @@ const showingNavigationDropdown = ref(false);
             <div class="page-container">
                 <!-- Flash Message -->
                 <div v-if="$page.props.flash.message" class="max-w-7xl mx-auto">
-                    <FlashMsg :msgType="$page.props.flash.message[0]">{{ $page.props.flash.message[1] }}</FlashMsg>
+                    <FlashMsg :msgType="$page.props.flash.message[0]">{{ flashMsg[1] }}</FlashMsg>
                 </div>
                 <!-- Current Stats: Displays on all pages -->
                 <section class="current-stats page-section">
@@ -195,7 +195,7 @@ export default {
         return {
             currentModal: this.pageModal ? this.pageModal.title : "Default",
             clockedInState: usePage().props.value.auth.clocked_in,
-            flashMsg: null,
+            flashMsg: usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""],
         }
     },
     watch: {
@@ -206,12 +206,14 @@ export default {
         },
         flashMsg(newVal) {
             // Display the flash message
-            document.querySelector('.flash-msg').style.display = 'block';
+            if (document.querySelector('.flash-msg')) {
+                document.querySelector('.flash-msg').style.display = 'block';
+            }
         },
     },
     updated() {
         this.changeClockInOutState();
-        this.flashMsg = usePage().props.value.flash.message;
+        this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
     },
     computed: {
         // Set title attribute of organization dropdown
