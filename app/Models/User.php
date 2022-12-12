@@ -63,4 +63,11 @@ class User extends Authenticatable
         // "A user can have many temp logs."
         return $this->hasMany(TempLog::class);
     }
+
+    public function categories()
+    {
+        // Sets up relationship with Category model.
+        // "A user belong to many categories."
+        return $this->belongsToMany(Category::class, 'user_category', 'user_id', 'category_id');
+    }
 }
