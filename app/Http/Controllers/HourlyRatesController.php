@@ -22,12 +22,12 @@ class HourlyRatesController extends Controller
         $organization_rates = auth()->user()->subscriptions()->select('user_org_subscriptions.id', 'name', 'rate')->orderBy('name', 'asc')->get();
         
         // Find the active_org_id in the `users` table. Set $categories_with_rates to list of the current users rates on the user_category table where the org_id in the `categories` table matches the active_org_id. Get the id, name, and rate and list in ascending order by name.
-        $category_with_rates = auth()->user()->categories()->where('org_id', auth()->user()->active_org_id)->select('user_category.id', 'name', 'rate')->orderBy('name', 'asc')->get();
+        $categories_with_rates = auth()->user()->categories()->where('org_id', auth()->user()->active_org_id)->select('user_category.id', 'name', 'rate')->orderBy('name', 'asc')->get();
 
         return inertia('Rates', [
             'global_rate' => $global_rate,
             'organization_rates' => $organization_rates,
-            'category_with_rates' => $category_with_rates,
+            'categories_with_rates' => $categories_with_rates,
         ]);
     }
 }

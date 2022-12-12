@@ -35,8 +35,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <div class="child-rates">
                 <table class="standard-table table-auto">
                     <tbody>
-                        <!-- For each row in category_with_rates, display the name and rate. But if category.rate is null, output "Not Set" -->
-                        <tr v-for="category in category_with_rates" :key="category.id">
+                        <!-- For each row in categories_with_rates, display the name and rate. But if category.rate is null, output "Not Set" -->
+                        <tr v-for="category in categories_with_rates" :key="category.id">
                             <td><a href="#">Edit</a></td>
                             <td>{{ category.name }}</td>
                             <td>{{ category.rate ? category.rate : "Not Set" }}</td>
@@ -54,7 +54,7 @@ export default {
     props: {
         global_rate: String,
         organization_rates: Array,
-        category_with_rates: Array,
+        categories_with_rates: Array,
     },
     methods: {
     },
