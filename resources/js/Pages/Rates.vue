@@ -41,6 +41,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <td>{{ category.name }}</td>
                             <td>{{ category.rate ? category.rate : "Not Set" }}</td>
                         </tr>
+                        <!-- Display categories_without_rates -->
+                        <tr v-for="category in categories_without_rates" :key="category.id">
+                            <td><a href="#">Edit</a></td>
+                            <td>{{ category.name }}</td>
+                            <td>Not Set</td>
+                        </tr>
+                        <!-- If categories_with_rates and categories_without_rates both have no rows, display a message. -->
+                        <tr v-if="categories_with_rates.length == 0 && categories_without_rates.length == 0">
+                            <td colspan="3">No categories found.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -55,6 +65,7 @@ export default {
         global_rate: String,
         organization_rates: Array,
         categories_with_rates: Array,
+        categories_without_rates: Array,
     },
     methods: {
     },
