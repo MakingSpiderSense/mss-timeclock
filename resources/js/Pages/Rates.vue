@@ -15,14 +15,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <tbody>
                         <!-- Global Rate -->
                         <tr>
-                            <td><a href="#">Edit</a></td>
+                            <td><button @click="modalRatesEdit('global_rate', undefined, 'Global Rate', global_rate)">Edit</button></td>
                             <td>Global rate</td>
                             <td>${{ global_rate }}</td>
                         </tr>
                         <!-- Organization Rates -->
                         <!-- For each row in organization_rates, display the name and rate. But if organization.rate is null, output "Not Set" -->
                         <tr v-for="organization in organization_rates" :key="organization.id">
-                            <td><a href="#">Edit</a></td>
+                            <td><button @click="modalRatesEdit('organization_rates', organization.id, organization.name, organization.rate)">Edit</button></td>
                             <td>{{ organization.name }}</td>
                             <td>{{ organization.rate ? organization.rate : "Not Set" }}</td>
                         </tr>
@@ -37,13 +37,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <tbody>
                         <!-- For each row in categories_with_rates, display the name and rate. But if category.rate is null, output "Not Set" -->
                         <tr v-for="category in categories_with_rates" :key="category.id">
-                            <td><a href="#">Edit</a></td>
+                            <td><button @click="modalRatesEdit('categories_with_rates', category.id, category.name, category.rate)">Edit</button></td>
                             <td>{{ category.name }}</td>
                             <td>{{ category.rate ? category.rate : "Not Set" }}</td>
                         </tr>
                         <!-- Display categories_without_rates -->
                         <tr v-for="category in categories_without_rates" :key="category.id">
-                            <td><a href="#">Edit</a></td>
+                            <td><button @click="modalRatesEdit('categories_without_rates', category.id, category.name)">Edit</button></td>
                             <td>{{ category.name }}</td>
                             <td>Not Set</td>
                         </tr>
@@ -68,6 +68,9 @@ export default {
         categories_without_rates: Array,
     },
     methods: {
+        modalRatesEdit(type, id, name, rate) {
+            console.log([type, id, name, rate]);
+        },
     },
 }
 </script>
@@ -97,6 +100,9 @@ table.standard-table {
                 text-align: right;
             }
         }
+    }
+    button {
+        color: $color1;
     }
 }
 </style>
