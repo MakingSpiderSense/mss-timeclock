@@ -20,19 +20,21 @@
 <!-- Scripts -->
 <script>
 import Default from '@/Modals/Default.vue';
-import OrgCreate from '@/Modals/OrgCreate.vue';
-import ManualTimeSet from '@/Modals/ManualTimeSet.vue';
-import InvitesManage from '@/Modals/InvitesManage.vue';
 import InvitesCreate from '@/Modals/InvitesCreate.vue';
+import InvitesManage from '@/Modals/InvitesManage.vue';
+import ManualTimeSet from '@/Modals/ManualTimeSet.vue';
+import OrgCreate from '@/Modals/OrgCreate.vue';
+import RatesUpdate from '@/Modals/RatesUpdate.vue';
 export default {
     name: 'Modal',
     props: ['currentModal'],
     components: {
         Default,
-        OrgCreate,
-        ManualTimeSet,
-        InvitesManage,
         InvitesCreate,
+        InvitesManage,
+        ManualTimeSet,
+        OrgCreate,
+        RatesUpdate,
     },
     methods: {
         // Close modal if user clicks on semi-transparent background or close icon

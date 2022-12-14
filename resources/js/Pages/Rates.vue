@@ -6,7 +6,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 <template>
     <Head title="Hourly Rates" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :pageModal="pageModal">
         <section class="page-section">
             <!-- Global and Organization Rates -->
             <h2>Global and Organization Rates</h2>
@@ -15,7 +15,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <tbody>
                         <!-- Global Rate -->
                         <tr>
-                            <td><button @click="modalRatesEdit('global_rate', undefined, 'Global Rate', global_rate)">Edit</button></td>
+                            <td><button @click="modalRatesEdit('global_rate', undefined, 'Global', global_rate)">Edit</button></td>
                             <td>Global rate</td>
                             <td>${{ global_rate }}</td>
                         </tr>
@@ -67,9 +67,34 @@ export default {
         categories_with_rates: Array,
         categories_without_rates: Array,
     },
+    data() {
+        return {
+            pageModal: {
+                title: 'RatesUpdate',
+                count: 0,
+            },
+        }
+    },
     methods: {
         modalRatesEdit(type, id, name, rate) {
-            console.log([type, id, name, rate]);
+            // Update modal body (the count is a workaround to trigger the watcher even if the value is the same)
+            this.pageModal = {
+                title: 'RatesUpdate',
+                count: this.pageModal.count + 1,
+            };
+            document.querySelector('.modal').style.display = "flex";
+            document.querySelector('.modal-title').innerHTML = "Update Rate";
+            const modalFooter = document.querySelector('.modal-footer');
+            modalFooter.innerHTML = `<button form="form_rate_update" class="btn modal-continue" type="submit">Save</button>`;
+            modalFooter.querySelector('button').addEventListener('click', updateRate);
+            function updateRate() {
+                console.log([type, id, name, rate]);
+                // Close modal and remove event listener
+                if (document.querySelector('#updated_rate').checkValidity()) {
+                    document.querySelector('.modal').style.display = 'none';
+                    modalFooter.removeEventListener('click', updateRate);
+                }
+            }
         },
     },
 }
