@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class HourlyRatesController extends Controller
+class RatesController extends Controller
 {
     public function __construct()
     {
