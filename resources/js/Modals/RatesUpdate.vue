@@ -5,7 +5,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 
 const form = useForm({
-    invite_email: '',
+    updated_rate: '',
 });
 
 const submit = () => {
