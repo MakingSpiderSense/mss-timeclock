@@ -87,11 +87,19 @@ export default {
             const modalFooter = document.querySelector('.modal-footer');
             modalFooter.innerHTML = `<button form="form_rate_update" class="btn modal-continue" type="submit">Save</button>`;
             modalFooter.querySelector('button').addEventListener('click', updateRate);
+            // Update intro text
+            const rates_intro = document.querySelector('#rates_intro');
+            const rate_name = document.querySelector('#rate_name');
+            const rate_status = document.querySelector('#rate_status');
+            rate_name.innerHTML = name;
+            rate_status.innerHTML = rate ? `It is current set to <strong>$${rate}</strong>` : "This rate is not yet set.";
+            rates_intro.style.display = "block";
             function updateRate() {
                 console.log([type, id, name, rate]);
                 // Close modal and remove event listener
                 if (document.querySelector('#updated_rate').checkValidity()) {
                     document.querySelector('.modal').style.display = 'none';
+                    rates_intro.style.display = "none";
                     modalFooter.removeEventListener('click', updateRate);
                 }
             }

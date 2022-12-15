@@ -19,12 +19,13 @@ const submit = () => {
 <!-- Template -->
 <template>
     <div>
-        <div class="mb-4">Update <strong>SomeName</strong> rate. Status.</div>
+        <!-- Intro Text - This mostly will be dynamic. -->
+        <div id="rates_intro" class="mb-4" style="display: none;">Update <strong><span id="rate_name">your</span></strong> rate. <span id="rate_status"></span></div>
         <div>
             <!-- Form -->
             <form id="form_rate_update" @submit.prevent="submit" autocomplete="off">
                 <InputLabel for="updated_rate" value="New Rate" />
-                <TextInput id="updated_rate" type="number" class="mt-1 block w-full" v-model="form.updated_rate" required />
+                <TextInput id="updated_rate" type="number" class="mt-1 block w-full" step=".01" min="0" v-model="form.updated_rate" required />
                 <InputError class="mt-2" :message="form.errors.updated_rate" />
             </form>
         </div>
