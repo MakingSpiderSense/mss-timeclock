@@ -13,7 +13,7 @@ class RatesController extends Controller
         $this->middleware('auth');
     }
 
-    // Load the hourly rates page with the current user's hourly rates
+    // Load the rates page with the current user's rates
     public function index()
     {
         // Look up the user's global rate
@@ -35,5 +35,11 @@ class RatesController extends Controller
             'categories_with_rates' => $categories_with_rates,
             'categories_without_rates' => $categories_without_rates,
         ]);
+    }
+
+    // Update the user's rates
+    public function update(Request $request)
+    {
+        dd($request);
     }
 }

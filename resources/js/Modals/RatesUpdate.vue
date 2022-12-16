@@ -6,6 +6,10 @@ import { useForm } from '@inertiajs/inertia-vue3';
 
 const form = useForm({
     updated_rate: '',
+    type: '',
+    id: '',
+    name: '',
+    rate: '',
 });
 
 const submit = () => {
@@ -24,6 +28,12 @@ const submit = () => {
         <div>
             <!-- Form -->
             <form id="form_rate_update" @submit.prevent="submit" autocomplete="off">
+                <!-- Hidden inputs for type, id, name, and rate -->
+                <input type="hidden" name="type" value="" />
+                <input type="hidden" name="id" value="" />
+                <input type="hidden" name="name" value="" />
+                <input type="hidden" name="rate" value="" />
+                <!-- Visible -->
                 <InputLabel for="updated_rate" value="New Rate" />
                 <TextInput id="updated_rate" type="number" class="mt-1 block w-full" step=".01" min="0" v-model="form.updated_rate" required />
                 <InputError class="mt-2" :message="form.errors.updated_rate" />
@@ -36,6 +46,25 @@ const submit = () => {
 <script>
 export default {
     name: 'RatesUpdate',
+    mounted() {
+        // When this modal is first loaded, add an event listener to all four hidden inputs watching for changes to the value. When a change is detected, update the corresponding form input (e.g. this.form.type = type.value).
+        const type = document.querySelector('input[name="type"]');
+        const id = document.querySelector('input[name="id"]');
+        const name = document.querySelector('input[name="name"]');
+        const rate = document.querySelector('input[name="rate"]');
+        type.addEventListener('change', () => {
+            this.form.type = type.value;
+        });
+        id.addEventListener('change', () => {
+            this.form.id = id.value;
+        });
+        name.addEventListener('change', () => {
+            this.form.name = name.value;
+        });
+        rate.addEventListener('change', () => {
+            this.form.rate = rate.value;
+        });
+    },
 }
 </script>
 

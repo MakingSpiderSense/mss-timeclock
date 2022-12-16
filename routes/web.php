@@ -59,6 +59,7 @@ Route::post('/organization/active/{org_id}', [OrganizationsController::class, 's
 
 // Hourly Rates route
 Route::get('/rates',  [RatesController::class, 'index'])->name('rates');
+Route::post('/rate/update',  [RatesController::class, 'update'])->name('rate.update');
 
 require __DIR__.'/auth.php';
 
