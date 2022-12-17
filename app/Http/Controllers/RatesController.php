@@ -46,7 +46,7 @@ class RatesController extends Controller
             'type' => 'required|string',
             'id' => 'numeric',
             'name' => 'required|string',
-            'rate' => 'numeric|min:0|max:999999999',
+            'rate' => 'nullable|numeric|min:0|max:999999999',
             'updated_rate' => 'required|numeric|min:0|max:999999999',
         ];
         // We use the Validator::make method so that we can output the errors as a flash message, similar to how we flash success messages. If we don't use this, we can simply set $data = request()->validate($rules);.
@@ -58,11 +58,24 @@ class RatesController extends Controller
 
         // If the type is global, update the user's global rate
         if ($data['type'] === 'global_rate') {
-            $update_rate = $data['updated_rate'];
             auth()->user()->update([
-                'global_rate' => $update_rate,
+                'global_rate' => $data['updated_rate'],
             ]);
-            return redirect()->back()->with('message', ['success', "Global rate updated to $$update_rate successfully."]);
+            return redirect()->back()->with('message', ['success', "Global rate updated to $$data[updated_rate] successfully."]);
+        }
+
+        // If the type is organization, update the organization rate
+        if ($data['type'] === 'organization_rates') {
+            // Set $updated_rate to $data['updated_rate'] if it is not 0, otherwise set it to null
+            $updated_rate = $data['updated_rate'] != 0 ? $data['updated_rate'] : null;
+            auth()->user()->subscriptions()->updateExistingPivot($data['id'], [
+                'rate' => $updated_rate,
+            ]);
+            if ($updated_rate) {
+                return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
+            } else {
+                return redirect()->back()->with('message', ['success', "$data[name] rate removed successfully."]);
+            }
         }
     }
 }
