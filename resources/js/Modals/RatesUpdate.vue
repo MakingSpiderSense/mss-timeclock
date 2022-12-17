@@ -36,7 +36,6 @@ const submit = () => {
                 <!-- Visible -->
                 <InputLabel for="updated_rate" value="New Rate" />
                 <TextInput id="updated_rate" type="number" class="mt-1 block w-full" step=".01" min="0" v-model="form.updated_rate" required />
-                <InputError class="mt-2" :message="form.errors.updated_rate" />
             </form>
         </div>
     </div>

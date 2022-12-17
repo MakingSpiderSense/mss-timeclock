@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Validator;
 
 class RatesController extends Controller
 {
@@ -40,6 +41,28 @@ class RatesController extends Controller
     // Update the user's rates
     public function update(Request $request)
     {
-        dd($request);
+        // Validate the request
+        $rules = [
+            'type' => 'required|string',
+            'id' => 'numeric',
+            'name' => 'required|string',
+            'rate' => 'numeric|min:0|max:999999999',
+            'updated_rate' => 'required|numeric|min:0|max:999999999',
+        ];
+        // We use the Validator::make method so that we can output the errors as a flash message, similar to how we flash success messages. If we don't use this, we can simply set $data = request()->validate($rules);.
+        $validator = Validator::make( $request->all(), $rules );
+        if ( $validator->fails() ) {
+            return redirect()->back()->with('message', ['error', $validator->errors()->first()]);
+        }
+        $data = request();
+
+        // If the type is global, update the user's global rate
+        if ($data['type'] === 'global_rate') {
+            $update_rate = $data['updated_rate'];
+            auth()->user()->update([
+                'global_rate' => $update_rate,
+            ]);
+            return redirect()->back()->with('message', ['success', "Global rate updated to $$update_rate successfully."]);
+        }
     }
 }

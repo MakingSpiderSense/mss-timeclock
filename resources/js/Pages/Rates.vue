@@ -15,7 +15,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <tbody>
                         <!-- Global Rate -->
                         <tr>
-                            <td><button @click="modalRatesEdit('global_rate', undefined, 'Global', global_rate)">Edit</button></td>
+                            <td><button @click="modalRatesEdit('global_rate', 0, 'Global', global_rate)">Edit</button></td>
                             <td>Global rate</td>
                             <td>${{ global_rate }}</td>
                         </tr>
