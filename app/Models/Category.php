@@ -24,7 +24,14 @@ class Category extends Model
     public function subcategory()
     {
         // Sets up relationship with Subcategory model.
-        // "An category can have many subcategories."
+        // "A category can have many subcategories."
         return $this->hasMany(Subcategory::class)->orderBy('name');
+    }
+
+    public function users()
+    {
+        // Sets up relationship with User model.
+        // "A category can have many users."
+        return $this->belongsToMany(User::class, 'user_category', 'category_id', 'user_id');
     }
 }
