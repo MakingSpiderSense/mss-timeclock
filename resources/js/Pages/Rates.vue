@@ -24,7 +24,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <tr v-for="organization in organization_rates" :key="organization.id">
                             <td><button @click="modalRatesEdit('organization_rates', organization.id, organization.name, organization.rate)">Edit</button></td>
                             <td>{{ organization.name }}</td>
-                            <td>{{ organization.rate ? organization.rate : "Not Set" }}</td>
+                            <td>{{ organization.rate ? `$${organization.rate}` : "Not Set" }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -39,7 +39,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <tr v-for="category in categories_with_rates" :key="category.id">
                             <td><button @click="modalRatesEdit('categories_with_rates', category.id, category.name, category.rate)">Edit</button></td>
                             <td>{{ category.name }}</td>
-                            <td>{{ category.rate ? category.rate : "Not Set" }}</td>
+                            <td>{{ category.rate ? `$${category.rate}` : "Not Set" }}</td>
                         </tr>
                         <!-- Display categories_without_rates -->
                         <tr v-for="category in categories_without_rates" :key="category.id">
