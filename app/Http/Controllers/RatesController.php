@@ -93,5 +93,17 @@ class RatesController extends Controller
                 return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
             }
         }
+
+        // If the type is categories_without_rates, add the category rate
+        if ($data['type'] === 'categories_without_rates') {
+            if ($data['updated_rate'] == 0) {
+                return redirect()->back()->with('message', ['error', 'Rate must be greater than 0.']);
+            } else {
+                auth()->user()->categories()->attach($data['id'], [
+                    'rate' => $data['updated_rate'],
+                ]);
+            }
+            return redirect()->back()->with('message', ['success', "$data[name] rate of $$data[updated_rate] added successfully."]);
+        }
     }
 }

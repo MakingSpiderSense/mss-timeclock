@@ -43,7 +43,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         </tr>
                         <!-- Display categories_without_rates -->
                         <tr v-for="category in categories_without_rates" :key="category.id">
-                            <td><button @click="modalRatesEdit('categories_without_rates', category.id, category.name)">Edit</button></td>
+                            <td><button @click="modalRatesEdit('categories_without_rates', category.id, category.name, 0)">Edit</button></td>
                             <td>{{ category.name }}</td>
                             <td>Not Set</td>
                         </tr>
