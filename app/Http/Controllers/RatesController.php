@@ -56,7 +56,7 @@ class RatesController extends Controller
         }
         $data = request();
 
-        // If the type is global, update the user's global rate
+        // If the type is global_rate, update the user's global rate
         if ($data['type'] === 'global_rate') {
             auth()->user()->update([
                 'global_rate' => $data['updated_rate'],
@@ -64,7 +64,7 @@ class RatesController extends Controller
             return redirect()->back()->with('message', ['success', "Global rate updated to $$data[updated_rate] successfully."]);
         }
 
-        // If the type is organization, update the organization rate
+        // If the type is organization_rates, update the organization rate
         if ($data['type'] === 'organization_rates') {
             // Set $updated_rate to $data['updated_rate'] if it is not 0, otherwise set it to null
             $updated_rate = $data['updated_rate'] != 0 ? $data['updated_rate'] : null;
@@ -75,6 +75,22 @@ class RatesController extends Controller
                 return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
             } else {
                 return redirect()->back()->with('message', ['success', "$data[name] rate removed successfully."]);
+            }
+        }
+
+        // If the type is categories_with_rates, update the category rate
+        if ($data['type'] === 'categories_with_rates') {
+            // Given the pivot table id, find the category_id in the `user_category` table.
+            $category_id = auth()->user()->categories()->where('user_category.id', $data['id'])->first()->pivot->category_id;
+            // If the rate is 0, delete the rate from the user_category table. Otherwise, update the rate.
+            if ($data['updated_rate'] == 0) {
+                auth()->user()->categories()->detach($category_id);
+                return redirect()->back()->with('message', ['success', "$data[name] rate removed successfully."]);
+            } else {
+                auth()->user()->categories()->updateExistingPivot($category_id, [
+                    'rate' => $data['updated_rate'],
+                ]);              
+                return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
             }
         }
     }
