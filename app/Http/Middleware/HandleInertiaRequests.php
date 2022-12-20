@@ -58,6 +58,8 @@ class HandleInertiaRequests extends Middleware
                 'active_org_name' => auth()->user() ? Organization::where('id', auth()->user()->active_org_id)->first()->name : null,
                 // Look up the clocked_in state of the user
                 'clocked_in' => auth()->user() ? User::where('id', auth()->user()->id)->first()->clocked_in : null,
+                // Set `clocked_in_at` based on the last clock_in time if available
+                'clocked_in_at' => $temp_log !== null ? $temp_log->clock_in : null,
                 'temp_log' => [
                     'row' => $temp_log,
                     // // Set 'active_category' to the category of the user's last temp log entry where clock_out is null, or null if there are no temp log entries.

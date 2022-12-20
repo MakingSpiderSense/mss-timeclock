@@ -173,7 +173,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Clocked-in time -->
                             <div class="mb-5">Clocked in at <span id="clockedInTime">1:12pm</span></div>
                             <!-- Current time on the clock -->
-                            <div class="text-5xl"><span id="timeOnClock">06:43:58</span></div>
+                            <div class="text-5xl"><span id="timeOnClock">00:00:00</span></div>
                         </div>
                     </div>
                 </section>
@@ -198,6 +198,10 @@ export default {
             flashMsg: usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""],
         }
     },
+    mounted() {
+        this.setOptionSelected();
+        this.updateTimeOnClock();
+    },
     watch: {
         // Watch for changes to the pageModal prop
         pageModal(newVal) {
@@ -214,6 +218,7 @@ export default {
     updated() {
         this.changeClockInOutState();
         this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
+        this.updateTimeOnClock();
     },
     computed: {
         // Set title attribute of organization dropdown
@@ -222,6 +227,35 @@ export default {
         }
     },
     methods: {
+        // If the user is clocked in, update the timeOnClock element to display the time they have been clocked in for. Then, update the time every second.
+        updateTimeOnClock() {
+            // console.log(this.clockedInState);
+            if (this.clockedInState) {
+                // Get the time the user clocked in at
+                const clockedInTime = usePage().props.value.auth.clocked_in_at ? new Date(usePage().props.value.auth.clocked_in_at) : null;
+                // Return if clockedInTime is null
+                if (!clockedInTime) return;
+                const timezoneOffset = clockedInTime.getTimezoneOffset();
+                const utcClockedInTime = new Date(clockedInTime.getTime() - timezoneOffset * 60 * 1000);
+                // Get the current time
+                const currentTime = new Date();
+                // Calculate the time difference between the two
+                const timeDifference = currentTime - utcClockedInTime;
+                // Convert the time difference to hours, minutes, and seconds
+                const hours = Math.floor(timeDifference / 1000 / 60 / 60);
+                const minutes = Math.floor(timeDifference / 1000 / 60) - (hours * 60);
+                const seconds = Math.floor(timeDifference / 1000) - (hours * 60 * 60) - (minutes * 60);
+                // Display the time on the clock
+                document.querySelector('#timeOnClock').innerHTML = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                // Update the time on the clock every second
+                setTimeout(this.updateTimeOnClock, 1000);
+            } else {
+                // If timeOnClock is set to 00:00:00, do not update it, otherwise, set it to 00:00:00
+                if (document.querySelector('#timeOnClock').innerHTML != "00:00:00") {
+                    document.querySelector('#timeOnClock').innerHTML = "00:00:00";
+                }
+            }
+        },
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
             this.clockedInState = usePage().props.value.auth.clocked_in;
@@ -293,10 +327,6 @@ export default {
                 }
             });
         },
-    },
-    mounted() {
-        this.setOptionSelected();
-        // console.log(usePage().props.value.auth.organizations);
     },
 }
 </script>
