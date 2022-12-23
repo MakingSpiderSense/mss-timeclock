@@ -201,6 +201,7 @@ export default {
     mounted() {
         this.setOptionSelected();
         this.updateTimeOnClock();
+        console.log(usePage().props.value.auth.stats.test);
     },
     watch: {
         // Watch for changes to the pageModal prop

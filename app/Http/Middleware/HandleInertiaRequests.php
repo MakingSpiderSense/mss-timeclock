@@ -7,6 +7,7 @@ use App\Models\TempLog;
 use Inertia\Middleware;
 use App\Models\Category;
 use Tightenco\Ziggy\Ziggy;
+use App\Models\Subcategory;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 
@@ -38,14 +39,55 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
-        // Set $temp_log to entry TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->first(), but order by created_at desc, and join with subcategories table by subcategory_id and then categories table by category_id
         if (auth()->user()) {
+            $user = auth()->user();
+            $userId = auth()->user()->id;
+            // Get the last user's temp log entry where clock_out is null, or null if there are no temp log entries.
             $temp_log = TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->orderBy('created_at', 'desc')->first();
             if ($temp_log) {
                 $temp_log->subcategory = $temp_log->subcategory()->first();
                 // Set $temp_log->subcategory->category to entry Category::where('id', $temp_log->subcategory->category_id)->first()
                 $temp_log->subcategory->category = Category::where('id', $temp_log->subcategory->category_id)->first();
             }
+            // Calculate Stats
+            // Get all of the user's temp_logs where clock_out is not null
+            $temp_logs = TempLog::where('user_id', $userId)->where('clock_out', '!=', null)->get();
+            $results = [];
+            foreach ($temp_logs as $tempLog) {
+                $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
+                $category = Category::find($subcategory->category_id); // get the category for the subcategory
+                $org_name = Organization::find($category->org_id)->name; // get the org name for the category
+                // Determine the rate for the category
+                $rate = $user->categories()->where('user_id', $userId)->where('category_id', $category->id)->value('rate');
+                if (!$rate && $org_name != 'Unpaid') {
+                    $rate = $user->subscriptions()->where('user_id', $userId)->where('org_id', $category->org_id)->value('rate');
+                }
+                if (!$rate && $org_name != 'Unpaid') {
+                    $rate = User::find($userId)->global_rate;
+                }
+                // Calculate the amount earned for the category
+                $amountEarnedForCategory = ($tempLog->minutes / 60) * $rate;
+                $amountEarnedForCategory = number_format($amountEarnedForCategory, 2, '.', '');
+                // Calculate the amount earned for the category tax
+                $amountEarnedForCategoryTax = $amountEarnedForCategory * User::find($userId)->simple_tax_rate;
+                $amountEarnedForCategoryTax = number_format($amountEarnedForCategoryTax, 2, '.', '');
+                // create an object for the current temp_log and add it to the results array
+                $result = (object) [
+                    'id' => $tempLog->id,
+                    'user_id' => $tempLog->user_id,
+                    'subcategory_id' => $tempLog->subcategory_id,
+                    'minutes' => $tempLog->minutes,
+                    'category_id' => $category->id,
+                    'category_name' => $category->name,
+                    'org_id' => $category->org_id,
+                    'org_name' => $org_name,
+                    'rate_determined_for_category' => $rate,
+                    'amount_earned_for_category' => $amountEarnedForCategory,
+                    'amount_earned_for_category_tax' => $amountEarnedForCategoryTax,
+                ];
+                $results[] = $result;
+            }
+            $test = $results;
         } else {
             $temp_log = null;
         }
@@ -68,6 +110,9 @@ class HandleInertiaRequests extends Middleware
                     'row' => $temp_log,
                     // // Set 'active_category' to the category of the user's last temp log entry where clock_out is null, or null if there are no temp log entries.
                     // 'active_subcategory_id' => auth()->user() ? TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->first()->subcategory_id : null,
+                ],
+                'stats' => [
+                    'test' => $test,
                 ],
             ],
             'ziggy' => function () use ($request) {
