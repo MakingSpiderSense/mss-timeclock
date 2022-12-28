@@ -55,6 +55,7 @@ class HandleInertiaRequests extends Middleware
             $results = [];
             $hours_month_unpaid = 0;
             $hours_today_current_org = 0;
+            $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
             // Loop through the temp_logs and build an array of objects with the data we need
             foreach ($temp_logs as $tempLog) {
                 $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
@@ -85,19 +86,22 @@ class HandleInertiaRequests extends Middleware
                 if ($org_name == 'Unpaid') {
                     $hours_month_unpaid += $minutes;
                 }
-                // If the category's org_id is the same as the active_org_id, and the clock_in time is today, add the minutes to the hours_today_current_org variable
-                if ($category->org_id == $user->active_org_id && date('Y-m-d', strtotime($tempLog->clock_in)) == date('Y-m-d')) {
+                // If the category's org_id is the same as the active_org_id, and the clock_in time is today (after adjusting for the user's time_zone), add the minutes to the hours_today_current_org variable
+                if ($category->org_id == $user->active_org_id && date('Y-m-d', strtotime($tempLog->clock_in . ' ' . $time_zone)) == date('Y-m-d')) {
                     $hours_today_current_org += $minutes;
                 }
                 // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
+                    'clock_in' => $tempLog->clock_in,
+                    'clock_in_adjusted' => date('Y-m-d H:i:s', strtotime($tempLog->clock_in . ' ' . $time_zone)),
+                    'org_id' => $category->org_id,
+                    'active_org_id' => $user->active_org_id,
+                    'minutes' => $minutes,
                     'id' => $tempLog->id,
                     'user_id' => $tempLog->user_id,
                     'subcategory_id' => $tempLog->subcategory_id,
-                    'minutes' => $minutes,
                     'category_id' => $category->id,
                     'category_name' => $category->name,
-                    'org_id' => $category->org_id,
                     'org_name' => $org_name,
                     'rate_determined_for_category' => $rate,
                     'amount_earned_for_category' => $amountEarnedForCategory,
