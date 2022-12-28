@@ -165,6 +165,7 @@ class HandleInertiaRequests extends Middleware
             $hours_month_combined_org = round($hours_month_combined_org / 60, 1);
             $hours_weekly_this_month_combined_org = round($hours_month_combined_org / $weeks_so_far, 1);
             $amount_earned_month_combined_org = round($amount_earned_month_combined_org, 2);
+            $amount_earned_month_combined_org_tax = round($amount_earned_month_combined_org * $simple_tax_rate, 2);
         } else {
             $temp_log = null;
         }
@@ -190,7 +191,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_month_combined_org) ? $amount_earned_month_combined_org : '',
+                    'test' => isset($amount_earned_month_combined_org_tax) ? $amount_earned_month_combined_org_tax : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
