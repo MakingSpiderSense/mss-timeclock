@@ -60,6 +60,7 @@ class HandleInertiaRequests extends Middleware
             $amount_earned_month_current_org = 0;
             $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
             $weeks_so_far = round(date('j') / 7, 2);
+            $simple_tax_rate = $user->simple_tax_rate;
             // Loop through the temp_logs and build an array of objects with the data we need
             foreach ($temp_logs as $tempLog) {
                 $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
@@ -126,9 +127,10 @@ class HandleInertiaRequests extends Middleware
             // Stat calculations continued...
             $hours_month_unpaid = round($hours_month_unpaid / 60, 1);
             $hours_today_current_org = round($hours_today_current_org / 60, 1);
-            $amount_earned_today_current_org_tax = $amount_earned_today_current_org * User::find($userId)->simple_tax_rate;
+            $amount_earned_today_current_org_tax = $amount_earned_today_current_org * $simple_tax_rate;
             $hours_month_current_org = round($hours_month_current_org / 60, 1);
             $hours_weekly_this_month_current_org = round($hours_month_current_org / $weeks_so_far, 1);
+            $amount_earned_month_current_org_tax = round($amount_earned_month_current_org * $simple_tax_rate, 2);
         } else {
             $temp_log = null;
         }
@@ -154,7 +156,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_month_current_org) ? $amount_earned_month_current_org : '',
+                    'test' => isset($amount_earned_month_current_org_tax) ? $amount_earned_month_current_org_tax : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
