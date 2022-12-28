@@ -63,6 +63,7 @@ class HandleInertiaRequests extends Middleware
             $amount_earned_today_combined_org = 0;
             $hours_month_paid_combined_org = 0;
             $hours_month_combined_org = 0;
+            $amount_earned_month_combined_org = 0;
             $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
             $weeks_so_far = round(date('j') / 7, 2);
             $simple_tax_rate = $user->simple_tax_rate;
@@ -96,10 +97,10 @@ class HandleInertiaRequests extends Middleware
                 }
                 // Calculate the amount earned for the category
                 $amountEarnedForCategory = ($minutes / 60) * $rate;
-                $amountEarnedForCategory = number_format($amountEarnedForCategory, 2, '.', '');
+                $amountEarnedForCategory = round($amountEarnedForCategory, 2);
                 // Calculate the amount earned for the category tax
                 $amountEarnedForCategoryTax = $amountEarnedForCategory * User::find($userId)->simple_tax_rate;
-                $amountEarnedForCategoryTax = number_format($amountEarnedForCategoryTax, 2, '.', '');
+                $amountEarnedForCategoryTax = round($amountEarnedForCategoryTax, 2);
                 // If the category's org_name is 'Unpaid', add the minutes to the hours_month_unpaid variable
                 if ($org_name == 'Unpaid') {
                     $hours_month_unpaid += $minutes;
@@ -125,13 +126,16 @@ class HandleInertiaRequests extends Middleware
                 }
                 // If it's from any time this month...
                 $hours_month_combined_org += $minutes;
+                $amount_earned_month_combined_org += $amountEarnedForCategory;
                 // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
                     'clock_in_adjusted' => $clock_in_time,
                     'amount_earned_for_category' => $amountEarnedForCategory,
-                    'org_id' => $category->org_id,
+                    'total_earned' => $amount_earned_month_combined_org,
+                    'adding_values' => "$amount_earned_month_combined_org + $amountEarnedForCategory",
                     'org_name' => $org_name,
                     'minutes' => $minutes,
+                    'org_id' => $category->org_id,
                     'id' => $tempLog->id,
                     'active_org_id' => $user->active_org_id,
                     'clock_in' => $tempLog->clock_in,
@@ -148,15 +152,19 @@ class HandleInertiaRequests extends Middleware
             // Stat calculations continued...
             $hours_month_unpaid = round($hours_month_unpaid / 60, 1);
             $hours_today_current_org = round($hours_today_current_org / 60, 1);
+            $amount_earned_today_current_org = round($amount_earned_today_current_org, 2);
             $amount_earned_today_current_org_tax = round($amount_earned_today_current_org * $simple_tax_rate, 2);
             $hours_month_current_org = round($hours_month_current_org / 60, 1);
             $hours_weekly_this_month_current_org = round($hours_month_current_org / $weeks_so_far, 1);
+            $amount_earned_month_current_org = round($amount_earned_month_current_org, 2);
             $amount_earned_month_current_org_tax = round($amount_earned_month_current_org * $simple_tax_rate, 2);
             $hours_today_combined_org = round($hours_today_combined_org / 60, 1);
+            $amount_earned_today_combined_org = round($amount_earned_today_combined_org, 2);
             $amount_earned_today_combined_org_tax = round($amount_earned_today_combined_org * $simple_tax_rate, 2);
             $hours_month_paid_combined_org = round($hours_month_paid_combined_org / 60, 1);
             $hours_month_combined_org = round($hours_month_combined_org / 60, 1);
             $hours_weekly_this_month_combined_org = round($hours_month_combined_org / $weeks_so_far, 1);
+            $amount_earned_month_combined_org = round($amount_earned_month_combined_org, 2);
         } else {
             $temp_log = null;
         }
@@ -182,7 +190,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($hours_weekly_this_month_combined_org) ? $hours_weekly_this_month_combined_org : '',
+                    'test' => isset($amount_earned_month_combined_org) ? $amount_earned_month_combined_org : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
