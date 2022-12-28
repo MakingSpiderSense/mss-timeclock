@@ -117,6 +117,7 @@ class HandleInertiaRequests extends Middleware
             // Stat calculations continued...
             $hours_month_unpaid = round($hours_month_unpaid / 60, 1);
             $hours_today_current_org = round($hours_today_current_org / 60, 1);
+            $amount_earned_today_current_org_tax = $amount_earned_today_current_org * User::find($userId)->simple_tax_rate;
         } else {
             $temp_log = null;
         }
@@ -142,7 +143,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_today_current_org) ? $amount_earned_today_current_org : '',
+                    'test' => isset($amount_earned_today_current_org_tax) ? $amount_earned_today_current_org_tax : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
