@@ -57,6 +57,7 @@ class HandleInertiaRequests extends Middleware
             $hours_today_current_org = 0;
             $amount_earned_today_current_org = 0;
             $hours_month_current_org = 0;
+            $amount_earned_month_current_org = 0;
             $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
             $weeks_so_far = round(date('j') / 7, 2);
             // Loop through the temp_logs and build an array of objects with the data we need
@@ -100,6 +101,7 @@ class HandleInertiaRequests extends Middleware
                 // If active org and it's from any time this month...
                 if ($isActiveOrg) {
                     $hours_month_current_org += $minutes;
+                    $amount_earned_month_current_org += $amountEarnedForCategory;
                 }
                 // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
@@ -152,7 +154,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($hours_weekly_this_month_current_org) ? $hours_weekly_this_month_current_org : '',
+                    'test' => isset($amount_earned_month_current_org) ? $amount_earned_month_current_org : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
