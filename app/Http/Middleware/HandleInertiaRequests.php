@@ -61,6 +61,7 @@ class HandleInertiaRequests extends Middleware
             $amount_earned_month_current_org = 0;
             $hours_today_combined_org = 0;
             $amount_earned_today_combined_org = 0;
+            $hours_month_paid_combined_org = 0;
             $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
             $weeks_so_far = round(date('j') / 7, 2);
             $simple_tax_rate = $user->simple_tax_rate;
@@ -117,6 +118,10 @@ class HandleInertiaRequests extends Middleware
                     $hours_today_combined_org += $minutes;
                     $amount_earned_today_combined_org += $amountEarnedForCategory;
                 }
+                // If paid hours and it's from any time this month...
+                if ($isPaid) {
+                    $hours_month_paid_combined_org += $minutes;
+                }
                 // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
                     'clock_in_adjusted' => $clock_in_time,
@@ -146,6 +151,7 @@ class HandleInertiaRequests extends Middleware
             $amount_earned_month_current_org_tax = round($amount_earned_month_current_org * $simple_tax_rate, 2);
             $hours_today_combined_org = round($hours_today_combined_org / 60, 1);
             $amount_earned_today_combined_org_tax = round($amount_earned_today_combined_org * $simple_tax_rate, 2);
+            $hours_month_paid_combined_org = round($hours_month_paid_combined_org / 60, 1);
         } else {
             $temp_log = null;
         }
@@ -171,7 +177,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_today_combined_org_tax) ? $amount_earned_today_combined_org_tax : '',
+                    'test' => isset($hours_month_paid_combined_org) ? $hours_month_paid_combined_org : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
