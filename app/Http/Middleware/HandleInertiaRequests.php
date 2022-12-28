@@ -53,6 +53,9 @@ class HandleInertiaRequests extends Middleware
             // Get all of the user's temp_logs where clock_out is not null
             $temp_logs = TempLog::where('user_id', $userId)->get();
             $results = [];
+            $hours_month_unpaid = 0;
+            $hours_today_current_org = 0;
+            // Loop through the temp_logs and build an array of objects with the data we need
             foreach ($temp_logs as $tempLog) {
                 $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
                 $category = Category::find($subcategory->category_id); // get the category for the subcategory
@@ -78,7 +81,15 @@ class HandleInertiaRequests extends Middleware
                 // Calculate the amount earned for the category tax
                 $amountEarnedForCategoryTax = $amountEarnedForCategory * User::find($userId)->simple_tax_rate;
                 $amountEarnedForCategoryTax = number_format($amountEarnedForCategoryTax, 2, '.', '');
-                // create an object for the current temp_log and add it to the results array
+                // If the category's org_name is 'Unpaid', add the minutes to the hours_month_unpaid variable
+                if ($org_name == 'Unpaid') {
+                    $hours_month_unpaid += $minutes;
+                }
+                // If the category's org_id is the same as the active_org_id, and the clock_in time is today, add the minutes to the hours_today_current_org variable
+                if ($category->org_id == $user->active_org_id && date('Y-m-d', strtotime($tempLog->clock_in)) == date('Y-m-d')) {
+                    $hours_today_current_org += $minutes;
+                }
+                // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
                     'id' => $tempLog->id,
                     'user_id' => $tempLog->user_id,
@@ -91,10 +102,14 @@ class HandleInertiaRequests extends Middleware
                     'rate_determined_for_category' => $rate,
                     'amount_earned_for_category' => $amountEarnedForCategory,
                     'amount_earned_for_category_tax' => $amountEarnedForCategoryTax,
+                    // Add other calculations here...
                 ];
                 $results[] = $result;
             }
-            $test = $results;
+            $all_logs = $results;
+            // Stat calculations continued...
+            $hours_month_unpaid = round($hours_month_unpaid / 60, 1);
+            $hours_today_current_org = round($hours_today_current_org / 60, 1);
         } else {
             $temp_log = null;
         }
@@ -119,7 +134,8 @@ class HandleInertiaRequests extends Middleware
                     // 'active_subcategory_id' => auth()->user() ? TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->first()->subcategory_id : null,
                 ],
                 'stats' => [
-                    'test' => isset($test) ? $test : '',
+                    'all_logs' => isset($all_logs) ? $all_logs : '',
+                    'test' => isset($hours_today_current_org) ? $hours_today_current_org : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
