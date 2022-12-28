@@ -10,6 +10,7 @@ use Tightenco\Ziggy\Ziggy;
 use App\Models\Subcategory;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -66,7 +67,12 @@ class HandleInertiaRequests extends Middleware
                 $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
                 $category = Category::find($subcategory->category_id); // get the category for the subcategory
                 $org_name = Organization::find($category->org_id)->name; // get the org name for the category
-                $isToday = date('Y-m-d', strtotime($tempLog->clock_in . ' ' . $time_zone)) == date('Y-m-d');
+                // Convert dates from UTC to user's time zone
+                $clock_in_tz = Carbon::parse($tempLog->clock_in)->setTimezone($time_zone);
+                $todays_date = Carbon::now()->setTimezone($time_zone)->format('Y-m-d');
+                $clock_in_time = $clock_in_tz->format('Y-m-d H:i:s');
+                $clock_in_date = $clock_in_tz->format('Y-m-d');
+                $isToday = $clock_in_date == $todays_date;
                 $isActiveOrg = $category->org_id == $user->active_org_id;
                 $isPaid = $org_name != 'Unpaid';
                 // Determine the rate for the category
@@ -106,7 +112,7 @@ class HandleInertiaRequests extends Middleware
                 }
                 // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
-                    'clock_in_adjusted' => date('Y-m-d H:i:s', strtotime($tempLog->clock_in . ' ' . $time_zone)),
+                    'clock_in_adjusted' => $clock_in_time,
                     'amount_earned_for_category' => $amountEarnedForCategory,
                     'org_id' => $category->org_id,
                     'minutes' => $minutes,
@@ -156,7 +162,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_month_current_org_tax) ? $amount_earned_month_current_org_tax : '',
+                    'test' => isset($hours_month_unpaid) ? $hours_month_unpaid : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
