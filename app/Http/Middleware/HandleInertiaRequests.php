@@ -56,6 +56,7 @@ class HandleInertiaRequests extends Middleware
             $hours_month_unpaid = 0;
             $hours_today_current_org = 0;
             $amount_earned_today_current_org = 0;
+            $hours_month_current_org = 0;
             $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
             // Loop through the temp_logs and build an array of objects with the data we need
             foreach ($temp_logs as $tempLog) {
@@ -64,12 +65,13 @@ class HandleInertiaRequests extends Middleware
                 $org_name = Organization::find($category->org_id)->name; // get the org name for the category
                 $isToday = date('Y-m-d', strtotime($tempLog->clock_in . ' ' . $time_zone)) == date('Y-m-d');
                 $isActiveOrg = $category->org_id == $user->active_org_id;
+                $isPaid = $org_name != 'Unpaid';
                 // Determine the rate for the category
                 $rate = $user->categories()->where('user_id', $userId)->where('category_id', $category->id)->value('rate');
-                if (!$rate && $org_name != 'Unpaid') {
+                if (!$rate && $isPaid) {
                     $rate = $user->subscriptions()->where('user_id', $userId)->where('org_id', $category->org_id)->value('rate');
                 }
-                if (!$rate && $org_name != 'Unpaid') {
+                if (!$rate && $isPaid) {
                     $rate = User::find($userId)->global_rate;
                 }
                 // Calculate the minutes for the entry
@@ -94,14 +96,18 @@ class HandleInertiaRequests extends Middleware
                     $hours_today_current_org += $minutes;
                     $amount_earned_today_current_org += $amountEarnedForCategory;
                 }
+                // If active org and it's from any time this month...
+                if ($isActiveOrg) {
+                    $hours_month_current_org += $minutes;
+                }
                 // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
                     'clock_in_adjusted' => date('Y-m-d H:i:s', strtotime($tempLog->clock_in . ' ' . $time_zone)),
                     'amount_earned_for_category' => $amountEarnedForCategory,
                     'org_id' => $category->org_id,
-                    'active_org_id' => $user->active_org_id,
                     'minutes' => $minutes,
                     'id' => $tempLog->id,
+                    'active_org_id' => $user->active_org_id,
                     'clock_in' => $tempLog->clock_in,
                     'user_id' => $tempLog->user_id,
                     'subcategory_id' => $tempLog->subcategory_id,
@@ -118,6 +124,7 @@ class HandleInertiaRequests extends Middleware
             $hours_month_unpaid = round($hours_month_unpaid / 60, 1);
             $hours_today_current_org = round($hours_today_current_org / 60, 1);
             $amount_earned_today_current_org_tax = $amount_earned_today_current_org * User::find($userId)->simple_tax_rate;
+            $hours_month_current_org = round($hours_month_current_org / 60, 1);
         } else {
             $temp_log = null;
         }
@@ -143,7 +150,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_today_current_org_tax) ? $amount_earned_today_current_org_tax : '',
+                    'test' => isset($hours_month_current_org) ? $hours_month_current_org : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
