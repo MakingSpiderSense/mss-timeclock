@@ -122,6 +122,7 @@ class HandleInertiaRequests extends Middleware
                     'clock_in_adjusted' => $clock_in_time,
                     'amount_earned_for_category' => $amountEarnedForCategory,
                     'org_id' => $category->org_id,
+                    'org_name' => $org_name,
                     'minutes' => $minutes,
                     'id' => $tempLog->id,
                     'active_org_id' => $user->active_org_id,
@@ -130,7 +131,6 @@ class HandleInertiaRequests extends Middleware
                     'subcategory_id' => $tempLog->subcategory_id,
                     'category_id' => $category->id,
                     'category_name' => $category->name,
-                    'org_name' => $org_name,
                     'rate_determined_for_category' => $rate,
                     'amount_earned_for_category_tax' => $amountEarnedForCategoryTax,
                 ];
@@ -140,7 +140,7 @@ class HandleInertiaRequests extends Middleware
             // Stat calculations continued...
             $hours_month_unpaid = round($hours_month_unpaid / 60, 1);
             $hours_today_current_org = round($hours_today_current_org / 60, 1);
-            $amount_earned_today_current_org_tax = $amount_earned_today_current_org * $simple_tax_rate;
+            $amount_earned_today_current_org_tax = round($amount_earned_today_current_org * $simple_tax_rate, 2);
             $hours_month_current_org = round($hours_month_current_org / 60, 1);
             $hours_weekly_this_month_current_org = round($hours_month_current_org / $weeks_so_far, 1);
             $amount_earned_month_current_org_tax = round($amount_earned_month_current_org * $simple_tax_rate, 2);
@@ -170,7 +170,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_today_combined_org) ? $amount_earned_today_combined_org : '',
+                    'test' => isset($amount_earned_month_current_org_tax) ? $amount_earned_month_current_org_tax : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
