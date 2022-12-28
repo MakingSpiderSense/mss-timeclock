@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -68,7 +69,8 @@ class RatesController extends Controller
         if ($data['type'] === 'organization_rates') {
             // Set $updated_rate to $data['updated_rate'] if it is not 0, otherwise set it to null
             $updated_rate = $data['updated_rate'] != 0 ? $data['updated_rate'] : null;
-            auth()->user()->subscriptions()->updateExistingPivot($data['id'], [
+            // Update the rate in the `user_org_subscriptions` table
+            $updated_rate = auth()->user()->subscriptions()->where('user_org_subscriptions.id', $data['id'])->update([
                 'rate' => $updated_rate,
             ]);
             if ($updated_rate) {
