@@ -51,7 +51,7 @@ class HandleInertiaRequests extends Middleware
             }
             // Calculate Stats
             // Get all of the user's temp_logs where clock_out is not null
-            $temp_logs = TempLog::where('user_id', $userId)->where('clock_out', '!=', null)->get();
+            $temp_logs = TempLog::where('user_id', $userId)->get();
             $results = [];
             foreach ($temp_logs as $tempLog) {
                 $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
@@ -65,8 +65,15 @@ class HandleInertiaRequests extends Middleware
                 if (!$rate && $org_name != 'Unpaid') {
                     $rate = User::find($userId)->global_rate;
                 }
+                // Calculate the minutes for the entry
+                if ($tempLog->clock_out != null) {
+                    $minutes = $tempLog->minutes;
+                } else {
+                    // Set minutes to the difference between the time now and clock_in in minutes
+                    $minutes = round((time() - strtotime($tempLog->clock_in)) / 60);
+                }
                 // Calculate the amount earned for the category
-                $amountEarnedForCategory = ($tempLog->minutes / 60) * $rate;
+                $amountEarnedForCategory = ($minutes / 60) * $rate;
                 $amountEarnedForCategory = number_format($amountEarnedForCategory, 2, '.', '');
                 // Calculate the amount earned for the category tax
                 $amountEarnedForCategoryTax = $amountEarnedForCategory * User::find($userId)->simple_tax_rate;
@@ -76,7 +83,7 @@ class HandleInertiaRequests extends Middleware
                     'id' => $tempLog->id,
                     'user_id' => $tempLog->user_id,
                     'subcategory_id' => $tempLog->subcategory_id,
-                    'minutes' => $tempLog->minutes,
+                    'minutes' => $minutes,
                     'category_id' => $category->id,
                     'category_name' => $category->name,
                     'org_id' => $category->org_id,
@@ -112,7 +119,7 @@ class HandleInertiaRequests extends Middleware
                     // 'active_subcategory_id' => auth()->user() ? TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->first()->subcategory_id : null,
                 ],
                 'stats' => [
-                    'test' => $test,
+                    'test' => isset($test) ? $test : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
