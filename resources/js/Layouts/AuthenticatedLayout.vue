@@ -151,7 +151,7 @@ const showingNavigationDropdown = ref(false);
                     <div>
                         <h3>This Month</h3>
                         <!-- Paid hours -->
-                        <div><span id="monthPaidHours">27.3</span> Paid Hours</div>
+                        <div><span id="monthPaidHours">27.3</span> Paid Hours ($<span id="monthHourlyRatePaid">61</span>/Hour)</div>
                         <!-- Unpaid hours -->
                         <div><span id="monthUnpaidHours">43.2</span> Unpaid Hours</div>
                         <!-- Hourly rate -->
@@ -203,6 +203,8 @@ export default {
         this.updateTimeOnClock();
         console.log(usePage().props.value.auth.stats.all_logs);
         console.log(usePage().props.value.auth.stats.test);
+        console.log(usePage().props.value.auth.stats.test2);
+        console.log(usePage().props.value.auth.stats.test3);
     },
     watch: {
         // Watch for changes to the pageModal prop
