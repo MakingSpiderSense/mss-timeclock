@@ -59,10 +59,11 @@ class HandleInertiaRequests extends Middleware
             $amount_earned_today_current_org = 0;
             $hours_month_current_org = 0;
             $amount_earned_month_current_org = 0;
+            $hours_today_combined_org = 0;
+            $amount_earned_today_combined_org = 0;
             $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
             $weeks_so_far = round(date('j') / 7, 2);
             $simple_tax_rate = $user->simple_tax_rate;
-            $hours_today_combined_org = 0;
             // Loop through the temp_logs and build an array of objects with the data we need
             foreach ($temp_logs as $tempLog) {
                 $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
@@ -114,6 +115,7 @@ class HandleInertiaRequests extends Middleware
                 // If it's from today...
                 if ($isToday) {
                     $hours_today_combined_org += $minutes;
+                    $amount_earned_today_combined_org += $amountEarnedForCategory;
                 }
                 // Create an object for the current temp_log and add it to the results array
                 $result = (object) [
@@ -168,7 +170,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 'stats' => [
                     'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($hours_today_combined_org) ? $hours_today_combined_org : '',
+                    'test' => isset($amount_earned_today_combined_org) ? $amount_earned_today_combined_org : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
