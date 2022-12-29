@@ -50,10 +50,9 @@ class HandleInertiaRequests extends Middleware
                 // Set $temp_log->subcategory->category to entry Category::where('id', $temp_log->subcategory->category_id)->first()
                 $temp_log->subcategory->category = Category::where('id', $temp_log->subcategory->category_id)->first();
             }
-            // Calculate Stats
-            // Get all of the user's temp_logs where clock_out is not null
+            // Calculate Stats from all of the user's temp_logs
             $temp_logs = TempLog::where('user_id', $userId)->get();
-            $results = [];
+            $all_logs = [];
             $hours_month_unpaid = 0;
             $hours_today_current_org = 0;
             $amount_earned_today_current_org = 0;
@@ -127,7 +126,7 @@ class HandleInertiaRequests extends Middleware
                 // If it's from any time this month...
                 $hours_month_combined_org += $minutes;
                 $amount_earned_month_combined_org += $amountEarnedForCategory;
-                // Create an object for the current temp_log and add it to the results array
+                // Create an object for the current temp_log and add it to the all_logs array
                 $result = (object) [
                     'clock_in_adjusted' => $clock_in_time,
                     'amount_earned_for_category' => $amountEarnedForCategory,
@@ -145,9 +144,8 @@ class HandleInertiaRequests extends Middleware
                     'rate_determined_for_category' => $rate,
                     'amount_earned_for_category_tax' => $amountEarnedForCategoryTax,
                 ];
-                $results[] = $result;
+                $all_logs[] = $result;
             }
-            $all_logs = $results;
             // Stat calculations continued...
             $hours_month_unpaid = round($hours_month_unpaid / 60, 1);
             $hours_today_current_org = round($hours_today_current_org / 60, 1);
@@ -191,10 +189,22 @@ class HandleInertiaRequests extends Middleware
                     // 'active_subcategory_id' => auth()->user() ? TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->first()->subcategory_id : null,
                 ],
                 'stats' => [
-                    'all_logs' => isset($all_logs) ? $all_logs : '',
-                    'test' => isset($amount_earned_month_combined_org) ? $amount_earned_month_combined_org : '',
-                    'test2' => isset($hours_month_combined_org) ? $hours_month_combined_org : '',
-                    'test3' => isset($rate_this_month_combined_org) ? $rate_this_month_combined_org : '',
+                    'hours_month_unpaid' => isset($hours_month_unpaid) ? $hours_month_unpaid : '',
+                    'hours_today_current_org' => isset($hours_today_current_org) ? $hours_today_current_org : '',
+                    'amount_earned_today_current_org' => isset($amount_earned_today_current_org) ? $amount_earned_today_current_org : '',
+                    'amount_earned_today_current_org_tax' => isset($amount_earned_today_current_org_tax) ? $amount_earned_today_current_org_tax : '',
+                    'hours_month_current_org' => isset($hours_month_current_org) ? $hours_month_current_org : '',
+                    'hours_weekly_this_month_current_org' => isset($hours_weekly_this_month_current_org) ? $hours_weekly_this_month_current_org : '',
+                    'amount_earned_month_current_org_tax' => isset($amount_earned_month_current_org_tax) ? $amount_earned_month_current_org_tax : '',
+                    'hours_today_combined_org' => isset($hours_today_combined_org) ? $hours_today_combined_org : '',
+                    'amount_earned_today_combined_org' => isset($amount_earned_today_combined_org) ? $amount_earned_today_combined_org : '',
+                    'amount_earned_today_combined_org_tax' => isset($amount_earned_today_combined_org_tax) ? $amount_earned_today_combined_org_tax : '',
+                    'hours_month_paid_combined_org' => isset($hours_month_paid_combined_org) ? $hours_month_paid_combined_org : '',
+                    'hours_month_combined_org' => isset($hours_month_combined_org) ? $hours_month_combined_org : '',
+                    'hours_weekly_this_month_combined_org' => isset($hours_weekly_this_month_combined_org) ? $hours_weekly_this_month_combined_org : '',
+                    'amount_earned_month_combined_org_tax' => isset($amount_earned_month_combined_org_tax) ? $amount_earned_month_combined_org_tax : '',
+                    'rate_this_month_paid_combined_org' => isset($rate_this_month_paid_combined_org) ? $rate_this_month_paid_combined_org : '',
+                    'rate_this_month_combined_org' => isset($rate_this_month_combined_org) ? $rate_this_month_combined_org : '',
                 ],
             ],
             'ziggy' => function () use ($request) {
