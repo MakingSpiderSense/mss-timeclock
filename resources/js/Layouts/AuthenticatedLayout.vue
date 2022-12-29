@@ -201,10 +201,17 @@ export default {
         }
     },
     mounted() {
-        console.log('mounted');
         this.stopUpdatingStats();
         this.setOptionSelected();
+        // Update the time on the clock every second
+        if (window.tc_second_counter_interval) {
+            clearInterval(window.tc_second_counter_interval);
+        }
         this.updateTimeOnClock();
+        window.tc_second_counter_interval = setInterval(() => {
+            this.updateTimeOnClock();
+        }, 1000);
+        // Update the stats every x seconds
         if (window.tc_stats_interval) {
             clearInterval(window.tc_stats_interval);
         }
@@ -240,7 +247,6 @@ export default {
     methods: {
         // If the user is clocked in, update the timeOnClock element to display the time they have been clocked in for. Then, update the time every second.
         updateTimeOnClock() {
-            // console.log(this.clockedInState);
             if (this.clockedInState) {
                 // Get the time the user clocked in at
                 const clockedInTime = usePage().props.value.auth.clocked_in_at ? new Date(usePage().props.value.auth.clocked_in_at) : null;
@@ -258,8 +264,6 @@ export default {
                 const seconds = Math.floor(timeDifference / 1000) - (hours * 60 * 60) - (minutes * 60);
                 // Display the time on the clock
                 document.querySelector('#timeOnClock').innerHTML = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                // Update the time on the clock every second
-                setTimeout(this.updateTimeOnClock, 1000);
             } else {
                 // If timeOnClock is set to 00:00:00, do not update it, otherwise, set it to 00:00:00
                 if (document.querySelector('#timeOnClock').innerHTML != "00:00:00") {
@@ -270,7 +274,6 @@ export default {
         // Update stats section
         async updateStats() {
             // Set the stats
-            console.log('updated stats');
             const stats = await axios.get('/stats');
             this.stats = stats.data;
             document.querySelector('#monthWeeklyHours').innerHTML = this.stats.hours_weekly_this_month_combined_org ? this.stats.hours_weekly_this_month_combined_org : "0";
