@@ -3,9 +3,10 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\RatesController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\ClockInOutController;
-use App\Http\Controllers\RatesController;
 use App\Http\Controllers\OrganizationsController;
 
 /*
@@ -58,8 +59,11 @@ Route::post('/organization/invite-decline/{org_id}', [OrganizationsController::c
 Route::post('/organization/active/{org_id}', [OrganizationsController::class, 'set_active'])->name('organizations.active');
 
 // Hourly Rates route
-Route::get('/rates',  [RatesController::class, 'index'])->name('rates');
-Route::post('/rate/update',  [RatesController::class, 'update'])->name('rate.update');
+Route::get('/rates', [RatesController::class, 'index'])->name('rates');
+Route::post('/rate/update', [RatesController::class, 'update'])->name('rate.update');
+
+// Stats route
+Route::get('/stats', [StatsController::class, 'index'])->middleware(['auth', 'verified'])->name('stats');
 
 require __DIR__.'/auth.php';
 

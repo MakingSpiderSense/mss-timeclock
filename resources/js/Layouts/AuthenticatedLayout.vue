@@ -157,9 +157,9 @@ const showingNavigationDropdown = ref(false);
                         <!-- Hourly rate -->
                         <div>$<span id="monthHourlyRate">43</span>/Hour</div>
                         <!-- Average weekly hours -->
-                        <div><span id="monthWeeklyHours">34</span> Hours/Week</div>
+                        <div><span id="monthWeeklyHours">0</span> Hours/Week</div>
                         <!-- Amount earned -->
-                        <div class="money-positive">$<span id="monthAmountEarned">2,346.25</span> Earned</div>
+                        <div class="money-positive">$<span id="monthAmountEarned">0</span> Earned</div>
                     </div>
                     <!-- Current Organization and Time -->
                     <div class="text-right">
@@ -196,12 +196,22 @@ export default {
             currentModal: this.pageModal ? this.pageModal.title : "Default",
             clockedInState: usePage().props.value.auth.clocked_in,
             flashMsg: usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""],
+            // stats: usePage().props.value.auth.stats,
+            stats: axios.get('/stats'),
         }
     },
     mounted() {
+        console.log('mounted');
+        this.stopUpdatingStats();
         this.setOptionSelected();
         this.updateTimeOnClock();
-        console.log(usePage().props.value.auth.stats);
+        if (window.tc_stats_interval) {
+            clearInterval(window.tc_stats_interval);
+        }
+        this.updateStats();
+        window.tc_stats_interval = setInterval(() => {
+            this.updateStats();
+        }, 5000);
     },
     watch: {
         // Watch for changes to the pageModal prop
@@ -256,6 +266,19 @@ export default {
                     document.querySelector('#timeOnClock').innerHTML = "00:00:00";
                 }
             }
+        },
+        // Update stats section
+        async updateStats() {
+            // Set the stats
+            console.log('updated stats');
+            const stats = await axios.get('/stats');
+            this.stats = stats.data;
+            document.querySelector('#monthWeeklyHours').innerHTML = this.stats.hours_weekly_this_month_combined_org ? this.stats.hours_weekly_this_month_combined_org : "0";
+            document.querySelector('#monthAmountEarned').innerHTML = this.stats.amount_earned_month_combined_org ? this.stats.amount_earned_month_combined_org : "0";
+        },
+        // Stop updating stats
+        stopUpdatingStats() {
+            clearInterval(this.intervalId);
         },
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
