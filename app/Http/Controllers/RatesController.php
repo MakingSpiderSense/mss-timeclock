@@ -61,6 +61,7 @@ class RatesController extends Controller
         if ($data['type'] === 'global_rate') {
             auth()->user()->update([
                 'global_rate' => $data['updated_rate'],
+                'updated_at' => now(),
             ]);
             return redirect()->back()->with('message', ['success', "Global rate updated to $$data[updated_rate] successfully."]);
         }
@@ -72,6 +73,7 @@ class RatesController extends Controller
             // Update the rate in the `user_org_subscriptions` table
             $updated_rate = auth()->user()->subscriptions()->where('user_org_subscriptions.id', $data['id'])->update([
                 'rate' => $updated_rate,
+                'user_org_subscriptions.updated_at' => now(),
             ]);
             if ($updated_rate) {
                 return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
@@ -91,6 +93,7 @@ class RatesController extends Controller
             } else {
                 auth()->user()->categories()->updateExistingPivot($category_id, [
                     'rate' => $data['updated_rate'],
+                    'updated_at' => now(),
                 ]);              
                 return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
             }
@@ -103,6 +106,7 @@ class RatesController extends Controller
             } else {
                 auth()->user()->categories()->attach($data['id'], [
                     'rate' => $data['updated_rate'],
+                    'created_at' => now(),
                 ]);
             }
             return redirect()->back()->with('message', ['success', "$data[name] rate of $$data[updated_rate] added successfully."]);
