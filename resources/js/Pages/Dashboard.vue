@@ -84,7 +84,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 </div>
                 <!-- Submit "Clock In/Out" -->
                 <div class="flex items-center justify-end mt-4">
-                    <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <PrimaryButton class=" clockin-btn ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         {{ clockInOutButton }}
                     </PrimaryButton>
                 </div>
@@ -373,6 +373,10 @@ export default {
     > div {
         width: 100%;
     }
+}
+.clockin-btn {
+    padding: 20px 30px;
+    font-size: 20px;
 }
 select {
     display: block;
