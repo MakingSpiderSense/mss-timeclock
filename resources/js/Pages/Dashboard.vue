@@ -106,6 +106,11 @@ const form = useForm({
     notes: '',
 });
 const submit = () => {
+    // If the category is contains to "aycove", then alert "test"
+    if (form.category.toLowerCase().includes('aycove')) {
+        alert("Don't forget to set yourself as active/inactive in Slack!");
+    }
+    // Submit the form
     form.post(route('clock-in-out'), {
         onFinish: () => form.reset('manualTime', 'category', 'subcategory', 'notes'),
     });
