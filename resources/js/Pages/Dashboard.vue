@@ -84,7 +84,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 </div>
                 <!-- Submit "Clock In/Out" -->
                 <div class="flex items-center justify-end mt-4">
-                    <a v-if="clockedInState" as="button" @click="cancelClockIn" class="cancel clockin-btn ml-4" :href="route('cancel-clock-in')">
+                    <a v-if="clockedInState" as="button" @click="cancelClockIn" class="cancel clockin-btn ml-4">
                         Cancel
                     </a>
                     <PrimaryButton class=" clockin-btn ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
@@ -159,7 +159,6 @@ export default {
         },
         // Cancel clock in
         cancelClockIn(e) {
-            // Prevent default
             e.preventDefault();
             form.post(route('cancel-clock-in'));
         },
@@ -394,6 +393,7 @@ export default {
 }
 .clockin-btn.cancel:hover {
     color: $black;
+    cursor: pointer;
 }
 select {
     display: block;
