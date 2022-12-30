@@ -15,6 +15,19 @@ class SettingsController extends Controller
     // Update stats view
     public function updateStatsView()
     {
-        dd('updateStatsView');
+        // Cycle through the stats view options
+        if (auth()->user()->set_combined_org == "combined_org") {
+            auth()->user()->set_combined_org = "combined_org_minus_tax";
+        } elseif (auth()->user()->set_combined_org == "combined_org_minus_tax") {
+            auth()->user()->set_combined_org = "current_org";
+        } elseif (auth()->user()->set_combined_org == "current_org") {
+            auth()->user()->set_combined_org = "current_org_minus_tax";
+        } elseif (auth()->user()->set_combined_org == "current_org_minus_tax") {
+            auth()->user()->set_combined_org = "combined_org";
+        }
+        // Save the user's updated set_combined_org setting
+        auth()->user()->save();
+        // Redirect back to the current page
+        return back();
     }
 }
