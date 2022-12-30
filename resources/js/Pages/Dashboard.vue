@@ -84,6 +84,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 </div>
                 <!-- Submit "Clock In/Out" -->
                 <div class="flex items-center justify-end mt-4">
+                    <a v-if="clockedInState" as="button" @click="cancelClockIn" class="cancel clockin-btn ml-4" :href="route('cancel-clock-in')">
+                        Cancel
+                    </a>
                     <PrimaryButton class=" clockin-btn ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         {{ clockInOutButton }}
                     </PrimaryButton>
@@ -153,6 +156,12 @@ export default {
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
             this.clockedInState = usePage().props.value.auth.clocked_in;
+        },
+        // Cancel clock in
+        cancelClockIn(e) {
+            // Prevent default
+            e.preventDefault();
+            form.post(route('cancel-clock-in'));
         },
         // Clear the manual time field
         clearManualTime() {
@@ -382,6 +391,9 @@ export default {
 .clockin-btn {
     padding: 20px 30px;
     font-size: 20px;
+}
+.clockin-btn.cancel:hover {
+    color: $black;
 }
 select {
     display: block;

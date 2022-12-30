@@ -178,4 +178,21 @@ class ClockInOutController extends Controller
         // Redirect to dashboard with success message, "Clocked have clocked out. Good work!"
         return redirect()->back()->with('message', ['success', "Clocked have clocked out with $hours hour$hours_label_suffix and $minutes minute$minutes_label_suffix on the clock. Good work!"]);
     }
+
+    // Cancel clock in
+    public function cancelClockIn() {
+        // Check to see if they are already clocked out.
+        if (auth()->user()->clocked_in == false) {
+            return redirect()->back()->with('message', ['error', 'You are already clocked out.']);
+        }
+
+        // Delete the temp log entry for the user
+        TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->orderBy('created_at', 'desc')->first()->delete();
+
+        // Update the user's clocked_in field to true
+        User::where('id', auth()->user()->id)->update(['clocked_in' => false]);
+
+        // Redirect to dashboard with success message
+        return redirect()->back()->with('message', ['success', 'Cancelled the clock in.']);
+    }
 }
