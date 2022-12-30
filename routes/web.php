@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\RatesController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ClockInOutController;
 use App\Http\Controllers\OrganizationsController;
 
@@ -65,7 +66,11 @@ Route::get('/rates', [RatesController::class, 'index'])->name('rates');
 Route::post('/rate/update', [RatesController::class, 'update'])->name('rate.update');
 
 // Stats route
-Route::get('/stats', [StatsController::class, 'index'])->middleware(['auth', 'verified'])->name('stats');
+Route::get('/stats', [StatsController::class, 'index'])->name('stats');
+
+// Settings routes
+// Update stats view settings
+Route::post('/settings/stats-view', [SettingsController::class, 'updateStatsView'])->name('settings.stats-view');
 
 require __DIR__.'/auth.php';
 

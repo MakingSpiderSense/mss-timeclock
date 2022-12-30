@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 
 class StatsController extends Controller
 {
+    public function __construct()
+    {
+        // Force the user to be logged in to access these functions. This will redirect them to the login page if they are not.
+        $this->middleware('auth');
+    }
+    
     // Return all stats
     public function index()
     {

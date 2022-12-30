@@ -146,6 +146,10 @@ const showingNavigationDropdown = ref(false);
                             <div><img src="/img/heart-icon-half.png" alt="heart icon"></div>
                             <div><img src="/img/heart-icon-empty.png" alt="heart icon"></div>
                         </div>
+                        <!-- Stats view setting -->
+                        <a as="button" @click="updateStatsView" class="btn-stats-view">
+                            {{ statsViewSettingLabel }}
+                        </a>
                     </div>
                     <!-- This Month -->
                     <div>
@@ -154,6 +158,8 @@ const showingNavigationDropdown = ref(false);
                         <div><span id="monthPaidHours">27.3</span> Paid Hours ($<span id="monthHourlyRatePaid">61</span>/Hour)</div>
                         <!-- Unpaid hours -->
                         <div><span id="monthUnpaidHours">43.2</span> Unpaid Hours</div>
+                        <!-- Current org hours -->
+                        <div><span id="monthUnpaidHours">55.2</span> Hours</div>
                         <!-- Hourly rate -->
                         <div>$<span id="monthHourlyRate">43</span>/Hour</div>
                         <!-- Average weekly hours -->
@@ -189,6 +195,8 @@ const showingNavigationDropdown = ref(false);
 <!-- Scripts -->
 <script>
 import { usePage } from '@inertiajs/inertia-vue3';
+import { useForm } from '@inertiajs/inertia-vue3';
+const form = useForm();
 export default {
     props: ['pageModal'],
     data() {
@@ -196,8 +204,8 @@ export default {
             currentModal: this.pageModal ? this.pageModal.title : "Default",
             clockedInState: usePage().props.value.auth.clocked_in,
             flashMsg: usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""],
-            // stats: usePage().props.value.auth.stats,
             stats: axios.get('/stats'),
+            set_combined_org: usePage().props.value.auth.user.set_combined_org,
         }
     },
     mounted() {
@@ -219,6 +227,8 @@ export default {
         window.tc_stats_interval = setInterval(() => {
             this.updateStats();
         }, 5000);
+        // Console log auth.user
+        console.log(usePage().props.value.auth.user.set_combined_org);
     },
     watch: {
         // Watch for changes to the pageModal prop
@@ -242,7 +252,21 @@ export default {
         // Set title attribute of organization dropdown
         organizationDropdownTitle() {
             return this.clockedInState ? "You cannot change organizations while clocked in" : "Change organization";
-        }
+        },
+        // Set button label for stats view setting based on set_combined_org prop
+        statsViewSettingLabel() {
+            if (this.set_combined_org === "combined_org") {
+                return "Viewing combined org stats >";
+            } else if (this.set_combined_org === "combined_org_minus_tax") {
+                return "Viewing combined org stats (after taxes) >";
+            } else if (this.set_combined_org === "current_org") {
+                return "Viewing current org stats >";
+            } else if (this.set_combined_org === "current_org_minus_tax") {
+                return "Viewing current org stats (after taxes) >";
+            } else {
+                return "Error: Invalid set_combined_org value";
+            }
+        },
     },
     methods: {
         // If the user is clocked in, update the timeOnClock element to display the time they have been clocked in for. Then, update the time every second.
@@ -282,6 +306,11 @@ export default {
         // Stop updating stats
         stopUpdatingStats() {
             clearInterval(this.intervalId);
+        },
+        // Update stats view setting
+        updateStatsView(e) {
+            e.preventDefault();
+            form.post(route('settings.stats-view'));
         },
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
@@ -459,7 +488,7 @@ export default {
         .hearts {
             display: flex;
             flex-wrap: wrap;
-            margin-bottom: 10px;
+            margin-bottom: 25px;
             img {
                 width: 25px;
                 margin-right: 5px;
@@ -467,6 +496,12 @@ export default {
         }
         .money-positive {
             color: green;
+        }
+        .btn-stats-view {
+            cursor: pointer;
+            &:hover {
+                color: $black;
+            }
         }
     }
 }
