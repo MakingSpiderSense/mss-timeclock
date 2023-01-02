@@ -134,9 +134,13 @@ const showingNavigationDropdown = ref(false);
                     <div>
                         <h3>Today</h3>
                         <!-- Hours worked -->
-                        <div><span id="todayHours">7.4</span> Hours</div>
+                        <div><span id="hours_today_current_org" title="hours_today_current_org">0</span> Hours</div>
+                        <div><span id="hours_today_combined_org" title="hours_today_combined_org">0</span> Hours</div>
                         <!-- Amount earned -->
-                        <div class="money-positive mb-5">$<span id="todayEarned">146.85</span> Earned</div>
+                        <div class="money-positive mb-5">$<span id="amount_earned_today_current_org" title="amount_earned_today_current_org">0</span> Earned</div>
+                        <div class="money-positive mb-5">$<span id="amount_earned_today_current_org_tax" title="amount_earned_today_current_org_tax">0</span> Earned</div>
+                        <div class="money-positive mb-5">$<span id="amount_earned_today_combined_org" title="amount_earned_today_combined_org">0</span> Earned</div>
+                        <div class="money-positive mb-5">$<span id="amount_earned_today_combined_org_tax" title="amount_earned_today_combined_org_tax">0</span> Earned</div>
                         <!-- Heart containers -->
                         <div class="hearts hearts-two-by-three">
                             <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
@@ -147,25 +151,28 @@ const showingNavigationDropdown = ref(false);
                             <div><img src="/img/heart-icon-empty.png" alt="heart icon"></div>
                         </div>
                         <!-- Stats view setting -->
-                        <a as="button" @click="updateStatsView" class="btn-stats-view">
-                            {{ statsViewSettingLabel }}
-                        </a>
+                        <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
                     </div>
                     <!-- This Month -->
                     <div>
                         <h3>This Month</h3>
                         <!-- Paid hours -->
-                        <div><span id="monthPaidHours">27.3</span> Paid Hours ($<span id="monthHourlyRatePaid">61</span>/Hour)</div>
+                        <div><span id="hours_month_paid_combined_org" title="hours_month_paid_combined_org">0</span> Paid Hours ($<span id="rate_this_month_paid_combined_org" title="rate_this_month_paid_combined_org">61</span>/Hour)</div>
                         <!-- Unpaid hours -->
-                        <div><span id="monthUnpaidHours">43.2</span> Unpaid Hours</div>
+                        <div><span id="hours_month_unpaid" title="hours_month_unpaid">0</span> Unpaid Hours</div>
                         <!-- Current org hours -->
-                        <div><span id="monthUnpaidHours">55.2</span> Hours</div>
+                        <div><span id="hours_month_current_org" title="hours_month_current_org">0</span> Hours</div>
+                        <div><span id="hours_month_combined_org" title="hours_month_combined_org">0</span> Hours</div>
                         <!-- Hourly rate -->
-                        <div>$<span id="monthHourlyRate">43</span>/Hour</div>
+                        <div>$<span id="rate_this_month_combined_org" title="rate_this_month_combined_org">0</span>/Hour</div>
                         <!-- Average weekly hours -->
-                        <div><span id="monthWeeklyHours">0</span> Hours/Week</div>
+                        <div><span id="hours_weekly_this_month_current_org" title="hours_weekly_this_month_current_org">0</span> Hours/Week</div>
+                        <div><span id="hours_weekly_this_month_combined_org" title="hours_weekly_this_month_combined_org">0</span> Hours/Week</div>
                         <!-- Amount earned -->
-                        <div class="money-positive">$<span id="monthAmountEarned">0</span> Earned</div>
+                        <div class="money-positive">$<span id="amount_earned_month_current_org" title="amount_earned_month_current_org">0</span> Earned</div>
+                        <div class="money-positive">$<span id="amount_earned_month_current_org_tax" title="amount_earned_month_current_org_tax">0</span> Earned</div>
+                        <div class="money-positive">$<span id="amount_earned_month_combined_org" title="amount_earned_month_combined_org">0</span> Earned</div>
+                        <div class="money-positive">$<span id="amount_earned_month_combined_org_tax" title="amount_earned_month_combined_org_tax">0</span> Earned</div>
                     </div>
                     <!-- Current Organization and Time -->
                     <div class="text-right">
@@ -245,7 +252,7 @@ export default {
         this.changeClockInOutState();
         this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
         this.updateTimeOnClock();
-        this.statsViewSettingLabel();
+        this.updateStatsDisplay();
         // Console log auth.user
         console.log(this.set_combined_org);
     },
@@ -287,8 +294,25 @@ export default {
             // Set the stats
             const stats = await axios.get('/stats');
             this.stats = stats.data;
-            document.querySelector('#monthWeeklyHours').innerHTML = this.stats.hours_weekly_this_month_combined_org ? this.stats.hours_weekly_this_month_combined_org : "0";
-            document.querySelector('#monthAmountEarned').innerHTML = this.stats.amount_earned_month_combined_org ? this.stats.amount_earned_month_combined_org : "0";
+            document.querySelector('#hours_today_current_org').innerHTML = this.stats.hours_today_current_org ? this.stats.hours_today_current_org : "0";
+            document.querySelector('#hours_today_combined_org').innerHTML = this.stats.hours_today_combined_org ? this.stats.hours_today_combined_org : "0";
+            document.querySelector('#amount_earned_today_current_org').innerHTML = this.stats.amount_earned_today_current_org ? this.stats.amount_earned_today_current_org : "0";
+            document.querySelector('#amount_earned_today_current_org_tax').innerHTML = this.stats.amount_earned_today_current_org_tax ? this.stats.amount_earned_today_current_org_tax : "0";
+            document.querySelector('#amount_earned_today_combined_org').innerHTML = this.stats.amount_earned_today_combined_org ? this.stats.amount_earned_today_combined_org : "0";
+            document.querySelector('#amount_earned_today_combined_org_tax').innerHTML = this.stats.amount_earned_today_combined_org_tax ? this.stats.amount_earned_today_combined_org_tax : "0";
+            document.querySelector('#hours_month_paid_combined_org').innerHTML = this.stats.hours_month_paid_combined_org ? this.stats.hours_month_paid_combined_org : "0";
+            document.querySelector('#rate_this_month_paid_combined_org').innerHTML = this.stats.rate_this_month_paid_combined_org ? this.stats.rate_this_month_paid_combined_org : "0";
+            document.querySelector('#hours_month_unpaid').innerHTML = this.stats.hours_month_unpaid ? this.stats.hours_month_unpaid : "0";
+            document.querySelector('#hours_month_current_org').innerHTML = this.stats.hours_month_current_org ? this.stats.hours_month_current_org : "0";
+            document.querySelector('#hours_month_combined_org').innerHTML = this.stats.hours_month_combined_org ? this.stats.hours_month_combined_org : "0";
+            document.querySelector('#rate_this_month_combined_org').innerHTML = this.stats.rate_this_month_combined_org ? this.stats.rate_this_month_combined_org : "0";
+            document.querySelector('#hours_weekly_this_month_current_org').innerHTML = this.stats.hours_weekly_this_month_current_org ? this.stats.hours_weekly_this_month_current_org : "0";
+            document.querySelector('#hours_weekly_this_month_combined_org').innerHTML = this.stats.hours_weekly_this_month_combined_org ? this.stats.hours_weekly_this_month_combined_org : "0";
+            document.querySelector('#amount_earned_month_current_org').innerHTML = this.stats.amount_earned_month_current_org ? this.stats.amount_earned_month_current_org : "0";
+            document.querySelector('#amount_earned_month_current_org_tax').innerHTML = this.stats.amount_earned_month_current_org_tax ? this.stats.amount_earned_month_current_org_tax : "0";
+            document.querySelector('#amount_earned_month_combined_org').innerHTML = this.stats.amount_earned_month_combined_org ? this.stats.amount_earned_month_combined_org : "0";
+            document.querySelector('#amount_earned_month_combined_org_tax').innerHTML = this.stats.amount_earned_month_combined_org_tax ? this.stats.amount_earned_month_combined_org_tax : "0";
+
         },
         // Stop updating stats
         stopUpdatingStats() {
@@ -297,15 +321,15 @@ export default {
         // Update stats view setting
         updateStatsView(e) {
             e.preventDefault();
-            // Update button label
-            this.statsViewSettingLabel();
-            form.post(route('settings.stats-view'));
-        },
-        // Set button label for stats view setting based on set_combined_org prop
-        statsViewSettingLabel() {
-            const btnLabel = document.querySelector('.btn-stats-view');
             // Get updated value of this.set_combined_org
             this.set_combined_org = usePage().props.value.auth.user.set_combined_org;
+            // Update button label
+            this.updateStatsDisplay();
+            form.post(route('settings.stats-view'));
+        },
+        // Update stats displayed on the page and button label
+        updateStatsDisplay() {
+            const btnLabel = document.querySelector('.btn-stats-view');
             if (this.set_combined_org === "combined_org") {
                 btnLabel.innerHTML = "Viewing combined org stats >";
             } else if (this.set_combined_org === "combined_org_minus_tax") {
