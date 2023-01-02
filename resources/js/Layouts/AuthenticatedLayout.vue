@@ -227,8 +227,6 @@ export default {
         window.tc_stats_interval = setInterval(() => {
             this.updateStats();
         }, 5000);
-        // Console log auth.user
-        console.log(usePage().props.value.auth.user.set_combined_org);
     },
     watch: {
         // Watch for changes to the pageModal prop
@@ -247,25 +245,14 @@ export default {
         this.changeClockInOutState();
         this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
         this.updateTimeOnClock();
+        this.statsViewSettingLabel();
+        // Console log auth.user
+        console.log(this.set_combined_org);
     },
     computed: {
         // Set title attribute of organization dropdown
         organizationDropdownTitle() {
             return this.clockedInState ? "You cannot change organizations while clocked in" : "Change organization";
-        },
-        // Set button label for stats view setting based on set_combined_org prop
-        statsViewSettingLabel() {
-            if (this.set_combined_org === "combined_org") {
-                return "Viewing combined org stats >";
-            } else if (this.set_combined_org === "combined_org_minus_tax") {
-                return "Viewing combined org stats (after taxes) >";
-            } else if (this.set_combined_org === "current_org") {
-                return "Viewing current org stats >";
-            } else if (this.set_combined_org === "current_org_minus_tax") {
-                return "Viewing current org stats (after taxes) >";
-            } else {
-                return "Error: Invalid set_combined_org value";
-            }
         },
     },
     methods: {
@@ -310,7 +297,26 @@ export default {
         // Update stats view setting
         updateStatsView(e) {
             e.preventDefault();
+            // Update button label
+            this.statsViewSettingLabel();
             form.post(route('settings.stats-view'));
+        },
+        // Set button label for stats view setting based on set_combined_org prop
+        statsViewSettingLabel() {
+            const btnLabel = document.querySelector('.btn-stats-view');
+            // Get updated value of this.set_combined_org
+            this.set_combined_org = usePage().props.value.auth.user.set_combined_org;
+            if (this.set_combined_org === "combined_org") {
+                btnLabel.innerHTML = "Viewing combined org stats >";
+            } else if (this.set_combined_org === "combined_org_minus_tax") {
+                btnLabel.innerHTML = "Viewing combined org stats (after taxes) >";
+            } else if (this.set_combined_org === "current_org") {
+                btnLabel.innerHTML = "Viewing current org stats >";
+            } else if (this.set_combined_org === "current_org_minus_tax") {
+                btnLabel.innerHTML = "Viewing current org stats (after taxes) >";
+            } else {
+                btnLabel.innerHTML = "Error: Invalid set_combined_org value";
+            }
         },
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
