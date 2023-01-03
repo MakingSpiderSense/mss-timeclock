@@ -84,7 +84,6 @@ class RatesController extends Controller
 
         // If the type is categories_with_rates, update the category rate
         if ($data['type'] === 'categories_with_rates') {
-            dd($request->input('auth'));
             // Given the pivot table id, find the category_id in the `user_category` table.
             $category_id = auth()->user()->categories()->where('user_category.id', $data['id'])->first()->pivot->category_id;
             // If the rate is 0, delete the rate from the user_category table. Otherwise, update the rate.
