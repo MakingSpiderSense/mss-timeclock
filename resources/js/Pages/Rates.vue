@@ -93,7 +93,7 @@ export default {
                 const rate_name = document.querySelector('#rate_name');
                 const rate_status = document.querySelector('#rate_status');
                 rate_name.innerHTML = name;
-                rate_status.innerHTML = rate ? `It is current set to <strong>$${rate}</strong>` : "This rate is not yet set.";
+                rate_status.innerHTML = rate ? `It is currently set to <strong>$${rate}</strong>. Leave blank to remove rate.` : "This rate is not yet set.";
                 rates_intro.style.display = "block";
                 // Update the hidden input values
                 document.querySelector('input[name="type"]').value = type;

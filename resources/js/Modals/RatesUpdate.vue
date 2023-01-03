@@ -35,7 +35,7 @@ const submit = () => {
                 <input type="hidden" name="rate" value="" />
                 <!-- Visible -->
                 <InputLabel for="updated_rate" value="New Rate" />
-                <TextInput id="updated_rate" type="number" class="mt-1 block w-full" step=".01" min="0" v-model="form.updated_rate" required />
+                <TextInput id="updated_rate" type="number" class="mt-1 block w-full" step=".01" min="0" v-model="form.updated_rate" />
             </form>
         </div>
     </div>
