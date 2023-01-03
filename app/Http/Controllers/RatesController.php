@@ -63,7 +63,8 @@ class RatesController extends Controller
                 'global_rate' => $data['updated_rate'],
                 'updated_at' => now(),
             ]);
-            return redirect()->back()->with('message', ['success', "Global rate updated to $$data[updated_rate] successfully."]);
+            $updated_rate_formatted = number_format($data['updated_rate'], 2);
+            return redirect()->back()->with('message', ['success', "Global rate updated to $$updated_rate_formatted successfully."]);
         }
 
         // If the type is organization_rates, update the organization rate
@@ -75,7 +76,8 @@ class RatesController extends Controller
                 'user_org_subscriptions.updated_at' => now(),
             ]);
             if ($updated_rate != NULL) {
-                return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
+                $updated_rate_formatted = number_format($data['updated_rate'], 2);
+                return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$updated_rate_formatted successfully."]);
             } else {
                 return redirect()->back()->with('message', ['success', "$data[name] rate removed successfully."]);
             }
@@ -93,8 +95,9 @@ class RatesController extends Controller
                 auth()->user()->categories()->updateExistingPivot($category_id, [
                     'rate' => $data['updated_rate'],
                     'updated_at' => now(),
-                ]);              
-                return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$data[updated_rate] successfully."]);
+                ]);
+                $updated_rate_formatted = number_format($data['updated_rate'], 2);
+                return redirect()->back()->with('message', ['success', "$data[name] rate updated to $$updated_rate_formatted successfully."]);
             }
         }
 
@@ -108,7 +111,8 @@ class RatesController extends Controller
                     'created_at' => now(),
                 ]);
             }
-            return redirect()->back()->with('message', ['success', "$data[name] rate of $$data[updated_rate] added successfully."]);
+            $updated_rate_formatted = number_format($data['updated_rate'], 2);
+            return redirect()->back()->with('message', ['success', "$data[name] rate of $$updated_rate_formatted added successfully."]);
         }
     }
 }
