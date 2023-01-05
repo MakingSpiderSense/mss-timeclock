@@ -253,7 +253,7 @@ export default {
         this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
         this.updateTimeOnClock();
         this.updateStatsDisplay();
-        // Console log auth.user
+        this.updateStats();
         console.log(this.set_combined_org);
     },
     computed: {
