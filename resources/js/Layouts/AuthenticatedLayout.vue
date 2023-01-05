@@ -234,6 +234,8 @@ export default {
         window.tc_stats_interval = setInterval(() => {
             this.updateStats();
         }, 5000);
+        // Update stats displayed based on the set_combined_org value
+        this.updateStatsDisplay();
     },
     watch: {
         // Watch for changes to the pageModal prop
@@ -252,9 +254,7 @@ export default {
         this.changeClockInOutState();
         this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
         this.updateTimeOnClock();
-        this.updateStatsDisplay();
         this.updateStats();
-        console.log(this.set_combined_org);
     },
     computed: {
         // Set title attribute of organization dropdown
@@ -338,11 +338,18 @@ export default {
         // Update stats view setting
         updateStatsView(e) {
             e.preventDefault();
-            // Get updated value of this.set_combined_org
-            this.set_combined_org = usePage().props.value.auth.user.set_combined_org;
             // Update button label
-            this.updateStatsDisplay();
-            form.post(route('settings.stats-view'));
+            this.$inertia.post(route('settings.stats-view'), {}, {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    // Get updated value of this.set_combined_org
+                    this.set_combined_org = usePage().props.value.auth.user.set_combined_org;
+                    setTimeout(() => {
+                        this.updateStatsDisplay();
+                    }, 0);
+                }
+            });
         },
         // Update stats displayed on the page and button label
         updateStatsDisplay() {
