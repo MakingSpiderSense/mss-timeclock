@@ -233,7 +233,7 @@ export default {
         this.updateStats();
         window.tc_stats_interval = setInterval(() => {
             this.updateStats();
-        }, 5000);
+        }, 60000);
         // Update stats displayed based on the set_combined_org value
         this.updateStatsDisplay();
     },
