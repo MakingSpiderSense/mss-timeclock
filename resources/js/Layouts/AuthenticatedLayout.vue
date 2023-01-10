@@ -134,8 +134,9 @@ const showingNavigationDropdown = ref(false);
                     <div>
                         <h3>Today</h3>
                         <!-- Hours worked -->
-                        <div><span id="hours_today_current_org" title="hours_today_current_org">0</span> Hours</div>
-                        <div><span id="hours_today_combined_org" title="hours_today_combined_org">0</span> Hours</div>
+                        <div><span id="hours_paid_today_combined_org" title="hours_paid_today_combined_org">0</span> Paid Work Hours</div>
+                        <div><span id="hours_today_combined_org" title="hours_today_combined_org">0</span> Total Work Hours</div>
+                        <div><span id="hours_today_current_org" title="hours_today_current_org">0</span> Total Hours</div>
                         <!-- Amount earned -->
                         <div class="money-positive mb-5">$<span id="amount_earned_today_current_org" title="amount_earned_today_current_org">0</span> Earned</div>
                         <div class="money-positive mb-5">$<span id="amount_earned_today_current_org_tax" title="amount_earned_today_current_org_tax">0</span> Earned</div>
@@ -156,15 +157,13 @@ const showingNavigationDropdown = ref(false);
                     <!-- This Month -->
                     <div>
                         <h3>This Month</h3>
-                        <!-- Paid hours -->
-                        <div><span id="hours_month_paid_combined_org" title="hours_month_paid_combined_org">0</span> Paid Hours ($<span id="rate_this_month_paid_combined_org" title="rate_this_month_paid_combined_org">61</span>/Hour)</div>
-                        <!-- Unpaid hours -->
-                        <div><span id="hours_month_unpaid" title="hours_month_unpaid">0</span> Unpaid Hours</div>
+                        <!-- Work hours -->
+                        <div><span id="hours_month_paid_work_combined_org" title="hours_month_paid_work_combined_org">0</span> Paid Work Hours</div>
+                        <div><span id="hours_month_total_work_combined_org" title="hours_month_total_work_combined_org">0</span> Total Work Hours</div>
                         <!-- Current org hours -->
-                        <div><span id="hours_month_current_org" title="hours_month_current_org">0</span> Hours</div>
-                        <div><span id="hours_month_combined_org" title="hours_month_combined_org">0</span> Hours</div>
+                        <div><span id="hours_month_current_org" title="hours_month_current_org">0</span> Total Hours</div>
                         <!-- Hourly rate -->
-                        <div>$<span id="rate_this_month_combined_org" title="rate_this_month_combined_org">0</span>/Hour</div>
+                        <div>$<span id="rate_this_month_work_combined_org" title="rate_this_month_work_combined_org">0</span>/Hour</div>
                         <!-- Average weekly hours -->
                         <div><span id="hours_weekly_this_month_current_org" title="hours_weekly_this_month_current_org">0</span> Hours/Week</div>
                         <div><span id="hours_weekly_this_month_combined_org" title="hours_weekly_this_month_combined_org">0</span> Hours/Week</div>
@@ -216,6 +215,7 @@ export default {
         }
     },
     mounted() {
+        console.log("Mounted: " + new Date().toLocaleTimeString());
         this.stopUpdatingStats();
         this.setOptionSelected();
         // Update the time on the clock every second
@@ -251,6 +251,7 @@ export default {
         },
     },
     updated() {
+        console.log("Updated: " + new Date().toLocaleTimeString());
         this.changeClockInOutState();
         this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
         this.updateTimeOnClock();
@@ -309,18 +310,12 @@ export default {
                 ? this.stats.amount_earned_today_combined_org.toFixed(2) : "0";
             document.querySelector('#amount_earned_today_combined_org_tax').innerHTML = this.stats.amount_earned_today_combined_org_tax 
                 ? this.stats.amount_earned_today_combined_org_tax.toFixed(2) : "0";
-            document.querySelector('#hours_month_paid_combined_org').innerHTML = this.stats.hours_month_paid_combined_org 
-                ? this.stats.hours_month_paid_combined_org : "0";
-            document.querySelector('#rate_this_month_paid_combined_org').innerHTML = this.stats.rate_this_month_paid_combined_org 
-                ? this.stats.rate_this_month_paid_combined_org.toFixed(2) : "0";
-            document.querySelector('#hours_month_unpaid').innerHTML = this.stats.hours_month_unpaid 
-                ? this.stats.hours_month_unpaid : "0";
+            document.querySelector('#hours_month_total_work_combined_org').innerHTML = this.stats.hours_month_total_work_combined_org 
+                ? this.stats.hours_month_total_work_combined_org : "0";
+            document.querySelector('#rate_this_month_work_combined_org').innerHTML = this.stats.rate_this_month_work_combined_org 
+                ? this.stats.rate_this_month_work_combined_org.toFixed(2) : "0";
             document.querySelector('#hours_month_current_org').innerHTML = this.stats.hours_month_current_org 
                 ? this.stats.hours_month_current_org : "0";
-            document.querySelector('#hours_month_combined_org').innerHTML = this.stats.hours_month_combined_org 
-                ? this.stats.hours_month_combined_org : "0";
-            document.querySelector('#rate_this_month_combined_org').innerHTML = this.stats.rate_this_month_combined_org 
-                ? this.stats.rate_this_month_combined_org.toFixed(2) : "0";
             document.querySelector('#hours_weekly_this_month_current_org').innerHTML = this.stats.hours_weekly_this_month_current_org 
                 ? this.stats.hours_weekly_this_month_current_org : "0";
             document.querySelector('#hours_weekly_this_month_combined_org').innerHTML = this.stats.hours_weekly_this_month_combined_org 
@@ -359,17 +354,17 @@ export default {
             const btnLabel = document.querySelector('.btn-stats-view');
             if (this.set_combined_org === "combined_org") {
                 btnLabel.innerHTML = "Viewing combined org stats >";
+                document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_current_org_tax').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_today_combined_org_tax').parentElement.style.display = "none";
-                document.querySelector('#hours_month_paid_combined_org').parentElement.style.display = "block";
-                document.querySelector('#hours_month_unpaid').parentElement.style.display = "block";
+                document.querySelector('#hours_month_paid_work_combined_org').parentElement.style.display = "block";
+                document.querySelector('#hours_month_total_work_combined_org').parentElement.style.display = "block";
+                document.querySelector('#rate_this_month_work_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_month_current_org').parentElement.style.display = "none";
-                document.querySelector('#hours_month_combined_org').parentElement.style.display = "block";
-                document.querySelector('#rate_this_month_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_weekly_this_month_current_org').parentElement.style.display = "none";
                 document.querySelector('#hours_weekly_this_month_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_month_current_org').parentElement.style.display = "none";
@@ -378,17 +373,17 @@ export default {
                 document.querySelector('#amount_earned_month_combined_org_tax').parentElement.style.display = "none";
             } else if (this.set_combined_org === "combined_org_minus_tax") {
                 btnLabel.innerHTML = "Viewing combined org stats (after taxes) >";
+                document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_current_org_tax').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_combined_org_tax').parentElement.style.display = "block";
-                document.querySelector('#hours_month_paid_combined_org').parentElement.style.display = "block";
-                document.querySelector('#hours_month_unpaid').parentElement.style.display = "block";
+                document.querySelector('#hours_month_paid_work_combined_org').parentElement.style.display = "block";
+                document.querySelector('#hours_month_total_work_combined_org').parentElement.style.display = "block";
+                document.querySelector('#rate_this_month_work_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_month_current_org').parentElement.style.display = "none";
-                document.querySelector('#hours_month_combined_org').parentElement.style.display = "block";
-                document.querySelector('#rate_this_month_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_weekly_this_month_current_org').parentElement.style.display = "none";
                 document.querySelector('#hours_weekly_this_month_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_month_current_org').parentElement.style.display = "none";
@@ -397,17 +392,17 @@ export default {
                 document.querySelector('#amount_earned_month_combined_org_tax').parentElement.style.display = "block";
             } else if (this.set_combined_org === "current_org") {
                 btnLabel.innerHTML = "Viewing current org stats >";
+                document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_today_current_org_tax').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_combined_org_tax').parentElement.style.display = "none";
-                document.querySelector('#hours_month_paid_combined_org').parentElement.style.display = "none";
-                document.querySelector('#hours_month_unpaid').parentElement.style.display = "none";
+                document.querySelector('#hours_month_paid_work_combined_org').parentElement.style.display = "none";
+                document.querySelector('#hours_month_total_work_combined_org').parentElement.style.display = "none";
+                document.querySelector('#rate_this_month_work_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_month_current_org').parentElement.style.display = "block";
-                document.querySelector('#hours_month_combined_org').parentElement.style.display = "none";
-                document.querySelector('#rate_this_month_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_weekly_this_month_current_org').parentElement.style.display = "block";
                 document.querySelector('#hours_weekly_this_month_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_month_current_org').parentElement.style.display = "block";
@@ -416,17 +411,17 @@ export default {
                 document.querySelector('#amount_earned_month_combined_org_tax').parentElement.style.display = "none";
             } else if (this.set_combined_org === "current_org_minus_tax") {
                 btnLabel.innerHTML = "Viewing current org stats (after taxes) >";
+                document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_current_org_tax').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_combined_org_tax').parentElement.style.display = "none";
-                document.querySelector('#hours_month_paid_combined_org').parentElement.style.display = "none";
-                document.querySelector('#hours_month_unpaid').parentElement.style.display = "none";
+                document.querySelector('#hours_month_paid_work_combined_org').parentElement.style.display = "none";
+                document.querySelector('#hours_month_total_work_combined_org').parentElement.style.display = "none";
+                document.querySelector('#rate_this_month_work_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_month_current_org').parentElement.style.display = "block";
-                document.querySelector('#hours_month_combined_org').parentElement.style.display = "none";
-                document.querySelector('#rate_this_month_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_weekly_this_month_current_org').parentElement.style.display = "block";
                 document.querySelector('#hours_weekly_this_month_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_month_current_org').parentElement.style.display = "none";

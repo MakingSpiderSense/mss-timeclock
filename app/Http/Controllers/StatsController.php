@@ -33,7 +33,7 @@ class StatsController extends Controller
         $amount_earned_month_current_org = 0;
         $hours_today_combined_org = 0;
         $amount_earned_today_combined_org = 0;
-        $hours_month_paid_combined_org = 0;
+        $hours_month_total_work_combined_org = 0;
         $hours_month_combined_org = 0;
         $amount_earned_month_combined_org = 0;
         $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
@@ -94,7 +94,7 @@ class StatsController extends Controller
             }
             // If paid hours and it's from any time this month...
             if ($isPaid) {
-                $hours_month_paid_combined_org += $minutes;
+                $hours_month_total_work_combined_org += $minutes;
             }
             // If it's from any time this month...
             $hours_month_combined_org += $minutes;
@@ -131,13 +131,12 @@ class StatsController extends Controller
         $hours_today_combined_org = round($hours_today_combined_org / 60, 2);
         $amount_earned_today_combined_org = round($amount_earned_today_combined_org, 2);
         $amount_earned_today_combined_org_tax = round($amount_earned_today_combined_org * $simple_tax_rate, 2);
-        $hours_month_paid_combined_org = round($hours_month_paid_combined_org / 60, 2);
+        $hours_month_total_work_combined_org = round($hours_month_total_work_combined_org / 60, 2);
         $hours_month_combined_org = round($hours_month_combined_org / 60, 2);
         $hours_weekly_this_month_combined_org = round($hours_month_combined_org / $weeks_so_far, 2);
         $amount_earned_month_combined_org = round($amount_earned_month_combined_org, 2);
         $amount_earned_month_combined_org_tax = round($amount_earned_month_combined_org * $simple_tax_rate, 2);
-        $rate_this_month_paid_combined_org = round($amount_earned_month_combined_org / $hours_month_paid_combined_org, 2);
-        $rate_this_month_combined_org = round($amount_earned_month_combined_org / $hours_month_combined_org, 2);
+        $rate_this_month_work_combined_org = round($amount_earned_month_combined_org / $hours_month_total_work_combined_org, 2);
         // Return the data as an object
         return (object) [
             'hours_month_unpaid' => isset($hours_month_unpaid) ? $hours_month_unpaid : '',
@@ -151,13 +150,12 @@ class StatsController extends Controller
             'hours_today_combined_org' => isset($hours_today_combined_org) ? $hours_today_combined_org : '',
             'amount_earned_today_combined_org' => isset($amount_earned_today_combined_org) ? $amount_earned_today_combined_org : '',
             'amount_earned_today_combined_org_tax' => isset($amount_earned_today_combined_org_tax) ? $amount_earned_today_combined_org_tax : '',
-            'hours_month_paid_combined_org' => isset($hours_month_paid_combined_org) ? $hours_month_paid_combined_org : '',
+            'hours_month_total_work_combined_org' => isset($hours_month_total_work_combined_org) ? $hours_month_total_work_combined_org : '',
             'hours_month_combined_org' => isset($hours_month_combined_org) ? $hours_month_combined_org : '',
             'hours_weekly_this_month_combined_org' => isset($hours_weekly_this_month_combined_org) ? $hours_weekly_this_month_combined_org : '',
             'amount_earned_month_combined_org' => isset($amount_earned_month_combined_org) ? $amount_earned_month_combined_org : '',
             'amount_earned_month_combined_org_tax' => isset($amount_earned_month_combined_org_tax) ? $amount_earned_month_combined_org_tax : '',
-            'rate_this_month_paid_combined_org' => isset($rate_this_month_paid_combined_org) ? $rate_this_month_paid_combined_org : '',
-            'rate_this_month_combined_org' => isset($rate_this_month_combined_org) ? $rate_this_month_combined_org : '',
+            'rate_this_month_work_combined_org' => isset($rate_this_month_work_combined_org) ? $rate_this_month_work_combined_org : '',
         ];
     }
 }
