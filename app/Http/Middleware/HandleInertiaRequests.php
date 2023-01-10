@@ -71,26 +71,6 @@ class HandleInertiaRequests extends Middleware
                     // // Set 'active_category' to the category of the user's last temp log entry where clock_out is null, or null if there are no temp log entries.
                     // 'active_subcategory_id' => auth()->user() ? TempLog::where('user_id', auth()->user()->id)->where('clock_out', null)->first()->subcategory_id : null,
                 ],
-                'stats' => [
-                    'hours_month_unpaid' => isset($hours_month_unpaid) ? $hours_month_unpaid : '',
-                    'hours_today_current_org' => isset($hours_today_current_org) ? $hours_today_current_org : '',
-                    'amount_earned_today_current_org' => isset($amount_earned_today_current_org) ? $amount_earned_today_current_org : '',
-                    'amount_earned_today_current_org_tax' => isset($amount_earned_today_current_org_tax) ? $amount_earned_today_current_org_tax : '',
-                    'hours_month_current_org' => isset($hours_month_current_org) ? $hours_month_current_org : '',
-                    'hours_weekly_this_month_current_org' => isset($hours_weekly_this_month_current_org) ? $hours_weekly_this_month_current_org : '',
-                    'amount_earned_month_current_org' => isset($amount_earned_month_current_org) ? $amount_earned_month_current_org : '',
-                    'amount_earned_month_current_org_tax' => isset($amount_earned_month_current_org_tax) ? $amount_earned_month_current_org_tax : '',
-                    'hours_today_combined_org' => isset($hours_today_combined_org) ? $hours_today_combined_org : '',
-                    'amount_earned_today_combined_org' => isset($amount_earned_today_combined_org) ? $amount_earned_today_combined_org : '',
-                    'amount_earned_today_combined_org_tax' => isset($amount_earned_today_combined_org_tax) ? $amount_earned_today_combined_org_tax : '',
-                    'hours_month_paid_combined_org' => isset($hours_month_paid_combined_org) ? $hours_month_paid_combined_org : '',
-                    'hours_month_combined_org' => isset($hours_month_combined_org) ? $hours_month_combined_org : '',
-                    'hours_weekly_this_month_combined_org' => isset($hours_weekly_this_month_combined_org) ? $hours_weekly_this_month_combined_org : '',
-                    'amount_earned_month_combined_org' => isset($amount_earned_month_combined_org) ? $amount_earned_month_combined_org : '',
-                    'amount_earned_month_combined_org_tax' => isset($amount_earned_month_combined_org_tax) ? $amount_earned_month_combined_org_tax : '',
-                    'rate_this_month_paid_combined_org' => isset($rate_this_month_paid_combined_org) ? $rate_this_month_paid_combined_org : '',
-                    'rate_this_month_combined_org' => isset($rate_this_month_combined_org) ? $rate_this_month_combined_org : '',
-                ],
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
