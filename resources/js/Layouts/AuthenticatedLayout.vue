@@ -300,6 +300,8 @@ export default {
             this.stats = stats.data;
             document.querySelector('#hours_today_current_org').innerHTML = this.stats.hours_today_current_org 
                 ? this.stats.hours_today_current_org : "0";
+            document.querySelector('#hours_paid_today_combined_org').innerHTML = this.stats.hours_paid_today_combined_org 
+                ? this.stats.hours_paid_today_combined_org : "0";
             document.querySelector('#hours_today_combined_org').innerHTML = this.stats.hours_today_combined_org 
                 ? this.stats.hours_today_combined_org : "0";
             document.querySelector('#amount_earned_today_current_org').innerHTML = this.stats.amount_earned_today_current_org 
@@ -310,6 +312,8 @@ export default {
                 ? this.stats.amount_earned_today_combined_org.toFixed(2) : "0";
             document.querySelector('#amount_earned_today_combined_org_tax').innerHTML = this.stats.amount_earned_today_combined_org_tax 
                 ? this.stats.amount_earned_today_combined_org_tax.toFixed(2) : "0";
+            document.querySelector('#hours_month_paid_work_combined_org').innerHTML = this.stats.hours_month_paid_work_combined_org
+                ? this.stats.hours_month_paid_work_combined_org.toFixed(2) : "0";
             document.querySelector('#hours_month_total_work_combined_org').innerHTML = this.stats.hours_month_total_work_combined_org 
                 ? this.stats.hours_month_total_work_combined_org : "0";
             document.querySelector('#rate_this_month_work_combined_org').innerHTML = this.stats.rate_this_month_work_combined_org 

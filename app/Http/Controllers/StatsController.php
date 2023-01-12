@@ -22,6 +22,7 @@ class StatsController extends Controller
     public function index()
     {
         // Calculate Stats from all of the user's temp_logs
+        // Todo: Create a hours_today_total_work_combined_org stat and swap it out. I should also update how hours_weekly_this_month_combined_org is calculated. 
         $user = auth()->user();
         $userId = auth()->user()->id;
         $temp_logs = TempLog::where('user_id', $userId)->get();
@@ -31,8 +32,10 @@ class StatsController extends Controller
         $amount_earned_today_current_org = 0;
         $hours_month_current_org = 0;
         $amount_earned_month_current_org = 0;
+        $hours_paid_today_combined_org = 0;
         $hours_today_combined_org = 0;
         $amount_earned_today_combined_org = 0;
+        $hours_month_paid_work_combined_org = 0;
         $hours_month_total_work_combined_org = 0;
         $hours_month_combined_org = 0;
         $amount_earned_month_combined_org = 0;
@@ -51,13 +54,13 @@ class StatsController extends Controller
             $clock_in_date = $clock_in_tz->format('Y-m-d');
             $isToday = $clock_in_date == $todays_date;
             $isActiveOrg = $category->org_id == $user->active_org_id;
-            $isPaid = $org_name != 'Unpaid';
+            $isWork = $org_name != 'Unpaid';
             // Determine the rate for the category
             $rate = $user->categories()->where('user_id', $userId)->where('category_id', $category->id)->value('rate');
-            if (!$rate && $isPaid) {
+            if (!$rate && $isWork) {
                 $rate = $user->subscriptions()->where('user_id', $userId)->where('org_id', $category->org_id)->value('rate');
             }
-            if (!$rate && $isPaid) {
+            if (!$rate && $isWork) {
                 $rate = User::find($userId)->global_rate;
             }
             // Calculate the minutes for the entry
@@ -91,10 +94,16 @@ class StatsController extends Controller
             if ($isToday) {
                 $hours_today_combined_org += $minutes;
                 $amount_earned_today_combined_org += $amountEarnedForCategory;
+                if ($rate > 0) {
+                    $hours_paid_today_combined_org += $minutes;
+                }
             }
             // If paid hours and it's from any time this month...
-            if ($isPaid) {
+            if ($isWork) {
                 $hours_month_total_work_combined_org += $minutes;
+                if ($rate > 0) {
+                    $hours_month_paid_work_combined_org += $minutes;
+                }
             }
             // If it's from any time this month...
             $hours_month_combined_org += $minutes;
@@ -128,9 +137,11 @@ class StatsController extends Controller
         $hours_weekly_this_month_current_org = round($hours_month_current_org / $weeks_so_far, 2);
         $amount_earned_month_current_org = round($amount_earned_month_current_org, 2);
         $amount_earned_month_current_org_tax = round($amount_earned_month_current_org * $simple_tax_rate, 2);
+        $hours_paid_today_combined_org = round($hours_paid_today_combined_org / 60, 2);
         $hours_today_combined_org = round($hours_today_combined_org / 60, 2);
         $amount_earned_today_combined_org = round($amount_earned_today_combined_org, 2);
         $amount_earned_today_combined_org_tax = round($amount_earned_today_combined_org * $simple_tax_rate, 2);
+        $hours_month_paid_work_combined_org = round($hours_month_paid_work_combined_org / 60, 2);
         $hours_month_total_work_combined_org = round($hours_month_total_work_combined_org / 60, 2);
         $hours_month_combined_org = round($hours_month_combined_org / 60, 2);
         $hours_weekly_this_month_combined_org = round($hours_month_combined_org / $weeks_so_far, 2);
@@ -147,9 +158,11 @@ class StatsController extends Controller
             'hours_weekly_this_month_current_org' => isset($hours_weekly_this_month_current_org) ? $hours_weekly_this_month_current_org : '',
             'amount_earned_month_current_org' => isset($amount_earned_month_current_org) ? $amount_earned_month_current_org : '',
             'amount_earned_month_current_org_tax' => isset($amount_earned_month_current_org_tax) ? $amount_earned_month_current_org_tax : '',
+            'hours_paid_today_combined_org' => isset($hours_paid_today_combined_org) ? $hours_paid_today_combined_org : '',
             'hours_today_combined_org' => isset($hours_today_combined_org) ? $hours_today_combined_org : '',
             'amount_earned_today_combined_org' => isset($amount_earned_today_combined_org) ? $amount_earned_today_combined_org : '',
             'amount_earned_today_combined_org_tax' => isset($amount_earned_today_combined_org_tax) ? $amount_earned_today_combined_org_tax : '',
+            'hours_month_paid_work_combined_org' => isset($hours_month_paid_work_combined_org) ? $hours_month_paid_work_combined_org : '',
             'hours_month_total_work_combined_org' => isset($hours_month_total_work_combined_org) ? $hours_month_total_work_combined_org : '',
             'hours_month_combined_org' => isset($hours_month_combined_org) ? $hours_month_combined_org : '',
             'hours_weekly_this_month_combined_org' => isset($hours_weekly_this_month_combined_org) ? $hours_weekly_this_month_combined_org : '',
