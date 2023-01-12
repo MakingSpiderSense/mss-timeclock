@@ -21,8 +21,7 @@ class StatsController extends Controller
     // Return all stats
     public function index()
     {
-        // Calculate Stats from all of the user's temp_logs
-        // Todo: Create a hours_today_total_work_combined_org stat and swap it out. I should also update how hours_weekly_this_month_combined_org is calculated. 
+        // Calculate Stats from all of the user's temp_logs 
         $user = auth()->user();
         $userId = auth()->user()->id;
         $temp_logs = TempLog::where('user_id', $userId)->get();
@@ -150,7 +149,7 @@ class StatsController extends Controller
         $hours_month_paid_work_combined_org = round($hours_month_paid_work_combined_org / 60, 2);
         $hours_month_total_work_combined_org = round($hours_month_total_work_combined_org / 60, 2);
         $hours_month_combined_org = round($hours_month_combined_org / 60, 2);
-        $hours_weekly_this_month_combined_org = round($hours_month_combined_org / $weeks_so_far, 2);
+        $hours_weekly_this_month_combined_org = round($hours_month_total_work_combined_org / $weeks_so_far, 2);
         $amount_earned_month_combined_org = round($amount_earned_month_combined_org, 2);
         $amount_earned_month_combined_org_tax = round($amount_earned_month_combined_org * $simple_tax_rate, 2);
         $rate_this_month_work_combined_org = round($amount_earned_month_combined_org / $hours_month_total_work_combined_org, 2);
