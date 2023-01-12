@@ -33,6 +33,7 @@ class StatsController extends Controller
         $hours_month_current_org = 0;
         $amount_earned_month_current_org = 0;
         $hours_paid_today_combined_org = 0;
+        $hours_today_total_work_combined_org = 0;
         $hours_today_combined_org = 0;
         $amount_earned_today_combined_org = 0;
         $hours_month_paid_work_combined_org = 0;
@@ -98,12 +99,16 @@ class StatsController extends Controller
                     $hours_paid_today_combined_org += $minutes;
                 }
             }
-            // If paid hours and it's from any time this month...
+            // If work hours and it's from any time this month...
             if ($isWork) {
                 $hours_month_total_work_combined_org += $minutes;
                 if ($rate > 0) {
                     $hours_month_paid_work_combined_org += $minutes;
                 }
+            }
+            // If it's from today and it's work hours...
+            if ($isToday && $isWork) {
+                $hours_today_total_work_combined_org += $minutes;
             }
             // If it's from any time this month...
             $hours_month_combined_org += $minutes;
@@ -138,6 +143,7 @@ class StatsController extends Controller
         $amount_earned_month_current_org = round($amount_earned_month_current_org, 2);
         $amount_earned_month_current_org_tax = round($amount_earned_month_current_org * $simple_tax_rate, 2);
         $hours_paid_today_combined_org = round($hours_paid_today_combined_org / 60, 2);
+        $hours_today_total_work_combined_org = round($hours_today_total_work_combined_org / 60, 2);
         $hours_today_combined_org = round($hours_today_combined_org / 60, 2);
         $amount_earned_today_combined_org = round($amount_earned_today_combined_org, 2);
         $amount_earned_today_combined_org_tax = round($amount_earned_today_combined_org * $simple_tax_rate, 2);
@@ -159,6 +165,7 @@ class StatsController extends Controller
             'amount_earned_month_current_org' => isset($amount_earned_month_current_org) ? $amount_earned_month_current_org : '',
             'amount_earned_month_current_org_tax' => isset($amount_earned_month_current_org_tax) ? $amount_earned_month_current_org_tax : '',
             'hours_paid_today_combined_org' => isset($hours_paid_today_combined_org) ? $hours_paid_today_combined_org : '',
+            'hours_today_total_work_combined_org' => isset($hours_today_total_work_combined_org) ? $hours_today_total_work_combined_org : '',
             'hours_today_combined_org' => isset($hours_today_combined_org) ? $hours_today_combined_org : '',
             'amount_earned_today_combined_org' => isset($amount_earned_today_combined_org) ? $amount_earned_today_combined_org : '',
             'amount_earned_today_combined_org_tax' => isset($amount_earned_today_combined_org_tax) ? $amount_earned_today_combined_org_tax : '',

@@ -135,7 +135,8 @@ const showingNavigationDropdown = ref(false);
                         <h3>Today</h3>
                         <!-- Hours worked -->
                         <div><span id="hours_paid_today_combined_org" title="hours_paid_today_combined_org">0</span> Paid Work Hours</div>
-                        <div><span id="hours_today_combined_org" title="hours_today_combined_org">0</span> Total Work Hours</div>
+                        <div><span id="hours_today_total_work_combined_org" title="hours_today_total_work_combined_org">0</span> Total Work Hours</div>
+                        <div><span id="hours_today_combined_org" title="hours_today_combined_org">0</span> Overall Hours</div>
                         <div><span id="hours_today_current_org" title="hours_today_current_org">0</span> Total Hours</div>
                         <!-- Amount earned -->
                         <div class="money-positive mb-5">$<span id="amount_earned_today_current_org" title="amount_earned_today_current_org">0</span> Earned</div>
@@ -302,6 +303,8 @@ export default {
                 ? this.stats.hours_today_current_org : "0";
             document.querySelector('#hours_paid_today_combined_org').innerHTML = this.stats.hours_paid_today_combined_org 
                 ? this.stats.hours_paid_today_combined_org : "0";
+            document.querySelector('#hours_today_total_work_combined_org').innerHTML = this.stats.hours_today_total_work_combined_org
+                ? this.stats.hours_today_total_work_combined_org : "0";
             document.querySelector('#hours_today_combined_org').innerHTML = this.stats.hours_today_combined_org 
                 ? this.stats.hours_today_combined_org : "0";
             document.querySelector('#amount_earned_today_current_org').innerHTML = this.stats.amount_earned_today_current_org 
@@ -359,6 +362,7 @@ export default {
             if (this.set_combined_org === "combined_org") {
                 btnLabel.innerHTML = "Viewing combined org stats >";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "block";
+                document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "none";
@@ -378,6 +382,7 @@ export default {
             } else if (this.set_combined_org === "combined_org_minus_tax") {
                 btnLabel.innerHTML = "Viewing combined org stats (after taxes) >";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "block";
+                document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "none";
@@ -397,6 +402,7 @@ export default {
             } else if (this.set_combined_org === "current_org") {
                 btnLabel.innerHTML = "Viewing current org stats >";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "none";
+                document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "block";
@@ -416,6 +422,7 @@ export default {
             } else if (this.set_combined_org === "current_org_minus_tax") {
                 btnLabel.innerHTML = "Viewing current org stats (after taxes) >";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "none";
+                document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_today_current_org').parentElement.style.display = "none";
