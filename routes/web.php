@@ -39,8 +39,8 @@ Route::post('/cancel-clock-in', [ClockInOutController::class, 'cancelClockIn'])-
 
 // Add route to 'placeholder' which simply returns the string 'Placeholder page'. 
 Route::get('/placeholder', function () {
-    return 'Placeholder page';
-})->name('placeholder');
+    return 'Coming soon...';
+})->middleware(['auth', 'verified'])->name('placeholder');
 
 // Profile routes
 Route::get('/profile', function () {
