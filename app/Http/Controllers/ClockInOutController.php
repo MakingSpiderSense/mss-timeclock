@@ -175,8 +175,8 @@ class ClockInOutController extends Controller
             'notes' => $request->notes,
         ]);
 
-        // Redirect to dashboard with success message, "Clocked have clocked out. Good work!"
-        return redirect()->back()->with('message', ['success', "Clocked have clocked out with $hours hour$hours_label_suffix and $minutes minute$minutes_label_suffix on the clock. Good work!"]);
+        // Redirect to dashboard with success message, "You have clocked out. Good work!"
+        return redirect()->back()->with('message', ['success', "You have clocked out with $hours hour$hours_label_suffix and $minutes minute$minutes_label_suffix on the clock. Good work!"]);
     }
 
     // Cancel clock in
