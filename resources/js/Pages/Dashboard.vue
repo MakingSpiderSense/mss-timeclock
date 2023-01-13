@@ -58,7 +58,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <div style="padding-top: 24px"></div>
                             <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @click="categoryOptionsChanged" :disabled="clockedInState">
                                 <option disabled selected value>-- Select --</option>
-                                <option v-for="category in this.categoriesArray" v-bind:key="category">{{ category }}</option>
+                                <option v-for="category in categoriesArray" v-bind:key="category">{{ category }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
