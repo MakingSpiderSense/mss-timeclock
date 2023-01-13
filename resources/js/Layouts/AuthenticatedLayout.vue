@@ -184,7 +184,7 @@ const showingNavigationDropdown = ref(false);
                         </select>
                         <div class="text-right">
                             <!-- Clocked-in time -->
-                            <div class="mb-5">Clocked in at <span id="clockedInTime">1:12pm</span></div>
+                            <div class="mb-5" v-if="clockedInTimeStat"><span id="clockedInTime">{{ clockedInTimeStat }}</span></div>
                             <!-- Current time on the clock -->
                             <div class="text-5xl"><span id="timeOnClock">00:00:00</span></div>
                         </div>
@@ -213,6 +213,7 @@ export default {
             flashMsg: usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""],
             stats: axios.get('/stats'),
             set_combined_org: usePage().props.value.auth.user.set_combined_org,
+            clockedInTime: usePage().props.value.auth.clocked_in_at ? new Date(usePage().props.value.auth.clocked_in_at) : null,
         }
     },
     mounted() {
@@ -250,6 +251,10 @@ export default {
                 document.querySelector('.flash-msg').style.display = 'block';
             }
         },
+        clockedInState(newVal) {
+            // Update the clocked in time stat
+            this.updateClockedInTime();
+        },
     },
     updated() {
         console.log("Updated: " + new Date().toLocaleTimeString());
@@ -266,17 +271,29 @@ export default {
         organizationDropdownTitle() {
             return this.clockedInState ? "You cannot change organizations while clocked in" : "Change organization";
         },
+        clockedInTimeStat() {
+            // Convert the clockedInTime to the browser's local time and return in the format of "1:12 PM"
+            if (this.clockedInTime) {
+                const timezoneOffset = this.clockedInTime.getTimezoneOffset();
+                const utcClockedInTime = new Date(this.clockedInTime.getTime() - timezoneOffset * 60 * 1000);
+                return "Clocked in at " + utcClockedInTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+            } else {
+                return "Clocked out";
+            }
+        },
     },
     methods: {
+        // Update clockedInTime when clockedInState changes
+        updateClockedInTime() {
+            this.clockedInTime = usePage().props.value.auth.clocked_in_at ? new Date(usePage().props.value.auth.clocked_in_at) : null;
+        },
         // If the user is clocked in, update the timeOnClock element to display the time they have been clocked in for. Then, update the time every second.
         updateTimeOnClock() {
             if (this.clockedInState) {
-                // Get the time the user clocked in at
-                const clockedInTime = usePage().props.value.auth.clocked_in_at ? new Date(usePage().props.value.auth.clocked_in_at) : null;
-                // Return if clockedInTime is null
-                if (!clockedInTime) return;
-                const timezoneOffset = clockedInTime.getTimezoneOffset();
-                const utcClockedInTime = new Date(clockedInTime.getTime() - timezoneOffset * 60 * 1000);
+                // Return if this.clockedInTime is null
+                if (!this.clockedInTime) return;
+                const timezoneOffset = this.clockedInTime.getTimezoneOffset();
+                const utcClockedInTime = new Date(this.clockedInTime.getTime() - timezoneOffset * 60 * 1000);
                 // Get the current time
                 const currentTime = new Date();
                 // Calculate the time difference between the two
