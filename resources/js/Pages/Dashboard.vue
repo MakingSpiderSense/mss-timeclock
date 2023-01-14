@@ -164,7 +164,7 @@ export default {
         },
         // Clear the manual time field
         clearManualTime() {
-            this.form.manualTime = '';
+            form.manualTime = '';
             document.getElementById("manual-time-display").innerHTML = '';
         },
         // Pull in the notes from the clock in record
