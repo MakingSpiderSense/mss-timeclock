@@ -11,6 +11,8 @@ const form = useForm({
     name: '',
     rate: '',
 });
+// Note: I had to add set the form to the window object so that I could access it from the RatesUpdate component. Not sure if there is a better way to do this.
+window.rate_form = form;
 
 const submit = () => {
     form.post(route('rate.update'), {
@@ -52,16 +54,16 @@ export default {
         const name = document.querySelector('input[name="name"]');
         const rate = document.querySelector('input[name="rate"]');
         type.addEventListener('change', () => {
-            this.form.type = type.value;
+            window.rate_form.type = type.value;
         });
         id.addEventListener('change', () => {
-            this.form.id = id.value;
+            window.rate_form.id = id.value;
         });
         name.addEventListener('change', () => {
-            this.form.name = name.value;
+            window.rate_form.name = name.value;
         });
         rate.addEventListener('change', () => {
-            this.form.rate = rate.value;
+            window.rate_form.rate = rate.value;
         });
     },
 }
