@@ -23,4 +23,15 @@ class SuperAdminController extends Controller
     {
         return inertia('SuperAdmin');
     }
+
+    // Consolidate all users' time logs
+    public function consolidateTimeLogs(Request $request)
+    {
+        // Validate request (`month` and `userAccounts` are required)
+        $request->validate([
+            'month' => 'required|date_format:Y-m',
+            'userAccounts' => 'required',
+        ]);
+        dd($request);
+    }
 }

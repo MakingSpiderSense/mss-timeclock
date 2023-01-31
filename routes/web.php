@@ -75,6 +75,7 @@ Route::post('/settings/stats-view', [SettingsController::class, 'updateStatsView
 
 // SuperAdmin Dashboard
 Route::get('/super-admin', [SuperAdminController::class, 'index'])->middleware(['auth', 'verified'])->name('super-admin');
+Route::post('/super-admin/consolidate', [SuperAdminController::class, 'consolidateTimeLogs'])->middleware(['auth', 'verified'])->name('super-admin.consolidate');
 
 require __DIR__.'/auth.php';
 
