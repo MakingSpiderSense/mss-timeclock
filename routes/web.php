@@ -8,6 +8,7 @@ use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ClockInOutController;
+use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\OrganizationsController;
 
 /*
@@ -71,6 +72,9 @@ Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 // Settings routes
 // Update stats view settings
 Route::post('/settings/stats-view', [SettingsController::class, 'updateStatsView'])->name('settings.stats-view');
+
+// SuperAdmin Dashboard
+Route::get('/super-admin', [SuperAdminController::class, 'index'])->middleware(['auth', 'verified'])->name('super-admin');
 
 require __DIR__.'/auth.php';
 
