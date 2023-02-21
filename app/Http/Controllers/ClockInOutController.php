@@ -158,6 +158,11 @@ class ClockInOutController extends Controller
 
         // Get the difference in minutes between the clock_out and clock_in times
         $diff_in_minutes = $clock_out->diffInMinutes($clock_in);
+        // Round the difference to the nearest minute based on the seconds
+        $seconds = $clock_out->diffInSeconds($clock_in);
+        if ($seconds % 60 >= 30) {
+            $diff_in_minutes = $diff_in_minutes + 1;
+        }
         // Get hours and minutes
         $hours = floor($diff_in_minutes / 60);
         $hours_label_suffix = $hours == 1 ? '' : 's';
