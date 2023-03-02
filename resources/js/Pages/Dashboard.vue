@@ -245,6 +245,8 @@ export default {
         },
         // When category is changed, update the subcategory select list
         updateSubcategoryOptions() {
+            // Clear the subcategory input
+            this.clearSubcategoryInput();
             const category = document.getElementById("category").value;
             // Check if category exists in this.categoriesArray
             if (this.categoriesArray.includes(category)) {
