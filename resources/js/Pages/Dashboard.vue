@@ -223,12 +223,17 @@ export default {
             }
         },
         // Update category select list
+        // Note: This function is run when the page loads or when the organization is changed
         updateCategoryOptions() {
+            // Clear the category and subcategory inputs
+            this.clearCategoryInput();
+            this.clearSubcategoryInput();
             // Create categoriesFullArray from categories object with the name of each category
             this.categoriesFullArray = [];
             this.categoriesObj.forEach(category => {
                 // Create subcategories array from each category
                 let subcategories = [];
+                console.log(category); // Leave this here for debugging
                 category.subcategories.forEach(subcategory => {
                     subcategories.push(subcategory.name);
                 });
@@ -266,6 +271,19 @@ export default {
             if (subcategoryOptions.value) {
                 form.subcategory = subcategoryOptions.value;
             }
+        },
+        // Clear the category input
+        clearCategoryInput() {
+            document.getElementById("category").value = "";
+            document.getElementById("category_options").value = "";
+            form.category = "";
+            this.updateSubcategoryOptions();
+        },
+        // Clear the subcategory input
+        clearSubcategoryInput() {
+            document.getElementById("subcategory").value = "";
+            document.getElementById("subcategory_options").value = "";
+            form.subcategory = "";
         },
         // Autocomplete function
         autocomplete(inp, arr) {

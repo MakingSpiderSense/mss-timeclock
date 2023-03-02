@@ -41,7 +41,20 @@ class StatsController extends Controller
         $amount_earned_month_combined_org = 0;
         $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
         $weeks_so_far = round(date('j') / 7, 2);
+        // $weeks_so_far = 4;
         $simple_tax_rate = $user->simple_tax_rate;
+        // Fixed earnings
+        $fixed_earnings = 0;
+        $percentage_month_complete = date('j') / date('t');
+        // Ben's fixed earnings
+        if ($userId == 1) { 
+            $fixed_earnings = 215;
+        }
+        // Erica's fixed earnings
+        if ($userId == 2) { 
+            $fixed_earnings = 290;
+        }
+        $fixed_earnings = round($fixed_earnings * $percentage_month_complete, 2);
         // Loop through the temp_logs and build an array of objects with the data we need
         foreach ($temp_logs as $tempLog) {
             $subcategory = Subcategory::find($tempLog->subcategory_id); // get the subcategory for the temp_log
@@ -150,7 +163,7 @@ class StatsController extends Controller
         $hours_month_total_work_combined_org = round($hours_month_total_work_combined_org / 60, 2);
         $hours_month_combined_org = round($hours_month_combined_org / 60, 2);
         $hours_weekly_this_month_combined_org = $weeks_so_far ? round($hours_month_total_work_combined_org / $weeks_so_far, 2) : 0;
-        $amount_earned_month_combined_org = round($amount_earned_month_combined_org, 2);
+        $amount_earned_month_combined_org = round($amount_earned_month_combined_org + $fixed_earnings, 2);
         $amount_earned_month_combined_org_tax = round($amount_earned_month_combined_org * $simple_tax_rate, 2);
         $rate_this_month_work_combined_org = $hours_month_total_work_combined_org ? round($amount_earned_month_combined_org / $hours_month_total_work_combined_org, 2) : 0;
         // Return the data as an object
