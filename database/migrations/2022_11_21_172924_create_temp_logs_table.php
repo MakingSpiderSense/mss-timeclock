@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('subcategory_id')->constrained();
-            $table->timestamp('clock_in');
+            $table->timestamp('clock_in')->nullable();
             $table->timestamp('clock_out')->nullable();
             $table->string('notes')->nullable();
             $table->timestamps();
