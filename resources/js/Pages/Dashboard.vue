@@ -87,7 +87,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <a v-if="clockedInState" as="button" @click="cancelClockIn" class="cancel clockin-btn ml-4">
                         Cancel
                     </a>
-                    <PrimaryButton class=" clockin-btn ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <PrimaryButton class="clockin-btn ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmCreation($event)">
                         {{ clockInOutButton }}
                     </PrimaryButton>
                 </div>
@@ -156,6 +156,53 @@ export default {
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
             this.clockedInState = usePage().props.value.auth.clocked_in;
+        },
+        // Confirm creation of new category or subcategory
+        confirmCreation(event) {
+            // If already clocked in, return
+            if (this.clockedInState) {
+                submit();
+                return;
+            }
+            // Otherwise, check if category and subcategory exist
+            let categoryExists = false;
+            let subcategoryExists = false;
+            const newCategory = form.category;
+            const newSubCategory = form.subcategory ? form.subcategory : "Other";
+            // Check if form.category is in this.categoriesArray, if so, set categoryExists to true
+            if (this.categoriesArray.includes(newCategory)) {
+                categoryExists = true;
+            }
+            // Check if form.subcategory is in this.subcategoriesArray, if so, set subcategoryExists to true
+            if (this.subcategoriesArray.includes(newSubCategory)) {
+                subcategoryExists = true;
+            } else {
+                // If subcategory does not exist, but is "Other", then set subcategoryExists to true
+                if (newSubCategory === "Other") {
+                    subcategoryExists = true;
+                }
+            }
+            // Compose confirm messages based on categoryExists and subcategoryExists
+            let confirmMessage = "";
+            if (categoryExists && subcategoryExists) {
+                // Submit the form
+                return;
+            } else if (categoryExists && !subcategoryExists) {
+                confirmMessage = `Are you sure you want to create the new subcategory, "${newSubCategory}"?`;
+            } else if (!categoryExists && subcategoryExists) {
+                confirmMessage = `Are you sure you want to create the new category, "${newCategory}"?`;
+            } else {
+                confirmMessage = `Are you sure you want to create the new category, "${newCategory}", and the new subcategory, "${newSubCategory}"?`;
+            }
+            if (!confirm(confirmMessage)) {
+                console.log("Cancel");
+                // Prevent the form from submitting
+                event.preventDefault();
+            } else {
+                console.log("Continue");
+                // Submit the form
+                submit();
+            }
         },
         // Cancel clock in
         cancelClockIn(e) {
