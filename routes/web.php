@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\RatesController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\TimeLogController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ClockInOutController;
@@ -65,6 +66,9 @@ Route::post('/organization/active/{org_id}', [OrganizationsController::class, 's
 // Hourly Rates route
 Route::get('/rates', [RatesController::class, 'index'])->name('rates');
 Route::post('/rate/update', [RatesController::class, 'update'])->name('rate.update');
+
+// Reports route
+Route::get('/reports/time-log', [TimeLogController::class, 'index'])->name('reports.time-log');
 
 // Stats route
 Route::get('/stats', [StatsController::class, 'index'])->name('stats');

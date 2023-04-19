@@ -110,7 +110,7 @@ const showingNavigationDropdown = ref(false);
                                 <DropdownLink  :href="route('placeholder')" as="button">
                                     All Time Overview
                                 </DropdownLink>
-                                <DropdownLink  :href="route('placeholder')" as="button">
+                                <DropdownLink  :href="route('reports.time-log')" as="button">
                                     Time Log
                                 </DropdownLink>
                             </template>
