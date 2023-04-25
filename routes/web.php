@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\RatesController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\PrivateController;
 use App\Http\Controllers\TimeLogController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\SettingsController;
@@ -69,6 +70,7 @@ Route::post('/rate/update', [RatesController::class, 'update'])->name('rate.upda
 
 // Reports route
 Route::get('/reports/time-log', [TimeLogController::class, 'index'])->name('reports.time-log');
+Route::get('/reports/private', [PrivateController::class, 'index'])->name('reports.private');
 
 // Stats route
 Route::get('/stats', [StatsController::class, 'index'])->name('stats');

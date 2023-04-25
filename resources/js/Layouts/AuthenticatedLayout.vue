@@ -104,14 +104,17 @@ const showingNavigationDropdown = ref(false);
                             </template>
                             <!-- Dropdown Links -->
                             <template #content>
-                                <DropdownLink  :href="route('placeholder')" as="button">
+                                <DropdownLink :href="route('placeholder')" as="button">
                                     Month Overview
                                 </DropdownLink>
-                                <DropdownLink  :href="route('placeholder')" as="button">
+                                <DropdownLink :href="route('placeholder')" as="button">
                                     All Time Overview
                                 </DropdownLink>
-                                <DropdownLink  :href="route('reports.time-log')" as="button">
+                                <DropdownLink :href="route('reports.time-log')" as="button">
                                     Time Log
+                                </DropdownLink>
+                                <DropdownLink v-if="$page.props.auth.user.id == 1 || $page.props.auth.user.id == 2" :href="route('reports.private')" as="button">
+                                    MSS Private Report
                                 </DropdownLink>
                             </template>
                         </Dropdown>

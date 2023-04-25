@@ -26,3 +26,5 @@ yarn-error.log
 style.css.map
 bookmark.md
 dev-notes-private.md
+Private.vue
+PrivateController.php
