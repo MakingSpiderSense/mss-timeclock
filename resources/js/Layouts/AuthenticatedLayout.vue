@@ -168,14 +168,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="money-positive mb-5">$<span id="amount_earned_today_combined_org" title="amount_earned_today_combined_org">0</span> Earned</div>
                         <div class="money-positive mb-5">$<span id="amount_earned_today_combined_org_tax" title="amount_earned_today_combined_org_tax">0</span> Earned</div>
                         <!-- Heart containers -->
-                        <div class="hearts hearts-two-by-three">
-                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
-                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
-                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
-                            <div><img src="/img/heart-icon-full.png" alt="heart icon"></div>
-                            <div><img src="/img/heart-icon-half.png" alt="heart icon"></div>
-                            <div><img src="/img/heart-icon-empty.png" alt="heart icon"></div>
-                        </div>
+                        <div id="goal-tracker" class="hearts hearts-two-by-three"></div>
                         <!-- Stats view setting -->
                         <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
                     </div>
@@ -237,6 +230,7 @@ export default {
             flashMsg: usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""],
             stats: axios.get('/stats'),
             set_combined_org: usePage().props.value.auth.user.set_combined_org,
+            goal_hours: usePage().props.value.auth.user.goal_hours,
             clockedInTime: usePage().props.value.auth.clocked_in_at ? new Date(usePage().props.value.auth.clocked_in_at) : null,
         }
     },
@@ -376,6 +370,8 @@ export default {
                 ? this.stats.amount_earned_month_combined_org.toFixed(2) : "0";
             document.querySelector('#amount_earned_month_combined_org_tax').innerHTML = this.stats.amount_earned_month_combined_org_tax 
                 ? this.stats.amount_earned_month_combined_org_tax.toFixed(2) : "0";
+            // Update the goal tracker
+            this.updateGoalTracker();
         },
         // Stop updating stats
         stopUpdatingStats() {
@@ -483,6 +479,46 @@ export default {
             } else {
                 btnLabel.innerHTML = "Error: Invalid set_combined_org value";
             }
+        },
+        // Output goal points
+        updateGoalTracker() {
+            const goal_hours = this.goal_hours;
+            console.log({goal_hours});
+            // Total Work Hours
+            const total_work_hours = this.stats.hours_today_total_work_combined_org;
+            console.log({total_work_hours});
+            // Progress of goal hours
+            const progress = (total_work_hours / goal_hours).toFixed(6);
+            console.log({progress});
+            // numberOfHearts should be calculated by multiplying the goal_hours by progress, then rounding down to the nearest half a step. For example, if the multiplied number is 2.7, it should be rounded down to 2.5. If it is 2.3, it should be rounded down to 2.
+            let numberOfHearts = Math.floor(goal_hours * progress * 2) / 2;
+            numberOfHearts = numberOfHearts > goal_hours ? goal_hours : numberOfHearts;
+            console.log({numberOfHearts});
+            // Use goal_hours as a counter. For each hour, add a `<div><img src="/img/heart-icon-empty.png" alt="heart icon"></div>` element as children of the `#goal-tracker` element. However, we need to fill in the hearts based on the progress. For example, if the goal_hours is 8 and the numberOfHearts is 2.5, the first two hearts should be full and get the src "/img/heart-icon-full.png", the third heart should be half full and get the src "/img/heart-icon-half.png", and the rest should remain empty.
+            const goalTracker = document.querySelector('#goal-tracker');
+            // Remove all children of the goalTracker element
+            while (goalTracker.firstChild) {
+                goalTracker.removeChild(goalTracker.firstChild);
+            }
+            // Add the correct number of hearts
+            for (let i = 0; i < goal_hours; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '<img src="/img/heart-icon-empty.png" alt="heart icon" style="width: 25px; margin-right: 5px;">';
+                goalTracker.appendChild(heart);
+            }
+            // Fill in the hearts based on the progress
+            console.log({numberOfHearts});
+            for (let i = 0; i < numberOfHearts; i++) {
+                const heart = goalTracker.children[i].firstChild;
+                heart.src = "/img/heart-icon-full.png";
+            }
+            // If the numberOfHearts is a half, fill in the next heart with a half heart
+            if (numberOfHearts % 1 != 0) {
+                const heart = goalTracker.children[Math.floor(numberOfHearts)].firstChild;
+                heart.src = "/img/heart-icon-half.png";
+            }
+            // Return the number of hearts
+            return numberOfHearts;
         },
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
@@ -661,10 +697,6 @@ export default {
             display: flex;
             flex-wrap: wrap;
             margin-bottom: 25px;
-            img {
-                width: 25px;
-                margin-right: 5px;
-            }
         }
         .money-positive {
             color: green;
