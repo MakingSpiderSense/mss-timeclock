@@ -483,18 +483,14 @@ export default {
         // Output goal points
         updateGoalTracker() {
             const goal_hours = this.goal_hours;
-            console.log({goal_hours});
             // Total Work Hours
             const total_work_hours = this.stats.hours_today_total_work_combined_org;
-            console.log({total_work_hours});
             // Progress of goal hours
             const progress = (total_work_hours / goal_hours).toFixed(6);
-            console.log({progress});
-            // numberOfHearts should be calculated by multiplying the goal_hours by progress, then rounding down to the nearest half a step. For example, if the multiplied number is 2.7, it should be rounded down to 2.5. If it is 2.3, it should be rounded down to 2.
+            // Calculate numberOfHearts by multiplying goal_hours by progress, rounding down to the nearest half step.
             let numberOfHearts = Math.floor(goal_hours * progress * 2) / 2;
             numberOfHearts = numberOfHearts > goal_hours ? goal_hours : numberOfHearts;
-            console.log({numberOfHearts});
-            // Use goal_hours as a counter. For each hour, add a `<div><img src="/img/heart-icon-empty.png" alt="heart icon"></div>` element as children of the `#goal-tracker` element. However, we need to fill in the hearts based on the progress. For example, if the goal_hours is 8 and the numberOfHearts is 2.5, the first two hearts should be full and get the src "/img/heart-icon-full.png", the third heart should be half full and get the src "/img/heart-icon-half.png", and the rest should remain empty.
+            // Add empty heart icons to #goal-tracker for each hour in goal_hours. Fill in hearts based on progress, with full hearts for each whole hour and a half-full heart for any remaining half hour.
             const goalTracker = document.querySelector('#goal-tracker');
             // Remove all children of the goalTracker element
             while (goalTracker.firstChild) {
@@ -507,7 +503,6 @@ export default {
                 goalTracker.appendChild(heart);
             }
             // Fill in the hearts based on the progress
-            console.log({numberOfHearts});
             for (let i = 0; i < numberOfHearts; i++) {
                 const heart = goalTracker.children[i].firstChild;
                 heart.src = "/img/heart-icon-full.png";
