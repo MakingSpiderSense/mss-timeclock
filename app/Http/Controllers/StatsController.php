@@ -40,7 +40,7 @@ class StatsController extends Controller
         $hours_month_combined_org = 0;
         $amount_earned_month_combined_org = 0;
         $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
-        $weeks_so_far = round(date('j') / 7, 2);
+        $weeks_so_far = $this->getBusinessWeeksSoFar(date('Y'), date('m'), date('j'));
         // $weeks_so_far = 4;
         $simple_tax_rate = $user->simple_tax_rate;
         // Fixed earnings
@@ -189,5 +189,22 @@ class StatsController extends Controller
             'amount_earned_month_combined_org_tax' => isset($amount_earned_month_combined_org_tax) ? $amount_earned_month_combined_org_tax : '',
             'rate_this_month_work_combined_org' => isset($rate_this_month_work_combined_org) ? $rate_this_month_work_combined_org : '',
         ];
+    }
+
+    // Get weeks so far for a given month for business days only
+    public function getBusinessWeeksSoFar($year, $month, $currentDay)
+    {
+        $weekdaysSoFar = 0;
+        for ($day = 1; $day <= $currentDay; $day++) {
+            $timestamp = mktime(0, 0, 0, $month, $day, $year);
+            $weekday = date('N', $timestamp);
+            // Count weekdays only
+            if ($weekday < 6) {
+                $weekdaysSoFar++;
+            }
+        }
+        // Now we divide by 5 to get the number of 5-day weeks
+        $weeksSoFar = $weekdaysSoFar / 5;
+        return round($weeksSoFar, 2);
     }
 }
