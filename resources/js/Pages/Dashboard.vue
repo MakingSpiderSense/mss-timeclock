@@ -58,7 +58,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <div style="padding-top: 24px"></div>
                             <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @click="categoryOptionsChanged" :disabled="clockedInState">
                                 <option disabled selected value>-- Select --</option>
-                                <option v-for="category in categoriesArray" v-bind:key="category">{{ category }}</option>
+                                <option v-for="category in filteredCategoriesArray" v-bind:key="category">{{ category }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
@@ -67,7 +67,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <div style="padding-top: 24px"></div>
                             <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @click="subcategoryOptionsChanged" :disabled="clockedInState">
                                 <option disabled selected value>-- Select --</option>
-                                <option v-for="subcategory in subcategoriesArray" v-bind:key="subcategory">{{ subcategory }}</option>
+                                <option v-for="subcategory in filteredSubcategoriesArray" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.subcategory_options" />
                         </div>
@@ -122,11 +122,14 @@ const submit = () => {
 export default {
     props: {
         categoriesObj: Object,
+        filteredCategoriesObj: Object,
     },
     data() {
         return {
             categoriesArray: [],
             subcategoriesArray: [],
+            filteredCategoriesArray: [],
+            filteredSubcategoriesArray: [],
             pageModal: {
                 title: 'ManualTimeSet',
                 count: 0,
@@ -287,6 +290,18 @@ export default {
                 this.categoriesFullArray.push([category.name, subcategories]);
             });
             this.categoriesArray = this.categoriesFullArray.map(value => value[0]);
+            // Create filteredCategoriesFullArray from filtered categories object with the name of each category
+            this.filteredCategoriesFullArray = [];
+            Object.values(this.filteredCategoriesObj).forEach(category => {
+                // Create subcategories array from each category
+                let subcategories = [];
+                Object.values(category.subcategories).forEach(subcategory => {
+                    subcategories.push(subcategory.name);
+                });
+                this.filteredCategoriesFullArray.push([category.name, subcategories]);
+            });
+            this.filteredCategoriesArray = this.filteredCategoriesFullArray.map(value => value[0]);
+            // Update the autocomplete lists
             this.autocomplete(document.getElementById("category"), this.categoriesArray);
             this.autocomplete(document.getElementById("subcategory"), this.subcategoriesArray);
         },
@@ -299,6 +314,13 @@ export default {
             if (this.categoriesArray.includes(category)) {
                 // If so, filter the categoriesFullArray array to get the subcategories array of the selected category
                 this.subcategoriesArray = this.categoriesFullArray.filter(value => value[0] === category)[0][1];
+                // Also, filter the filteredCategoriesFullArray array to get the subcategories array of the selected category
+                if (this.filteredCategoriesFullArray.some(value => value[0] === category)) {
+                    // If the selected category is not hidden, update the filteredSubcategoriesArray array
+                    this.filteredSubcategoriesArray = this.filteredCategoriesFullArray.filter(value => value[0] === category)[0][1];
+                } else {
+                    this.filteredSubcategoriesArray = [];
+                }
             } else {
                 this.subcategoriesArray = [];
             }

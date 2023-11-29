@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\TempLog;
 use App\Models\Category;
 use App\Models\Subcategory;
+use App\Models\HiddenCategory;
 use App\Models\Organization;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
@@ -30,9 +31,25 @@ class ClockInOutController extends Controller
         foreach ($categories as $category) {
             $category->subcategories = Subcategory::where('category_id', $category->id)->orderBy('name')->get();
         }
+        // Get the user's hidden categories
+        $hidden_categories = HiddenCategory::where('user_id', auth()->user()->id)->get();
+        // Filter the categories and subcategories based on hidden categories.
+        $filteredCategories = $categories->map(function ($category) use ($hidden_categories) {
+            // Clone the category to avoid altering the original
+            $clonedCategory = clone $category;
+            // Filters the subcategories of each cloned category to exclude those that are marked as hidden for the user
+            $clonedCategory->subcategories = $clonedCategory->subcategories->filter(function ($subcategory) use ($hidden_categories, $category) {
+                return $hidden_categories->where('category_id', $category->id)->where('subcategory_id', $subcategory->id)->count() === 0;
+            });
+            return $clonedCategory;
+        })->filter(function ($category) use ($hidden_categories) {
+            // If the category is marked as hidden for the user, it is excluded from the filtered list
+            return $hidden_categories->where('category_id', $category->id)->whereNull('subcategory_id')->count() === 0;
+        });
         // Inertia render dashboard view with categories and subcategories
         return inertia('Dashboard', [
             'categoriesObj' => $categories,
+            'filteredCategoriesObj' => $filteredCategories,
         ]);
     }
 
