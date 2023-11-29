@@ -76,6 +76,7 @@ Route::get('/reports/private', [PrivateController::class, 'index'])->name('repor
 Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 
 // Settings routes
+Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
 // Update stats view settings
 Route::post('/settings/stats-view', [SettingsController::class, 'updateStatsView'])->name('settings.stats-view');
 

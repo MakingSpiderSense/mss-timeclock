@@ -43,7 +43,7 @@ const showingNavigationDropdown = ref(false);
                             <DropdownLink :href="route('profile')" as="button">
                                 View Profile
                             </DropdownLink>
-                            <DropdownLink :href="route('placeholder')" as="button">
+                            <DropdownLink :href="route('settings')" as="button">
                                 Settings
                             </DropdownLink>
                             <DropdownLink :href="route('logout')" method="post" as="button">

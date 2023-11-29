@@ -12,6 +12,7 @@ $font_heading: $open_sans;
 $font_body: $nunito;
 
 $color1: #e78017;
+$color1-light: #fde4cb;
 $color2: #119DA4;
 $color3: #F4E285;
 $black: #1B2F33;
@@ -62,6 +63,15 @@ a {
     color: $white;
     &:hover {
         background-color: darken($success, 10%);
+    }
+}
+.btn-1 {
+    background-color: $color1-light;
+    color: $color1;
+    font-weight: 600;
+    &:hover {
+        background-color: $color1;
+        color: $white;
     }
 }
 
@@ -156,6 +166,9 @@ select, input, textarea {
     margin-bottom: 25px;
     background-color: $white;
     border-bottom: 1px solid rgb(229, 231, 235);
+    h2 {
+        text-align: center;
+    }
 }
 
 // Standard Table

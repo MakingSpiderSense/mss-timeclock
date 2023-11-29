@@ -12,6 +12,12 @@ class SettingsController extends Controller
         $this->middleware('auth');
     }
 
+    // Load the settings page
+    public function index()
+    {
+        return inertia('Settings');
+    }
+
     // Update stats view
     public function updateStatsView()
     {

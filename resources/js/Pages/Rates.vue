@@ -121,6 +121,11 @@ export default {
 <!-- Styling -->
 <style lang="scss" scoped>
 @import "../../sass/app.scss";
+.page-section {
+    h2 {
+        text-align: left;
+    }
+}
 table.standard-table {
     border: none;
     width: 100%;
