@@ -15,7 +15,7 @@ class SettingsController extends Controller
     // Load the settings page
     public function index()
     {
-        return inertia('Settings');
+        return inertia('Settings/Settings');
     }
 
     // Update stats view

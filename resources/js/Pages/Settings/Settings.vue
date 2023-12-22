@@ -46,7 +46,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 <!-- Styling -->
 <style lang="scss" scoped>
-@import "../../sass/app.scss";
+@import "../../../sass/app.scss";
 .setting {
     display: flex;
     padding: 16px 15px;
