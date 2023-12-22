@@ -31,7 +31,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <div class="setting-description">Choose to hide specific categories or subcategories from the dropdown options when clocking in. This is useful if you created an old category that you no longer use.</div>
                         </div>
                         <div>
-                            <button class="btn btn-1">Manage</button>
+                            <Link class="btn btn-1" :href="route('settings.hidden-categories')">Manage</Link>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 @import "../../../sass/app.scss";
 .setting {
     display: flex;
-    padding: 16px 15px;
     padding-right: 70px;
     border-bottom: 1px solid #eee;
     &:last-child {
@@ -116,7 +115,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     display: flex;
     justify-content: space-between;
     align-items: center;
-    button {
+    a {
         margin-left: 35px;
     }
 }

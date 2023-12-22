@@ -18,6 +18,12 @@ class SettingsController extends Controller
         return inertia('Settings/Settings');
     }
 
+    // Display the hidden categories page
+    public function show_hidden_categories ()
+    {
+        return inertia('Settings/HiddenCategories');
+    }
+
     // Update stats view
     public function updateStatsView()
     {
