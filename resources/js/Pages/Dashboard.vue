@@ -35,24 +35,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <!-- Column 1 -->
                     <div>
                         <!-- Category Text Input -->
-                        <div class="mb-4">
+                        <div>
                             <InputLabel for="category" value="Category" />
                             <div class="autocomplete">
                                 <TextInput id="category" type="text" class="mt-1 block w-full" v-model="form.category" @input="updateSubcategoryOptions" :disabled="clockedInState" tabindex="1" required autofocus />
                             </div>
                             <InputError class="mt-2" :message="form.errors.category" />
                         </div>
-                        <!-- Subcategory Text Input -->
-                        <div class="mb-4">
-                            <InputLabel for="subcategory" value="Subcategory" />
-                            <div class="autocomplete">
-                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" tabindex="3" :disabled="clockedInState" />
-                            </div>
-                            <InputError class="mt-2" :message="form.errors.subcategory" />
-                        </div>
-                    </div>
-                    <!-- Column 2 -->
-                    <div>
                         <!-- Category Dropdown Select -->
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
@@ -61,6 +50,17 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                                 <option v-for="category in filteredCategoriesArray" v-bind:key="category">{{ category }}</option>
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
+                        </div>
+                    </div>
+                    <!-- Column 2 -->
+                    <div>
+                        <!-- Subcategory Text Input -->
+                        <div>
+                            <InputLabel for="subcategory" value="Subcategory" />
+                            <div class="autocomplete">
+                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" tabindex="3" :disabled="clockedInState" />
+                            </div>
+                            <InputError class="mt-2" :message="form.errors.subcategory" />
                         </div>
                         <!-- Subcategory Dropdown Select -->
                         <div class="mb-4">
@@ -77,7 +77,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <!-- Notes -->
                         <div class="mb-4">
                             <InputLabel for="notes" value="Notes" />
-                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:125px;" tabindex="5" />
+                            <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:109px;" tabindex="5" />
                             <InputError class="mt-2" :message="form.errors.notes" />
                         </div>
                     </div>
