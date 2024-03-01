@@ -40,12 +40,16 @@ class StatsController extends Controller
         $hours_month_combined_org = 0;
         $amount_earned_month_combined_org = 0;
         $time_zone = $user->time_zone ? $user->time_zone : 'UTC';
-        $weeks_so_far = $this->getBusinessWeeksSoFar(date('Y'), date('m'), date('j'));
+        $currentDateTime = Carbon::now()->setTimezone($time_zone);
+        $current_year = $currentDateTime->format('Y');
+        $current_month = $currentDateTime->format('m');
+        $current_day = $currentDateTime->format('d');
+        $weeks_so_far = $this->getBusinessWeeksSoFar($current_year, $current_month, $current_day);
         // $weeks_so_far = 4;
         $simple_tax_rate = $user->simple_tax_rate;
         // Fixed earnings
         $fixed_earnings = 0;
-        $percentage_month_complete = date('j') / date('t');
+        $percentage_month_complete = $current_day / $currentDateTime->daysInMonth;
         // Custom fixed earnings (workaround until feature is implemented)
         $customConfigPath = base_path('custom_config.php');
         if (file_exists($customConfigPath)) {
@@ -69,7 +73,7 @@ class StatsController extends Controller
             $org_name = Organization::find($category->org_id)->name; // get the org name for the category
             // Convert dates from UTC to user's time zone
             $clock_in_tz = Carbon::parse($tempLog->clock_in)->setTimezone($time_zone);
-            $todays_date = Carbon::now()->setTimezone($time_zone)->format('Y-m-d');
+            $todays_date = $currentDateTime->format('Y-m-d');
             $clock_in_time = $clock_in_tz->format('Y-m-d H:i:s');
             $clock_in_date = $clock_in_tz->format('Y-m-d');
             $isToday = $clock_in_date == $todays_date;
