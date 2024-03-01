@@ -46,13 +46,20 @@ class StatsController extends Controller
         // Fixed earnings
         $fixed_earnings = 0;
         $percentage_month_complete = date('j') / date('t');
-        // Ben's fixed earnings
-        if ($userId == 1) { 
-            $fixed_earnings = 215;
+        // Custom fixed earnings (workaround until feature is implemented)
+        $customConfigPath = base_path('custom_config.php');
+        if (file_exists($customConfigPath)) {
+            $config = require $customConfigPath;
+            $fixed_earnings_a = $config['fixed_earnings_a'] ?? 0;
+            $fixed_earnings_b = $config['fixed_earnings_b'] ?? 0;
+        } else {
+            $fixed_earnings_a = 0;
+            $fixed_earnings_b = 0;
         }
-        // Erica's fixed earnings
-        if ($userId == 2) { 
-            $fixed_earnings = 290;
+        if ($userId == 1) {
+            $fixed_earnings = $fixed_earnings_a;
+        } else if ($userId == 2) {
+            $fixed_earnings = $fixed_earnings_b;
         }
         $fixed_earnings = round($fixed_earnings * $percentage_month_complete, 2);
         // Loop through the temp_logs and build an array of objects with the data we need
