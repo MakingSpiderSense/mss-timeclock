@@ -53,7 +53,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         </div>
                         <!-- "Hide Category" button -->
                         <div v-if="isCategoryFound">
-                            <a href="#" @click="hideCategory">Hide Category</a>
+                            <a href="#" @click="hideCategory('category')">Hide Category</a>
                         </div>
                     </div>
                     <!-- Column 2 -->
@@ -76,6 +76,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <InputError class="mt-2" :message="form.errors.subcategory_options" />
                         </div>
                         <!-- "Hide Subcategory" button -->
+                        <div v-if="isSubcategoryFound">
+                            <a href="#" @click="hideCategory('subcategory')">Hide Subcategory</a>
+                        </div>
                     </div>
                     <!-- Column 3 -->
                     <div>
@@ -143,6 +146,7 @@ export default {
             clockedInCategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.category.name : '',
             clockedInSubcategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '',
             isCategoryFound: false,
+            isSubcategoryFound: false,
         }
     },
     mounted() {
@@ -157,9 +161,12 @@ export default {
         this.clockedInSubcategory = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '';
     },
     watch: {
-        // Watch the 'form.category' input to see if it exists in the dropdown list
+        // Watch the category inputs to see if value exists in the dropdown list
         'form.category'(newVal) {
             this.isCategoryFound = this.categoriesArray.includes(newVal);
+        },
+        'form.subcategory'(newVal) {
+            this.isSubcategoryFound = this.subcategoriesArray.includes(newVal);
         },
     },
     computed: {
@@ -284,12 +291,16 @@ export default {
                 return ("0" + n).slice(-2);
             }
         },
-        // Hide Category
-        hideCategory() {
-            if (confirm(`Are you sure you want to hide the category, "${form.category}"?`)) {
-                console.log(`Hiding category "${form.category}"`); // Leave this here for debugging
+        // Hide Category or Subcategory
+        hideCategory(type) {
+            const category = form.category;
+            const subcategory = form.subcategory;
+            const categoryTitle = type === "category" ? category : subcategory;
+            let confirmMessage = `Are you sure you want to hide the ${type}, "${categoryTitle}"?`;
+            if (confirm(confirmMessage)) {
+                console.log(`Hide ${type}: ${categoryTitle}`);
                 // form.post(route('hide-category'), {
-                //     onFinish: () => this.updateCategoryOptions(),
+                //     // onFinish: () => this.updateCategoryOptions(),
                 // });
             }
         },
