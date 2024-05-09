@@ -51,6 +51,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             </select>
                             <InputError class="mt-2" :message="form.errors.category_options" />
                         </div>
+                        <!-- "Hide Category" button -->
+                        <div v-if="isCategoryFound">
+                            <a href="#" @click="hideCategory">Hide Category</a>
+                        </div>
                     </div>
                     <!-- Column 2 -->
                     <div>
@@ -71,6 +75,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             </select>
                             <InputError class="mt-2" :message="form.errors.subcategory_options" />
                         </div>
+                        <!-- "Hide Subcategory" button -->
                     </div>
                     <!-- Column 3 -->
                     <div>
@@ -137,6 +142,7 @@ export default {
             clockedInState: usePage().props.value.auth.clocked_in,
             clockedInCategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.category.name : '',
             clockedInSubcategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '',
+            isCategoryFound: false,
         }
     },
     mounted() {
@@ -149,6 +155,12 @@ export default {
         this.clearManualTime();
         this.clockedInCategory = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.category.name : '';
         this.clockedInSubcategory = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '';
+    },
+    watch: {
+        // Watch the 'form.category' input to see if it exists in the dropdown list
+        'form.category'(newVal) {
+            this.isCategoryFound = this.categoriesArray.includes(newVal);
+        },
     },
     computed: {
         clockInOutButton() {
@@ -270,6 +282,15 @@ export default {
             }
             function twoDigits(n) {
                 return ("0" + n).slice(-2);
+            }
+        },
+        // Hide Category
+        hideCategory() {
+            if (confirm(`Are you sure you want to hide the category, "${form.category}"?`)) {
+                console.log(`Hiding category "${form.category}"`); // Leave this here for debugging
+                // form.post(route('hide-category'), {
+                //     onFinish: () => this.updateCategoryOptions(),
+                // });
             }
         },
         // Update category select list
