@@ -91,7 +91,7 @@ class ClockInOutController extends Controller
         // Store the category (if applicable)
         // If the category name doesn't exist in the "categories" table for the logged in user's active organization, create it.
         Category::firstOrCreate([
-            'name' => $request->category, 
+            'name' => $request->category,
             'org_id' => auth()->user()->active_org_id
         ]);
         // Get the category id where name is equal to the category name and the org_id is equal to the logged in user's active organization id
@@ -108,7 +108,7 @@ class ClockInOutController extends Controller
         }
         // If the subcategory name doesn't exist in the "subcategories" table for the $category_id, create it.
         Subcategory::firstOrCreate([
-            'name' => $subcategory_name, 
+            'name' => $subcategory_name,
             'category_id' => $category_id
         ]);
         // Get the subcategory id where name is equal to the subcategory name and the category_id is equal to the $category_id
@@ -216,5 +216,52 @@ class ClockInOutController extends Controller
 
         // Redirect to dashboard with success message
         return redirect()->back()->with('message', ['success', 'Cancelled the clock in.']);
+    }
+
+    // Hide category
+    public function hideCategory(Request $request, $type) {
+        // Validate request
+        $request->validate([
+            'category' => 'required|string|max:255',
+            'subcategory' => 'nullable|string|max:255',
+        ]);
+        // Get the user's current organization's id
+        $current_org_id = auth()->user()->active_org_id;
+        // Set the category name and subcategory name based on the type
+        if ($type == 'category') {
+            $category_name = $request->category;
+            $subcategory_name = null;
+        } else {
+            $category_name = $request->category;
+            $subcategory_name = $request->subcategory;
+        }
+        // If the category name doesn't exist, return an error
+        if (Category::where('name', $category_name)->where('org_id', $current_org_id)->count() == 0) {
+            return redirect()->back()->with('message', ['error', 'The category does not exist.']);
+        }
+        // Get the category id based on the category name and the current org
+        $category_id = Category::where('name', $category_name)->where('org_id', $current_org_id)->first()->id;
+        // If we are hiding the subcategory, find the subcategory id
+        $subcategory_id = null;
+        if ($subcategory_name) {
+            // If the subcategory name doesn't exist, return an error
+            if (Subcategory::where('name', $subcategory_name)->where('category_id', $category_id)->count() == 0) {
+                return redirect()->back()->with('message', ['error', 'The subcategory does not exist.']);
+            }
+            // Get the subcategory id based on the subcategory name and the category id
+            $subcategory_id = Subcategory::where('name', $subcategory_name)->where('category_id', $category_id)->first()->id;
+        }
+        // If the entry already exists in the hidden_categories table, return an error
+        if (HiddenCategory::where('user_id', auth()->user()->id)->where('category_id', $category_id)->where('subcategory_id', $subcategory_id)->count() > 0) {
+            return redirect()->back()->with('message', ['error', 'The ' . $type . ' "' . $category_name . ($subcategory_name != null ? ' > ' . $subcategory_name : '') . '" is already hidden.']);
+        }
+        // Create a new hidden category entry
+        HiddenCategory::create([
+            'user_id' => auth()->user()->id,
+            'category_id' => $category_id,
+            'subcategory_id' => $subcategory_id,
+        ]);
+        // Redirect to dashboard with success message
+        return redirect()->back()->with('message', ['success', 'The ' . $type . ' "' . $category_name . ($subcategory_name != null ? ' > ' . $subcategory_name : '') . '" has been hidden.']);
     }
 }

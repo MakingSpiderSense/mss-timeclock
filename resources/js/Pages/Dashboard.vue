@@ -299,9 +299,7 @@ export default {
             let confirmMessage = `Are you sure you want to hide the ${type}, "${categoryTitle}"?`;
             if (confirm(confirmMessage)) {
                 console.log(`Hide ${type}: ${categoryTitle}`);
-                // form.post(route('hide-category'), {
-                //     // onFinish: () => this.updateCategoryOptions(),
-                // });
+                form.post(route('hide-category', type));
             }
         },
         // Update category select list

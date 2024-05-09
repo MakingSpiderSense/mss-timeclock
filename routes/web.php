@@ -39,8 +39,10 @@ Route::get('/dashboard',  [ClockInOutController::class, 'index'])->name('dashboa
 Route::post('/clock-in-out', [ClockInOutController::class, 'clockInOut'])->name('clock-in-out');
 // Cancel Clock In
 Route::post('/cancel-clock-in', [ClockInOutController::class, 'cancelClockIn'])->name('cancel-clock-in');
+// Hide Category
+Route::post('/hide-category/{type}', [ClockInOutController::class, 'hideCategory'])->name('hide-category');
 
-// Add route to 'placeholder' which simply returns the string 'Placeholder page'. 
+// Add route to 'placeholder' which simply returns the string 'Placeholder page'
 Route::get('/placeholder', function () {
     return 'Coming soon...';
 })->middleware(['auth', 'verified'])->name('placeholder');
