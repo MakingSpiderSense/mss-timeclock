@@ -275,6 +275,10 @@ export default {
         // Update category select list
         // Note: This function is run when the page loads or when the organization is changed
         updateCategoryOptions() {
+            // If triggered by the modal, return
+            if (document.querySelector('.modal').style.display === 'flex') {
+                return;
+            }
             // Clear the category and subcategory inputs
             this.clearCategoryInput();
             this.clearSubcategoryInput();
