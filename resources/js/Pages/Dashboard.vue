@@ -95,7 +95,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     <a v-if="clockedInState" as="button" @click="cancelClockIn" class="cancel clockin-btn ml-4">
                         Cancel
                     </a>
-                    <PrimaryButton class="clockin-btn ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmCreation($event)">
+                    <PrimaryButton title="Shortcut: Alt + C" class="clockin-btn ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmCreation($event)">
                         {{ clockInOutButton }}
                     </PrimaryButton>
                 </div>
@@ -150,8 +150,12 @@ export default {
         }
     },
     mounted() {
+        window.addEventListener('keydown', this.handleKeydown);
         this.updateCategoryOptions();
         this.getNotes();
+    },
+    beforeUnmount() {
+        window.removeEventListener('keydown', this.handleKeydown);
     },
     updated() {
         this.updateCategoryOptions();
@@ -493,6 +497,13 @@ export default {
             document.addEventListener("click", function (e) {
                 closeAllLists(e.target);
             });
+        },
+        // Keyboard shortcuts
+        handleKeydown(event) {
+            // Alt + C: Clock in/out
+            if (event.altKey && event.code === 'KeyC') {
+                submit();
+            }
         },
     },
 }
