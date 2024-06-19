@@ -4,14 +4,14 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Textarea from '@/Components/Textarea.vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 </script>
 
 <template>
     <Head title="Hidden Categories - Settings" />
 
-    <AuthenticatedLayout :pageModal="pageModal">
+    <AuthenticatedLayout>
         <section class="page-section">
             <h2 style="margin-bottom: 25px;">Hidden Categories</h2>
             <table>
@@ -24,22 +24,17 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Acme Co</td>
-                        <td>Business Administration</td>
-                        <td>* All subcategories hidden</td>
-                        <td><Link class="btn">Unhide</Link></td>
-                    </tr>
-                    <tr>
-                        <td>Acme Co</td>
-                        <td>Business Improvements</td>
-                        <td>Marketing</td>
-                        <td><Link class="btn">Unhide</Link></td>
-                    </tr>
-                    <tr>
-                        <td>Personal</td>
-                        <td>Side Projects</td>
-                        <td>* All subcategories hidden</td>
+                    <tr v-for="hiddenCategory in hiddenCategories" :key="hiddenCategory.id">
+                        <td>{{ hiddenCategory.organization.name }}</td>
+                        <td>{{ hiddenCategory.category.name }}</td>
+                        <td>
+                            <span v-if="hiddenCategory.subcategory === null">
+                                * All subcategories hidden
+                            </span>
+                            <span v-else>
+                                {{ hiddenCategory.subcategory.name }}
+                            </span>
+                        </td>
                         <td><Link class="btn">Unhide</Link></td>
                     </tr>
                 </tbody>
@@ -50,6 +45,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 <!-- Scripts -->
 <script>
+import { usePage } from '@inertiajs/inertia-vue3';
+
+export default {
+    data() {
+        return {
+            hiddenCategories: usePage().props.value.hiddenCategories,
+        };
+    },
+};
 </script>
 
 <!-- Styling -->
