@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Organization;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class HiddenCategory extends Model
 {
     use HasFactory;
-    
+
     /**
      * The table associated with the model.
      *
@@ -45,5 +46,13 @@ class HiddenCategory extends Model
     public function subcategory()
     {
         return $this->belongsTo(Subcategory::class, 'subcategory_id');
+    }
+
+    /**
+     * Get the organization associated with the hidden category through the category.
+     */
+    public function organization()
+    {
+        return $this->hasOneThrough(Organization::class, Category::class, 'id', 'id', 'category_id', 'org_id');
     }
 }
