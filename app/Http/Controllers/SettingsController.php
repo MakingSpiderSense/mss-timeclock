@@ -21,12 +21,12 @@ class SettingsController extends Controller
     }
 
     // Display the hidden categories page
-    public function show_hidden_categories ()
+    public function show_hidden_categories()
     {
         $user = Auth::user();
         $hiddenCategories = HiddenCategory::with(['organization', 'category', 'subcategory'])
-                            ->where('user_id', $user->id)
-                            ->get();
+            ->where('user_id', $user->id)
+            ->get();
         return inertia('Settings/HiddenCategories', [
             'hiddenCategories' => $hiddenCategories,
         ]);
