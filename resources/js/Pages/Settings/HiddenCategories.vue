@@ -14,30 +14,26 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     <AuthenticatedLayout>
         <section class="page-section">
             <h2 style="margin-bottom: 25px;">Hidden Categories</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Organization</th>
-                        <th>Category</th>
-                        <th>Subcategory</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="hiddenCategory in hiddenCategories" :key="hiddenCategory.id">
-                        <td>{{ hiddenCategory.organization.name }}</td>
-                        <td>{{ hiddenCategory.category.name }}</td>
-                        <td>
-                            <span v-if="hiddenCategory.subcategory === null">
-                                * All subcategories hidden
-                            </span>
-                            <span v-else>
-                                {{ hiddenCategory.subcategory.name }}
-                            </span>
-                        </td>
-                        <td><Link class="btn">Unhide</Link></td>
-                    </tr>
-                </tbody>
+            <table id="table-sortable">
+                <tr>
+                    <th @click="sortTable(0, 'text')">Organization</th>
+                    <th @click="sortTable(1, 'text')">Category</th>
+                    <th @click="sortTable(2, 'text')">Subcategory</th>
+                    <th></th>
+                </tr>
+                <tr v-for="hiddenCategory in hiddenCategories" :key="hiddenCategory.id">
+                    <td>{{ hiddenCategory.organization.name }}</td>
+                    <td>{{ hiddenCategory.category.name }}</td>
+                    <td>
+                        <span v-if="hiddenCategory.subcategory === null">
+                            * All subcategories hidden
+                        </span>
+                        <span v-else>
+                            {{ hiddenCategory.subcategory.name }}
+                        </span>
+                    </td>
+                    <td><Link class="btn">Unhide</Link></td>
+                </tr>
             </table>
         </section>
     </AuthenticatedLayout>
@@ -46,12 +42,18 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 <!-- Scripts -->
 <script>
 import { usePage } from '@inertiajs/inertia-vue3';
+import { sortTable } from '../../Utilities/helpers';
 
 export default {
     data() {
         return {
             hiddenCategories: usePage().props.value.hiddenCategories,
         };
+    },
+    mounted() {
+        sortTable(2, 'text');
+        sortTable(1, 'text');
+        sortTable(0, 'text');
     },
 };
 </script>
@@ -69,6 +71,9 @@ table {
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 50px;
+    th {
+        cursor: pointer;
+    }
     th, td {
         padding: 8px 15px;
     }
