@@ -32,7 +32,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <form :action="route('settings.hidden-categories.remove', { id: hiddenCategory.id })" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" :value="csrfToken">
-                            <button type="submit" class="btn">Unhide</button>
+                            <button type="submit" class="btn btn-unhide">Unhide</button>
                         </form>
                     </td>
                 </tr>
@@ -64,6 +64,13 @@ export default {
 <!-- Styling -->
 <style lang="scss" scoped>
 @import "../../../sass/app.scss";
+.btn-unhide {
+    padding: 0;
+    color: $color1;
+    &:hover {
+        color: $black;
+    }
+}
 // Table
 // Eventually move this to a global style sheet if it's used in multiple places
 table, td, th {
