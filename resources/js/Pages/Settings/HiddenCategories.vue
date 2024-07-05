@@ -9,7 +9,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     <AuthenticatedLayout>
         <section class="page-section">
             <h2 style="margin-bottom: 25px;">Hidden Categories</h2>
-            <table id="table-sortable">
+            <table id="table-sortable" class="clean-table">
                 <tr>
                     <th @click="sortTable(0, 'text')">Organization</th>
                     <th @click="sortTable(1, 'text')">Category</th>
@@ -69,41 +69,6 @@ export default {
     color: $color1;
     &:hover {
         color: $black;
-    }
-}
-// Table
-// Eventually move this to a global style sheet if it's used in multiple places
-table, td, th {
-    border: 1px solid #ddd;
-    text-align: center;
-}
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 50px;
-    th {
-        cursor: pointer;
-    }
-    th, td {
-        padding: 8px 15px;
-    }
-    .notes {
-        text-align: left;
-    }
-    .price {
-        text-align: right;
-    }
-}
-@media (max-width: 1000px) {
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        th, td {
-            img {
-                max-width: 50px;
-            }
-        }
     }
 }
 </style>

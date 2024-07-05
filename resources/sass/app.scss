@@ -172,24 +172,27 @@ select, input, textarea {
     }
 }
 
-// Standard Table
-table.standard-table {
+// Clean Table
+table.clean-table {
     border-collapse: collapse;
     width: 100%;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
     border: 1px solid #ddd;
     text-align: center;
-    th {
-        cursor: pointer;
-    }
     th, td {
-        padding: 15px;
+        padding: 8px 15px;
         border: 1px solid #ddd;
         text-align: center;
     }
+    .notes {
+        text-align: left;
+    }
+    .price {
+        text-align: right;
+    }
 }
 @media (max-width: 1000px) {
-    table.standard-table {
+    table.clean-table {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
@@ -198,5 +201,12 @@ table.standard-table {
                 max-width: 50px;
             }
         }
+    }
+}
+
+// Sortable Table
+#table-sortable {
+    th {
+        cursor: pointer;
     }
 }

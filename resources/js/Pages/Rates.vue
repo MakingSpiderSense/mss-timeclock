@@ -11,7 +11,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <!-- Global and Organization Rates -->
             <h2>Global and Organization Rates</h2>
             <div class="parent-rates mb-10">
-                <table class="standard-table table-auto">
+                <table class="clean-table table-auto">
                     <tbody>
                         <!-- Global Rate -->
                         <tr>
@@ -33,7 +33,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <h2>Category Rates</h2>
             <p class="mb-4"><em>Only the categories that are part of the currently selected organization, <strong>{{ $page.props.auth.active_org_name }}</strong>, will show up here.</em></p>
             <div class="child-rates">
-                <table class="standard-table table-auto">
+                <table class="clean-table table-auto">
                     <tbody>
                         <!-- For each row in categories_with_rates, display the name and rate. But if category.rate is null, output "Not Set" -->
                         <tr v-for="category in categories_with_rates" :key="category.id">
@@ -126,7 +126,8 @@ export default {
         text-align: left;
     }
 }
-table.standard-table {
+// Custom adjustments to the clean-table class
+table.clean-table {
     border: none;
     width: 100%;
     max-width: 600px;

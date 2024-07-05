@@ -23,7 +23,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     <AuthenticatedLayout :pageModal="pageModal">
         <section class="page-section">
             <h2 style="margin-bottom: 25px;">Time Log</h2>
-            <table>
+            <table class="clean-table">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -101,39 +101,4 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 <!-- Styling -->
 <style lang="scss" scoped>
 @import "../../../sass/app.scss";
-// Table
-// Eventually move this to a global style sheet if it's used in multiple places
-table, td, th {  
-    border: 1px solid #ddd;
-    text-align: center;
-}
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 50px;
-    // th {
-    //     cursor: pointer;
-    // }
-    th, td {
-        padding: 8px 15px;
-    }
-    .notes {
-        text-align: left;
-    }
-    .price {
-        text-align: right;
-    }
-}
-@media (max-width: 1000px) {
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        th, td {
-            img {
-                max-width: 50px;
-            }
-        }
-    }
-}
 </style>
