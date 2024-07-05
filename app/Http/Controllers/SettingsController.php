@@ -32,6 +32,19 @@ class SettingsController extends Controller
         ]);
     }
 
+    // Unhide the specified category
+    public function remove_hidden_category($id)
+    {
+        $hiddenCategory = HiddenCategory::find($id);
+        if ($hiddenCategory->delete()) {
+            // Redirect back with success message
+            return redirect()->back()->with('message', ['success', 'The category is no longer hidden.']);
+        } else {
+            // Redirect back with error message
+            return redirect()->back()->with('message', ['error', 'There was an error unhiding the category.']);
+        }
+    }
+
     // Update stats view
     public function updateStatsView()
     {

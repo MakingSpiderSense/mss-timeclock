@@ -32,7 +32,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             {{ hiddenCategory.subcategory.name }}
                         </span>
                     </td>
-                    <td><Link class="btn">Unhide</Link></td>
+                    <!-- Unhide button -->
+                    <td>
+                        <form :action="route('settings.hidden-categories.remove', { id: hiddenCategory.id })" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" :value="csrfToken">
+                            <button type="submit" class="btn">Unhide</button>
+                        </form>
+                    </td>
                 </tr>
             </table>
         </section>
@@ -48,6 +55,7 @@ export default {
     data() {
         return {
             hiddenCategories: usePage().props.value.hiddenCategories,
+            csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         };
     },
     mounted() {

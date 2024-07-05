@@ -80,6 +80,9 @@ Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 // Settings routes
 Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
 Route::get('/settings/hidden-categories', [SettingsController::class, 'show_hidden_categories'])->name('settings.hidden-categories');
+// Remove specified hidden category
+Route::delete('/settings/hidden-categories/remove/{id}', [SettingsController::class, 'remove_hidden_category'])->name('settings.hidden-categories.remove');
+
 // Update stats view settings
 Route::post('/settings/stats-view', [SettingsController::class, 'updateStatsView'])->name('settings.stats-view');
 
