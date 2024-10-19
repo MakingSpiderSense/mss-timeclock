@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
             <!-- Profile -->
             <div class="ml-profile">
                 <!-- Image -->
-                <div v-if="$page.props.auth.user.avatar_url" class="mlp-image" 
+                <div v-if="$page.props.auth.user.avatar_url" class="mlp-image"
                     :style="`background-image: url('/storage/uploads/profile/${$page.props.auth.user.avatar_url}')`">
                 </div>
                 <div v-else class="mlp-image" style="background-image: url('/img/avatar-placeholder.png')"></div>
@@ -66,7 +66,7 @@ const showingNavigationDropdown = ref(false);
                         <Dropdown align="left" width="48">
                             <template #trigger>
                                 <button>
-                                    Manage 
+                                    Manage
                                     <!-- Down chevron -->
                                     <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -95,7 +95,7 @@ const showingNavigationDropdown = ref(false);
                         <Dropdown align="left" width="48">
                             <template #trigger>
                                 <button>
-                                    Reports 
+                                    Reports
                                     <!-- Down chevron -->
                                     <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -155,7 +155,7 @@ const showingNavigationDropdown = ref(false);
                 <!-- Current Stats: Displays on all pages -->
                 <section class="current-stats page-section">
                     <!-- Today -->
-                    <div>
+                    <div class="stats-today">
                         <h3>Today</h3>
                         <!-- Hours worked -->
                         <div><span id="hours_paid_today_combined_org" title="hours_paid_today_combined_org">0</span> Paid Work Hours</div>
@@ -169,11 +169,9 @@ const showingNavigationDropdown = ref(false);
                         <div class="money-positive mb-5">$<span id="amount_earned_today_combined_org_tax" title="amount_earned_today_combined_org_tax">0</span> Earned</div>
                         <!-- Heart containers -->
                         <div id="goal-tracker" class="hearts hearts-two-by-three"></div>
-                        <!-- Stats view setting -->
-                        <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
                     </div>
                     <!-- This Month -->
-                    <div>
+                    <div class="stats-month">
                         <h3>This Month</h3>
                         <!-- Work hours -->
                         <div><span id="hours_month_paid_work_combined_org" title="hours_month_paid_work_combined_org">0</span> Paid Work Hours</div>
@@ -192,20 +190,22 @@ const showingNavigationDropdown = ref(false);
                         <div class="money-positive">$<span id="amount_earned_month_combined_org_tax" title="amount_earned_month_combined_org_tax">0</span> Earned</div>
                     </div>
                     <!-- Current Organization and Time -->
-                    <div class="text-right">
+                    <div class="stats-time">
                         <!-- Organization Select -->
                         <select class="mb-4" name="organization" @change="updateActiveOrganization()" :disabled="clockedInState" :title="organizationDropdownTitle">
                             <option v-for="organization in $page.props.auth.organizations" :key="organization.id" :value="organization.id">
                                 {{ organization.name }}
                             </option>
                         </select>
-                        <div class="text-right">
+                        <div class="st-state">
                             <!-- Clocked-in time -->
                             <div class="mb-5" v-if="clockedInTimeStat"><span id="clockedInTime">{{ clockedInTimeStat }}</span></div>
                             <!-- Current time on the clock -->
                             <div class="text-5xl"><span id="timeOnClock">00:00:00</span></div>
                         </div>
                     </div>
+                    <!-- Stats view setting -->
+                    <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
                 </section>
                 <slot />
             </div>
@@ -334,41 +334,41 @@ export default {
             // Set the stats
             const stats = await axios.get('/stats');
             this.stats = stats.data;
-            document.querySelector('#hours_today_current_org').innerHTML = this.stats.hours_today_current_org 
+            document.querySelector('#hours_today_current_org').innerHTML = this.stats.hours_today_current_org
                 ? this.stats.hours_today_current_org : "0";
-            document.querySelector('#hours_paid_today_combined_org').innerHTML = this.stats.hours_paid_today_combined_org 
+            document.querySelector('#hours_paid_today_combined_org').innerHTML = this.stats.hours_paid_today_combined_org
                 ? this.stats.hours_paid_today_combined_org : "0";
             document.querySelector('#hours_today_total_work_combined_org').innerHTML = this.stats.hours_today_total_work_combined_org
                 ? this.stats.hours_today_total_work_combined_org : "0";
-            document.querySelector('#hours_today_combined_org').innerHTML = this.stats.hours_today_combined_org 
+            document.querySelector('#hours_today_combined_org').innerHTML = this.stats.hours_today_combined_org
                 ? this.stats.hours_today_combined_org : "0";
-            document.querySelector('#amount_earned_today_current_org').innerHTML = this.stats.amount_earned_today_current_org 
+            document.querySelector('#amount_earned_today_current_org').innerHTML = this.stats.amount_earned_today_current_org
                 ? this.stats.amount_earned_today_current_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_today_current_org_tax').innerHTML = this.stats.amount_earned_today_current_org_tax 
+            document.querySelector('#amount_earned_today_current_org_tax').innerHTML = this.stats.amount_earned_today_current_org_tax
                 ? this.stats.amount_earned_today_current_org_tax.toFixed(2) : "0";
-            document.querySelector('#amount_earned_today_combined_org').innerHTML = this.stats.amount_earned_today_combined_org 
+            document.querySelector('#amount_earned_today_combined_org').innerHTML = this.stats.amount_earned_today_combined_org
                 ? this.stats.amount_earned_today_combined_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_today_combined_org_tax').innerHTML = this.stats.amount_earned_today_combined_org_tax 
+            document.querySelector('#amount_earned_today_combined_org_tax').innerHTML = this.stats.amount_earned_today_combined_org_tax
                 ? this.stats.amount_earned_today_combined_org_tax.toFixed(2) : "0";
             document.querySelector('#hours_month_paid_work_combined_org').innerHTML = this.stats.hours_month_paid_work_combined_org
                 ? this.stats.hours_month_paid_work_combined_org.toFixed(2) : "0";
-            document.querySelector('#hours_month_total_work_combined_org').innerHTML = this.stats.hours_month_total_work_combined_org 
+            document.querySelector('#hours_month_total_work_combined_org').innerHTML = this.stats.hours_month_total_work_combined_org
                 ? this.stats.hours_month_total_work_combined_org : "0";
-            document.querySelector('#rate_this_month_work_combined_org').innerHTML = this.stats.rate_this_month_work_combined_org 
+            document.querySelector('#rate_this_month_work_combined_org').innerHTML = this.stats.rate_this_month_work_combined_org
                 ? this.stats.rate_this_month_work_combined_org.toFixed(2) : "0";
-            document.querySelector('#hours_month_current_org').innerHTML = this.stats.hours_month_current_org 
+            document.querySelector('#hours_month_current_org').innerHTML = this.stats.hours_month_current_org
                 ? this.stats.hours_month_current_org : "0";
-            document.querySelector('#hours_weekly_this_month_current_org').innerHTML = this.stats.hours_weekly_this_month_current_org 
+            document.querySelector('#hours_weekly_this_month_current_org').innerHTML = this.stats.hours_weekly_this_month_current_org
                 ? this.stats.hours_weekly_this_month_current_org : "0";
-            document.querySelector('#hours_weekly_this_month_combined_org').innerHTML = this.stats.hours_weekly_this_month_combined_org 
+            document.querySelector('#hours_weekly_this_month_combined_org').innerHTML = this.stats.hours_weekly_this_month_combined_org
                 ? this.stats.hours_weekly_this_month_combined_org : "0";
-            document.querySelector('#amount_earned_month_current_org').innerHTML = this.stats.amount_earned_month_current_org 
+            document.querySelector('#amount_earned_month_current_org').innerHTML = this.stats.amount_earned_month_current_org
                 ? this.stats.amount_earned_month_current_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_month_current_org_tax').innerHTML = this.stats.amount_earned_month_current_org_tax 
+            document.querySelector('#amount_earned_month_current_org_tax').innerHTML = this.stats.amount_earned_month_current_org_tax
                 ? this.stats.amount_earned_month_current_org_tax.toFixed(2) : "0";
-            document.querySelector('#amount_earned_month_combined_org').innerHTML = this.stats.amount_earned_month_combined_org 
+            document.querySelector('#amount_earned_month_combined_org').innerHTML = this.stats.amount_earned_month_combined_org
                 ? this.stats.amount_earned_month_combined_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_month_combined_org_tax').innerHTML = this.stats.amount_earned_month_combined_org_tax 
+            document.querySelector('#amount_earned_month_combined_org_tax').innerHTML = this.stats.amount_earned_month_combined_org_tax
                 ? this.stats.amount_earned_month_combined_org_tax.toFixed(2) : "0";
             // Update the goal tracker
             this.updateGoalTracker();
@@ -678,6 +678,8 @@ export default {
         flex-basis: 100%;
         padding: 30px;
         .page-container {
+            container-type: inline-size;
+            container-name: page-container;
             margin: 0 auto;
             width: 100%;
             max-width: 1200px;
@@ -685,8 +687,30 @@ export default {
     }
     // Current Stats
     .current-stats {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(1, 1fr);
+        .stats-day {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+        }
+        .stats-month {
+            grid-column: 2 / 3;
+            grid-row: 1 / 2;
+        }
+        .stats-time {
+            text-align: right;
+            grid-column: 3 / 5;
+            grid-row: 1 / 2;
+        }
+        .btn-stats-view {
+            grid-column: 1 / 5;
+            grid-row: 2 / 3;
+            cursor: pointer;
+            &:hover {
+                color: $black;
+            }
+        }
         // Hearts
         .hearts {
             display: flex;
@@ -696,10 +720,37 @@ export default {
         .money-positive {
             color: green;
         }
-        .btn-stats-view {
-            cursor: pointer;
-            &:hover {
-                color: $black;
+    }
+    @container page-container (max-width: 1000px) {
+        .current-stats {
+            justify-content: space-between;
+            grid-template-columns: repeat(3, 1fr);
+            .stats-time {
+                grid-column: 3 / 4;
+            }
+        }
+    }
+    @container page-container (max-width: 700px) {
+        .current-stats {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            .stats-time {
+                grid-column: 1 / 3;
+                grid-row: 1 / 2;
+                margin-bottom: 20px;
+                text-align: left;
+            }
+            .stats-day {
+                grid-column: 1 / 2;
+                grid-row: 2 / 3;
+            }
+            .stats-month {
+                grid-column: 2 / 3;
+                grid-row: 2 / 3;
+            }
+            .btn-stats-view {
+                grid-column: 1 / 3;
+                grid-row: 3 / 4;
             }
         }
     }
