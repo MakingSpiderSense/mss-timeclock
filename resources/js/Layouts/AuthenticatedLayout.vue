@@ -148,7 +148,7 @@ const showingNavigationDropdown = ref(false);
         <section class="main-content">
             <!-- Hamburger Menu Button -->
             <div class="menu-icon">
-                <button>
+                <button @click="toggleMenu">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
@@ -307,6 +307,23 @@ export default {
         },
     },
     methods: {
+        // Toggle the menu
+        toggleMenu() {
+            const header = document.querySelector('header');
+            if (header.style.left === '0px') {
+                // Close menu
+                header.style.left = '-100%';
+                // Switch icons
+                document.querySelector('.menu-icon button i').classList.remove('fa-times');
+                document.querySelector('.menu-icon button i').classList.add('fa-bars');
+            } else {
+                // Open menu
+                header.style.left = '0';
+                // Switch icons
+                document.querySelector('.menu-icon button i').classList.remove('fa-bars');
+                document.querySelector('.menu-icon button i').classList.add('fa-times');
+            }
+        },
         // Update clockedInTime when clockedInState changes
         updateClockedInTime() {
             this.clockedInTime = usePage().props.value.auth.clocked_in_at ? new Date(usePage().props.value.auth.clocked_in_at) : null;
@@ -611,6 +628,7 @@ export default {
         min-height: 100vh;
         padding: 25px;
         box-shadow: 1px 0px 28px 1px rgba(0, 0, 0, .1);
+        transition: .4s ease-in-out;
         @media (max-width: 1000px) {
             position: fixed;
             left: -100%;
@@ -700,6 +718,9 @@ export default {
                 width: 100%;
                 max-width: 35px;
                 transform: translateY(-15px);
+            }
+            @media (min-width: 1000px) {
+                display: none;
             }
         }
         .page-container {
