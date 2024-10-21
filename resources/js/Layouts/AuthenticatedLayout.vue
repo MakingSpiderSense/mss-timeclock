@@ -15,6 +15,15 @@ const showingNavigationDropdown = ref(false);
 <!-- Template -->
 <template>
     <div class="main-layout">
+        <!-- Mobile Icons -->
+        <div class="mobile-icons">
+            <!-- Hamburger Menu Button -->
+            <div class="menu-icon">
+                <button @click="toggleMenu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
         <!-- Header/Sidebar -->
         <header>
             <!-- Profile -->
@@ -146,12 +155,6 @@ const showingNavigationDropdown = ref(false);
         </header>
         <!-- Main Content -->
         <section class="main-content">
-            <!-- Hamburger Menu Button -->
-            <div class="menu-icon">
-                <button @click="toggleMenu">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
             <!-- Content -->
             <div class="page-container">
                 <!-- Flash Message -->
@@ -703,12 +706,12 @@ export default {
             }
         }
     }
-    // Main content
-    .main-content {
-        display: flex;
-        flex-direction: column;
-        flex-basis: 100%;
-        padding: 30px;
+    // Mobile Icons
+    .mobile-icons {
+        position: fixed;
+        z-index: 10;
+        width: 100%;
+        padding: 10px;
         .menu-icon {
             display: flex;
             justify-content: flex-end;
@@ -718,12 +721,19 @@ export default {
                 aspect-ratio: 1;
                 width: 100%;
                 max-width: 35px;
-                transform: translateY(-15px);
+                box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
             }
             @media (min-width: 1000px) {
                 display: none;
             }
         }
+    }
+    // Main content
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        padding: 30px;
         .page-container {
             container-type: inline-size;
             container-name: page-container;
