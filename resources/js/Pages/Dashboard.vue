@@ -519,6 +519,9 @@ export default {
     > div {
         width: 100%;
     }
+    @container page-section (max-width: 550px) {
+        flex-direction: column;
+    }
 }
 .clockin-btn {
     padding: 20px 30px;
