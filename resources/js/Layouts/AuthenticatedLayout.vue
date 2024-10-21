@@ -634,6 +634,7 @@ export default {
             left: -100%;
             width: 80vw;
             max-width: 300px;
+            z-index: 1;
         }
         // Profile
         .ml-profile {
