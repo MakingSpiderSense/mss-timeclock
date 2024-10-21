@@ -45,7 +45,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <!-- Category Dropdown Select -->
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @click="categoryOptionsChanged" :disabled="clockedInState">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="category_options" id="category_options" tabindex="2" @change="categoryOptionsChanged" :disabled="clockedInState">
                                 <option disabled selected value>-- Select --</option>
                                 <option v-for="category in filteredCategoriesArray" v-bind:key="category">{{ category }}</option>
                             </select>
@@ -69,7 +69,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <!-- Subcategory Dropdown Select -->
                         <div class="mb-4">
                             <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @click="subcategoryOptionsChanged" :disabled="clockedInState">
+                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @change="subcategoryOptionsChanged" :disabled="clockedInState">
                                 <option disabled selected value>-- Select --</option>
                                 <option v-for="subcategory in filteredSubcategoriesArray" v-bind:key="subcategory">{{ subcategory }}</option>
                             </select>
