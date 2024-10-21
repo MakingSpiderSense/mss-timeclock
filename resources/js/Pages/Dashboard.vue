@@ -91,7 +91,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </div>
                 </div>
                 <!-- Submit "Clock In/Out" -->
-                <div class="flex items-center justify-end mt-4">
+                <div class="cfi-submit flex items-center justify-end mt-4">
                     <a v-if="clockedInState" as="button" @click="cancelClockIn" class="cancel clockin-btn ml-4">
                         Cancel
                     </a>
@@ -534,5 +534,13 @@ export default {
 select {
     display: block;
     width: 100%;
+}
+@container page-section (max-width: 415px) {
+    .cfi-submit {
+        flex-direction: column-reverse;
+        a, button {
+            margin-left: 0;
+        }
+    }
 }
 </style>
