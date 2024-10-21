@@ -201,7 +201,7 @@ const showingNavigationDropdown = ref(false);
                     <!-- Current Organization and Time -->
                     <div class="stats-time">
                         <!-- Organization Select -->
-                        <select class="mb-4" name="organization" @change="updateActiveOrganization()" :disabled="clockedInState" :title="organizationDropdownTitle">
+                        <select name="organization" @change="updateActiveOrganization()" :disabled="clockedInState" :title="organizationDropdownTitle">
                             <option v-for="organization in $page.props.auth.organizations" :key="organization.id" :value="organization.id">
                                 {{ organization.name }}
                             </option>
@@ -759,6 +759,13 @@ export default {
             text-align: right;
             grid-column: 3 / 5;
             grid-row: 1 / 2;
+            .st-state > div:first-child {
+                padding-left: 12px;
+                color: gray;
+            }
+            select {
+                margin-bottom: 0.3rem;
+            }
         }
         .btn-stats-view {
             grid-column: 1 / 5;
