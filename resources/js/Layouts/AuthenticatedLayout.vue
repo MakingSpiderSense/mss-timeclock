@@ -214,7 +214,10 @@ const showingNavigationDropdown = ref(false);
                         </div>
                     </div>
                     <!-- Stats view setting -->
-                    <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
+                    <div class="stats-view-btns">
+                        <a as="button" @click="toggleStats" class="btn-stats-toggle">Show Statistics</a>
+                        <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
+                    </div>
                 </section>
                 <slot />
             </div>
@@ -325,6 +328,27 @@ export default {
                 // Switch icons
                 document.querySelector('.menu-icon button i').classList.remove('fa-bars');
                 document.querySelector('.menu-icon button i').classList.add('fa-times');
+            }
+        },
+        // Toggle the stats view
+        toggleStats() {
+            const statsToday = document.querySelector('.stats-today');
+            const statsMonth = document.querySelector('.stats-month');
+            const statsViewBtn = document.querySelector('a.btn-stats-view');
+            const btnStatsToggle = document.querySelector('.btn-stats-toggle');
+            const timeOnClock = document.querySelector('#timeOnClock');
+            if (btnStatsToggle.innerHTML === "Show Statistics") {
+                statsToday.style.maxHeight = "500px";
+                statsMonth.style.maxHeight = "500px";
+                statsMonth.style.marginTop = "20px";
+                statsViewBtn.style.display = "block";
+                btnStatsToggle.innerHTML = "Hide Statistics";
+            } else {
+                statsToday.style.maxHeight = "0px";
+                statsMonth.style.maxHeight = "0px";
+                statsMonth.style.marginTop = "0px";
+                statsViewBtn.style.display = "none";
+                btnStatsToggle.innerHTML = "Show Statistics";
             }
         },
         // Update clockedInTime when clockedInState changes
@@ -747,11 +771,13 @@ export default {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(1, 1fr);
-        .stats-day {
+        .stats-today {
+            overflow: hidden;
             grid-column: 1 / 2;
             grid-row: 1 / 2;
         }
         .stats-month {
+            overflow: hidden;
             grid-column: 2 / 3;
             grid-row: 1 / 2;
         }
@@ -767,12 +793,24 @@ export default {
                 margin-bottom: 0.3rem;
             }
         }
-        .btn-stats-view {
+        .stats-view-btns {
             grid-column: 1 / 5;
             grid-row: 2 / 3;
-            cursor: pointer;
-            &:hover {
-                color: $black;
+            a {
+                display: block;
+                cursor: pointer;
+                margin-bottom: 5px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+            @container page-container (min-width: 530px) {
+                a.btn-stats-toggle {
+                    display: none;
+                }
+                &:hover {
+                    color: $black;
+                }
             }
         }
         // Hearts
@@ -804,7 +842,7 @@ export default {
                 margin-bottom: 20px;
                 text-align: left;
             }
-            .stats-day {
+            .stats-today {
                 grid-column: 1 / 2;
                 grid-row: 2 / 3;
             }
@@ -812,7 +850,7 @@ export default {
                 grid-column: 2 / 3;
                 grid-row: 2 / 3;
             }
-            .btn-stats-view {
+            .stats-view-btns {
                 grid-column: 1 / 3;
                 grid-row: 3 / 4;
             }
@@ -826,21 +864,28 @@ export default {
             .stats-time {
                 grid-column: 1 / 2;
                 grid-row: 1 / 2;
-                margin-bottom: 20px;
+                margin-bottom: 0px;
                 text-align: left;
             }
             .stats-month {
                 grid-column: 1 / 2;
                 grid-row: 2 / 3;
+                max-height: 0;
+                transition: .4s;
                 margin-bottom: 20px;
             }
-            .stats-day {
+            .stats-today {
                 grid-column: 1 / 2;
                 grid-row: 3 / 4;
+                max-height: 0;
+                transition: .4s;
             }
-            .btn-stats-view {
+            .stats-view-btns {
                 grid-column: 1 / 2;
                 grid-row: 4 / 5;
+            }
+            .stats-view-btns a.btn-stats-view {
+                display: none;
             }
         }
     }
