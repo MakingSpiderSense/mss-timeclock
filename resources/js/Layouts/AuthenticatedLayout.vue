@@ -146,6 +146,12 @@ const showingNavigationDropdown = ref(false);
         </header>
         <!-- Main Content -->
         <section class="main-content">
+            <!-- Hamburger Menu Button -->
+            <div class="menu-icon">
+                <button>
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
             <!-- Content -->
             <div class="page-container">
                 <!-- Flash Message -->
@@ -605,6 +611,12 @@ export default {
         min-height: 100vh;
         padding: 25px;
         box-shadow: 1px 0px 28px 1px rgba(0, 0, 0, .1);
+        @media (max-width: 1000px) {
+            position: fixed;
+            left: -100%;
+            width: 80vw;
+            max-width: 300px;
+        }
         // Profile
         .ml-profile {
             display: flex;
@@ -675,8 +687,21 @@ export default {
     // Main content
     .main-content {
         display: flex;
+        flex-direction: column;
         flex-basis: 100%;
         padding: 30px;
+        .menu-icon {
+            display: flex;
+            justify-content: flex-end;
+            button {
+                background-color: white;
+                border-radius: 100%;
+                aspect-ratio: 1;
+                width: 100%;
+                max-width: 35px;
+                transform: translateY(-15px);
+            }
+        }
         .page-container {
             container-type: inline-size;
             container-name: page-container;
