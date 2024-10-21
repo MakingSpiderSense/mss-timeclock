@@ -112,6 +112,7 @@ import { usePage } from '@inertiajs/inertia-vue3';
 
 const form = useForm({
     manualTime: '',
+    org_id: '',
     category: '',
     subcategory: '',
     notes: '',
@@ -181,6 +182,8 @@ export default {
                 submit();
                 return;
             }
+            // Update the form's org_id to the current org_id
+            form.org_id = this.org_id;
             // Otherwise, check if category and subcategory exist
             let categoryExists = false;
             let subcategoryExists = false;
@@ -314,7 +317,11 @@ export default {
             this.clearSubcategoryInput();
             // Create categoriesFullArray from categories object with the name of each category
             this.categoriesFullArray = [];
-            this.categoriesObj.forEach(category => {
+            this.categoriesObj.forEach((category, index) => {
+                // If first iteration, set the org_id
+                if (index === 0) {
+                    this.org_id = category.org_id;
+                }
                 // Create subcategories array from each category
                 let subcategories = [];
                 console.log(category); // Leave this here for debugging

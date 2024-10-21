@@ -71,13 +71,19 @@ class ClockInOutController extends Controller
     {
         // Validate request
         $request->validate([
+            'org_id' => 'integer',
             'category' => 'required|string|max:255',
             'manualTime' => 'nullable|date_format:Y-m-d H:i:s',
             'subcategory' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
 
-        // dd($request->category, $request->subcategory, $request->manualTime, $request->notes);
+        // dd($request->category, $request->subcategory, $request->manualTime, $request->notes, $request->org_id);
+
+        // Check to see org got out of sync between devices
+        if ($request->org_id && $request->org_id != auth()->user()->active_org_id) {
+            return redirect()->back()->with('message', ['error', 'The organization may have gotten out of sync between your devices. Please refresh the page.']);
+        }
 
         // Check to see if they are already clocked in, if not, update the user's clocked_in field to true
         if (auth()->user()->clocked_in == false) {
