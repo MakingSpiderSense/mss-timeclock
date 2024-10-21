@@ -291,10 +291,6 @@ export default {
         this.changeClockInOutState();
         this.flashMsg = usePage().props.value.flash.message ? usePage().props.value.flash.message : ["", ""];
         this.updateTimeOnClock();
-        // There is a bug where the this.flashMsg data value is not updated when the updateStats() method is called. It has to do with the async/await aspect of the method. This the setTimeout() was added as a workaround until I can figure out a better solution.
-        setTimeout(() => {
-            this.updateStats();
-        }, 1000);
     },
     computed: {
         // Set title attribute of organization dropdown
