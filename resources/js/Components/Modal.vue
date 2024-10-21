@@ -61,6 +61,7 @@ export default {
     display: none;
     justify-content: center;
     align-items: center;
+    padding: 15px;
     .modal-content {
         position: relative;
         background-color: #fff;
