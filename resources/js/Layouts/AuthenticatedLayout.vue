@@ -732,8 +732,8 @@ export default {
     }
     @container page-container (max-width: 700px) {
         .current-stats {
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto auto;
+            grid-template-columns: 1fr 1fr; // 2 even columns
+            grid-template-rows: auto auto auto; // 3 rows that are auto height
             .stats-time {
                 grid-column: 1 / 3;
                 grid-row: 1 / 2;
@@ -751,6 +751,32 @@ export default {
             .btn-stats-view {
                 grid-column: 1 / 3;
                 grid-row: 3 / 4;
+            }
+        }
+    }
+    @container page-container (max-width: 530px) {
+        .current-stats {
+            grid-template-columns: auto; // 2 even columns
+            grid-template-rows: auto auto auto auto;
+            justify-content: center;
+            .stats-time {
+                grid-column: 1 / 2;
+                grid-row: 1 / 2;
+                margin-bottom: 20px;
+                text-align: left;
+            }
+            .stats-month {
+                grid-column: 1 / 2;
+                grid-row: 2 / 3;
+                margin-bottom: 20px;
+            }
+            .stats-day {
+                grid-column: 1 / 2;
+                grid-row: 3 / 4;
+            }
+            .btn-stats-view {
+                grid-column: 1 / 2;
+                grid-row: 4 / 5;
             }
         }
     }
