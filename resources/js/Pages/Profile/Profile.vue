@@ -24,7 +24,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </div>
                     <div>
                         <p><strong>Created at:</strong> {{ $page.props.auth.user.created_at }}</p>
-                        <p><strong>Updated at:</strong> {{ $page.props.auth.user.updated_at }}</p>
                         <Link class="edit-link" :href="route('profile.edit')">Edit Profile</Link>
                         <Link class="change-settings" :href="route('settings')">Change Settings</Link>
                         <Link class="settings-icon" :href="route('settings')">
