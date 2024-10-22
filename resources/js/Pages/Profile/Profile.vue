@@ -26,7 +26,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </div>
                     <!-- FA icon for email -->
                     <div>
-                        <p style="margin-bottom: 10px;"><strong>Created at:</strong> {{ $page.props.auth.user.created_at }}</p>
+                        <p style="margin-bottom: 10px;">Keeping time since <strong>{{ formatDateNow($page.props.auth.user.created_at) }}</strong></p>
                         <Link class="edit-link pr-4" :href="route('profile.edit')"><i class="fas fa-pencil-alt"></i> Edit</Link>
                         <Link class="change-settings" :href="route('settings')"><i class="fas fa-cog"></i> Settings</Link>
                         <Link class="settings-icon" :href="route('settings')">
@@ -43,6 +43,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 <script>
 export default {
     methods: {
+        formatDateNow(date) {
+            return new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        },
     },
 }
 </script>
