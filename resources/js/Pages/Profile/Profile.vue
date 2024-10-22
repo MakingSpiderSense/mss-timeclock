@@ -82,7 +82,7 @@ export default {
     .settings-icon {
         display: none;
     }
-    @media (min-width: 1050px) {
+    @container page-section (min-width: 700px) {
         .edit-link {
             position: absolute;
             bottom: 0;
