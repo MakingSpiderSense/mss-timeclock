@@ -25,7 +25,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         </div>
                     </div>
                     <!-- FA icon for email -->
-                    <div>
+                    <div class="profile-links">
                         <p style="margin-bottom: 10px;">Keeping time since <strong>{{ formatDateNow($page.props.auth.user.created_at) }}</strong></p>
                         <Link class="edit-link pr-4" :href="route('profile.edit')"><i class="fas fa-pencil-alt"></i> Edit</Link>
                         <Link class="change-settings" :href="route('settings')"><i class="fas fa-cog"></i> Settings</Link>
@@ -67,8 +67,8 @@ export default {
         height: 200px;
         overflow: hidden;
         img {
+            aspect-ratio: 1;
             width: 100%;
-            height: 100%;
             object-fit: cover;
         }
     }
@@ -82,6 +82,7 @@ export default {
         }
         .user-details {
             padding-left: 5px;
+            margin-bottom: 25px;
             i {
                 min-width: 20px;
             }
@@ -118,6 +119,24 @@ export default {
                     fill: #000;
                     rotate: 90deg;
                 }
+            }
+        }
+    }
+    @container page-section (max-width: 540px) {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        .avatar {
+            margin-bottom: 0;
+        }
+        .other-info {
+            h2 {
+                text-align: center;
+                font-size: 16px;
+                margin-bottom: 25px;
+            }
+            .profile-links {
+                text-align: center;
             }
         }
     }
