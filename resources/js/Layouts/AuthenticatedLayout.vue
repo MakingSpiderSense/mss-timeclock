@@ -268,6 +268,8 @@ export default {
         }, 60000);
         // Update stats displayed based on the set_combined_org value
         this.updateStatsDisplay();
+        // Reset the menu icon
+        this.resetMenuIcon();
     },
     watch: {
         // Watch for changes to the pageModal prop
@@ -324,6 +326,14 @@ export default {
                 // Switch icons
                 document.querySelector('.menu-icon button i').classList.remove('fa-bars');
                 document.querySelector('.menu-icon button i').classList.add('fa-times');
+            }
+        },
+        // Reset menu icon
+        resetMenuIcon() {
+            const menuIcon = document.querySelector('.menu-icon button i');
+            if (menuIcon.classList.contains('fa-times')) {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
             }
         },
         // Toggle the stats view
