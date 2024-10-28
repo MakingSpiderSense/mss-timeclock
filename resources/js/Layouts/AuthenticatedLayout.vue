@@ -387,47 +387,51 @@ export default {
         },
         // Update stats section
         async updateStats() {
-            // Set the stats
-            const stats = await axios.get('/stats');
-            this.stats = stats.data;
-            document.querySelector('#hours_today_current_org').innerHTML = this.stats.hours_today_current_org
-                ? this.stats.hours_today_current_org : "0";
-            document.querySelector('#hours_paid_today_combined_org').innerHTML = this.stats.hours_paid_today_combined_org
-                ? this.stats.hours_paid_today_combined_org : "0";
-            document.querySelector('#hours_today_total_work_combined_org').innerHTML = this.stats.hours_today_total_work_combined_org
-                ? this.stats.hours_today_total_work_combined_org : "0";
-            document.querySelector('#hours_today_combined_org').innerHTML = this.stats.hours_today_combined_org
-                ? this.stats.hours_today_combined_org : "0";
-            document.querySelector('#amount_earned_today_current_org').innerHTML = this.stats.amount_earned_today_current_org
-                ? this.stats.amount_earned_today_current_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_today_current_org_tax').innerHTML = this.stats.amount_earned_today_current_org_tax
-                ? this.stats.amount_earned_today_current_org_tax.toFixed(2) : "0";
-            document.querySelector('#amount_earned_today_combined_org').innerHTML = this.stats.amount_earned_today_combined_org
-                ? this.stats.amount_earned_today_combined_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_today_combined_org_tax').innerHTML = this.stats.amount_earned_today_combined_org_tax
-                ? this.stats.amount_earned_today_combined_org_tax.toFixed(2) : "0";
-            document.querySelector('#hours_month_paid_work_combined_org').innerHTML = this.stats.hours_month_paid_work_combined_org
-                ? this.stats.hours_month_paid_work_combined_org.toFixed(2) : "0";
-            document.querySelector('#hours_month_total_work_combined_org').innerHTML = this.stats.hours_month_total_work_combined_org
-                ? this.stats.hours_month_total_work_combined_org : "0";
-            document.querySelector('#rate_this_month_work_combined_org').innerHTML = this.stats.rate_this_month_work_combined_org
-                ? this.stats.rate_this_month_work_combined_org.toFixed(2) : "0";
-            document.querySelector('#hours_month_current_org').innerHTML = this.stats.hours_month_current_org
-                ? this.stats.hours_month_current_org : "0";
-            document.querySelector('#hours_weekly_this_month_current_org').innerHTML = this.stats.hours_weekly_this_month_current_org
-                ? this.stats.hours_weekly_this_month_current_org : "0";
-            document.querySelector('#hours_weekly_this_month_combined_org').innerHTML = this.stats.hours_weekly_this_month_combined_org
-                ? this.stats.hours_weekly_this_month_combined_org : "0";
-            document.querySelector('#amount_earned_month_current_org').innerHTML = this.stats.amount_earned_month_current_org
-                ? this.stats.amount_earned_month_current_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_month_current_org_tax').innerHTML = this.stats.amount_earned_month_current_org_tax
-                ? this.stats.amount_earned_month_current_org_tax.toFixed(2) : "0";
-            document.querySelector('#amount_earned_month_combined_org').innerHTML = this.stats.amount_earned_month_combined_org
-                ? this.stats.amount_earned_month_combined_org.toFixed(2) : "0";
-            document.querySelector('#amount_earned_month_combined_org_tax').innerHTML = this.stats.amount_earned_month_combined_org_tax
-                ? this.stats.amount_earned_month_combined_org_tax.toFixed(2) : "0";
-            // Update the goal tracker
-            this.updateGoalTracker();
+            try {
+                // Set the stats
+                const stats = await axios.get('/stats');
+                this.stats = stats.data;
+                document.querySelector('#hours_today_current_org').innerHTML = this.stats.hours_today_current_org
+                    ? this.stats.hours_today_current_org : "0";
+                document.querySelector('#hours_paid_today_combined_org').innerHTML = this.stats.hours_paid_today_combined_org
+                    ? this.stats.hours_paid_today_combined_org : "0";
+                document.querySelector('#hours_today_total_work_combined_org').innerHTML = this.stats.hours_today_total_work_combined_org
+                    ? this.stats.hours_today_total_work_combined_org : "0";
+                document.querySelector('#hours_today_combined_org').innerHTML = this.stats.hours_today_combined_org
+                    ? this.stats.hours_today_combined_org : "0";
+                document.querySelector('#amount_earned_today_current_org').innerHTML = this.stats.amount_earned_today_current_org
+                    ? this.stats.amount_earned_today_current_org.toFixed(2) : "0";
+                document.querySelector('#amount_earned_today_current_org_tax').innerHTML = this.stats.amount_earned_today_current_org_tax
+                    ? this.stats.amount_earned_today_current_org_tax.toFixed(2) : "0";
+                document.querySelector('#amount_earned_today_combined_org').innerHTML = this.stats.amount_earned_today_combined_org
+                    ? this.stats.amount_earned_today_combined_org.toFixed(2) : "0";
+                document.querySelector('#amount_earned_today_combined_org_tax').innerHTML = this.stats.amount_earned_today_combined_org_tax
+                    ? this.stats.amount_earned_today_combined_org_tax.toFixed(2) : "0";
+                document.querySelector('#hours_month_paid_work_combined_org').innerHTML = this.stats.hours_month_paid_work_combined_org
+                    ? this.stats.hours_month_paid_work_combined_org.toFixed(2) : "0";
+                document.querySelector('#hours_month_total_work_combined_org').innerHTML = this.stats.hours_month_total_work_combined_org
+                    ? this.stats.hours_month_total_work_combined_org : "0";
+                document.querySelector('#rate_this_month_work_combined_org').innerHTML = this.stats.rate_this_month_work_combined_org
+                    ? this.stats.rate_this_month_work_combined_org.toFixed(2) : "0";
+                document.querySelector('#hours_month_current_org').innerHTML = this.stats.hours_month_current_org
+                    ? this.stats.hours_month_current_org : "0";
+                document.querySelector('#hours_weekly_this_month_current_org').innerHTML = this.stats.hours_weekly_this_month_current_org
+                    ? this.stats.hours_weekly_this_month_current_org : "0";
+                document.querySelector('#hours_weekly_this_month_combined_org').innerHTML = this.stats.hours_weekly_this_month_combined_org
+                    ? this.stats.hours_weekly_this_month_combined_org : "0";
+                document.querySelector('#amount_earned_month_current_org').innerHTML = this.stats.amount_earned_month_current_org
+                    ? this.stats.amount_earned_month_current_org.toFixed(2) : "0";
+                document.querySelector('#amount_earned_month_current_org_tax').innerHTML = this.stats.amount_earned_month_current_org_tax
+                    ? this.stats.amount_earned_month_current_org_tax.toFixed(2) : "0";
+                document.querySelector('#amount_earned_month_combined_org').innerHTML = this.stats.amount_earned_month_combined_org
+                    ? this.stats.amount_earned_month_combined_org.toFixed(2) : "0";
+                document.querySelector('#amount_earned_month_combined_org_tax').innerHTML = this.stats.amount_earned_month_combined_org_tax
+                    ? this.stats.amount_earned_month_combined_org_tax.toFixed(2) : "0";
+                // Update the goal tracker
+                this.updateGoalTracker();
+            } catch (error) {
+                console.error("Failed to update stats:", error);
+            }
         },
         // Stop updating stats
         stopUpdatingStats() {
