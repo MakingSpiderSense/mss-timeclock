@@ -574,6 +574,7 @@ export default {
         // Perform any actions when user clocks in or out
         changeClockInOutState() {
             this.clockedInState = usePage().props.value.auth.clocked_in;
+            this.updateStats();
         },
         // Swap modal body to OrgCreate
         modalOrgCreate() {
