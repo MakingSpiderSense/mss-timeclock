@@ -70,13 +70,16 @@ class ClockInOutController extends Controller
     public function clockIn(Request $request)
     {
         // Validate request
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'org_id' => 'integer',
             'category' => 'required|string|max:255',
             'manualTime' => 'nullable|date_format:Y-m-d H:i:s',
             'subcategory' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('message', ['error', 'Validation Error: ' . $validator->errors()->first()])->withInput();
+        }
 
         // dd($request->category, $request->subcategory, $request->manualTime, $request->notes, $request->org_id);
 
