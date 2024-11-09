@@ -189,6 +189,11 @@ export default {
             let subcategoryExists = false;
             const newCategory = form.category;
             const newSubCategory = form.subcategory ? form.subcategory : "Other";
+            // Exit if no category is entered
+            if (newCategory == "") {
+                console.warn("Please enter a category.");
+                return;
+            }
             // Check if form.category is in this.categoriesArray, if so, set categoryExists to true
             if (this.categoriesArray.includes(newCategory)) {
                 categoryExists = true;
