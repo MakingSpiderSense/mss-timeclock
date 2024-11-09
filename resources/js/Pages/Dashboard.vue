@@ -124,7 +124,7 @@ const submit = () => {
     }
     // Submit the form
     form.post(route('clock-in-out'), {
-        onFinish: () => form.reset('manualTime', 'category', 'subcategory', 'notes'),
+        onFinish: () => form.reset('manualTime', 'org_id', 'category', 'subcategory', 'notes'),
     });
 };
 
@@ -177,7 +177,7 @@ export default {
         },
         // Confirm creation of new category or subcategory
         confirmCreation(event) {
-            // If already clocked in, return
+            // If already clocked in, submit and return
             if (this.clockedInState) {
                 submit();
                 return;
@@ -206,6 +206,7 @@ export default {
             let confirmMessage = "";
             if (categoryExists && subcategoryExists) {
                 // Submit the form
+                submit();
                 return;
             } else if (categoryExists && !subcategoryExists) {
                 confirmMessage = `Are you sure you want to create the new subcategory, "${newSubCategory}"?`;
@@ -509,7 +510,8 @@ export default {
         handleKeydown(event) {
             // Alt + C: Clock in/out
             if (event.altKey && event.code === 'KeyC') {
-                submit();
+                // Submit after confirming creation
+                this.confirmCreation(event);
             }
         },
     },
