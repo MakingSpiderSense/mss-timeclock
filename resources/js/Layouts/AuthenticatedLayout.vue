@@ -754,7 +754,7 @@ export default {
                 border-radius: 100%;
                 aspect-ratio: 1;
                 width: 100%;
-                max-width: 35px;
+                max-width: 42px;
                 box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
             }
             @media (min-width: 1000px) {
@@ -768,6 +768,9 @@ export default {
         flex-direction: column;
         flex-basis: 100%;
         padding: 30px;
+        @media (max-width: 500px) {
+            padding: 20px;
+        }
         .page-container {
             container-type: inline-size;
             container-name: page-container;
