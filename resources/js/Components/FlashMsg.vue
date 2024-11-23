@@ -39,6 +39,8 @@ export default {
             this.swipeStartX = event.touches[0].clientX;
         },
         moveSwipe(event) {
+            // Prevent scrolling while swiping
+            event.preventDefault();
             // Calculate swipe distance
             const currentX = event.touches[0].clientX;
             this.swipeDistance = currentX - this.swipeStartX;
