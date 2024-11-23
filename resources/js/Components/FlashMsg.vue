@@ -72,6 +72,9 @@ export default {
     .fm-close {
         float: right;
         padding-left: 5px;
+        @media (max-width: 500px) {
+            padding-right: 20px;
+        }
     }
 }
 </style>

@@ -747,9 +747,11 @@ export default {
         z-index: 10;
         width: 100%;
         padding: 10px;
+        pointer-events: none;
         .menu-icon {
             display: flex;
             justify-content: flex-end;
+            pointer-events: initial;
             button {
                 background-color: white;
                 border-radius: 100%;
@@ -805,6 +807,7 @@ export default {
             }
             select {
                 margin-bottom: 0.3rem;
+                max-width: 300px;
             }
         }
         .stats-view-btns {
