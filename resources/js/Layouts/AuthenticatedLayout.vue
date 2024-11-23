@@ -657,6 +657,7 @@ export default {
 .main-layout {
     display: flex;
     background-color: $light-gray;
+    overflow-x: hidden; // Prevent horizontal scroll when swiping notifications
     // Header
     header {
         position: relative;
