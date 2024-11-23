@@ -751,7 +751,6 @@ export default {
         .menu-icon {
             display: flex;
             justify-content: flex-end;
-            pointer-events: initial;
             button {
                 background-color: white;
                 border-radius: 100%;
@@ -759,6 +758,7 @@ export default {
                 width: 100%;
                 max-width: 42px;
                 box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+                pointer-events: initial;
             }
             @media (min-width: 1000px) {
                 display: none;
