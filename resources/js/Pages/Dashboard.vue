@@ -383,6 +383,12 @@ export default {
                 categoryInput.value = categoryOptions.value;
                 this.updateSubcategoryOptions();
             }
+            // Add scrolling for mobile devices
+            const clockinForm = document.querySelector('.clockin-form-input');
+            if (clockinForm.offsetWidth <= 550) {
+                const clockInButton = document.querySelector('.clockin-btn');
+                clockInButton.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         },
         // When #subcategory_options is changed, update form.subcategory
         subcategoryOptionsChanged() {
@@ -390,6 +396,12 @@ export default {
             this.isSubcategoryFound = this.subcategoriesArray.includes(subcategoryOptions.value);
             if (subcategoryOptions.value) {
                 form.subcategory = subcategoryOptions.value;
+            }
+            // Add scrolling for mobile devices
+            const clockinForm = document.querySelector('.clockin-form-input');
+            if (clockinForm.offsetWidth <= 550) {
+                const clockInButton = document.querySelector('.clockin-btn');
+                clockInButton.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         },
         // Clear the category input
