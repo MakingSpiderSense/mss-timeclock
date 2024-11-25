@@ -387,7 +387,7 @@ export default {
             const clockinForm = document.querySelector('.clockin-form-input');
             if (clockinForm.offsetWidth <= 550) {
                 const clockInButton = document.querySelector('.clockin-btn');
-                clockInButton.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                clockInButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         },
         // When #subcategory_options is changed, update form.subcategory
@@ -401,7 +401,7 @@ export default {
             const clockinForm = document.querySelector('.clockin-form-input');
             if (clockinForm.offsetWidth <= 550) {
                 const clockInButton = document.querySelector('.clockin-btn');
-                clockInButton.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                clockInButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         },
         // Clear the category input
