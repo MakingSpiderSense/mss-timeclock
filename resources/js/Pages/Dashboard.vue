@@ -542,10 +542,11 @@ export default {
     display: flex;
     justify-content: space-between;
     gap: 25px;
+    container: inline-size;
     > div {
         width: 100%;
     }
-    @container page-section (max-width: 550px) {
+    @container (max-width: 550px) {
         flex-direction: column;
     }
 }
@@ -561,8 +562,9 @@ select {
     display: block;
     width: 100%;
 }
-@container page-section (max-width: 415px) {
-    .cfi-submit {
+.cfi-submit {
+    container: inline-size;
+    @container (max-width: 415px) {
         flex-direction: column-reverse;
         a, button {
             margin-left: 0;
