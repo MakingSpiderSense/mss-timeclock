@@ -17,11 +17,11 @@ class StatsController extends Controller
         // Force the user to be logged in to access these functions. This will redirect them to the login page if they are not.
         $this->middleware('auth');
     }
-    
+
     // Return all stats
     public function index()
     {
-        // Calculate Stats from all of the user's temp_logs 
+        // Calculate Stats from all of the user's temp_logs
         $user = auth()->user();
         $userId = auth()->user()->id;
         $temp_logs = TempLog::where('user_id', $userId)->get();
@@ -45,7 +45,7 @@ class StatsController extends Controller
         $current_month = $currentDateTime->format('m');
         $current_day = $currentDateTime->format('d');
         $weeks_so_far = $this->getBusinessWeeksSoFar($current_year, $current_month, $current_day);
-        // $weeks_so_far = 4;
+        // $weeks_so_far = 4.3;
         $simple_tax_rate = $user->simple_tax_rate;
         // Fixed earnings
         $fixed_earnings = 0;
