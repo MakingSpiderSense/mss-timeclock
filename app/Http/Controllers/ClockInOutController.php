@@ -144,8 +144,8 @@ class ClockInOutController extends Controller
         // Look up the organization name based on the org_id
         $org_name = Organization::where('id', $org_id)->first()->name;
 
-        // Redirect to dashboard with success message, "Clocked into [organization name] > [category name] > [subcategory name] successfully."
-        return redirect()->back()->with('message', ['success', 'Clocked into "' . $org_name . ' > ' . $request->category . ' > ' . $subcategory_name . '" successfully.']);
+        // Redirect to dashboard with success message, "Clocked into [organization name] → [category name] → [subcategory name] successfully."
+        return redirect()->back()->with('message', ['success', 'Clocked into "' . $org_name . ' → ' . $request->category . ' → ' . $subcategory_name . '" successfully.']);
     }
 
     // Clock out

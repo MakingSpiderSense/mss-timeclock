@@ -457,7 +457,7 @@ export default {
         updateStatsDisplay() {
             const btnLabel = document.querySelector('.btn-stats-view');
             if (this.set_combined_org === "combined_org") {
-                btnLabel.innerHTML = "Viewing combined org stats >";
+                btnLabel.innerHTML = "Viewing combined org stats <span class='sm-right-arrowhead'>➤</span>";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "none";
@@ -477,7 +477,7 @@ export default {
                 document.querySelector('#amount_earned_month_combined_org').parentElement.style.display = "block";
                 document.querySelector('#amount_earned_month_combined_org_tax').parentElement.style.display = "none";
             } else if (this.set_combined_org === "combined_org_minus_tax") {
-                btnLabel.innerHTML = "Viewing combined org stats (after taxes) >";
+                btnLabel.innerHTML = "Viewing combined org stats (after taxes) <span class='sm-right-arrowhead'>➤</span>";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "block";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "none";
@@ -497,7 +497,7 @@ export default {
                 document.querySelector('#amount_earned_month_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_month_combined_org_tax').parentElement.style.display = "block";
             } else if (this.set_combined_org === "current_org") {
-                btnLabel.innerHTML = "Viewing current org stats >";
+                btnLabel.innerHTML = "Viewing current org stats <span class='sm-right-arrowhead'>➤</span>";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "block";
@@ -517,7 +517,7 @@ export default {
                 document.querySelector('#amount_earned_month_combined_org').parentElement.style.display = "none";
                 document.querySelector('#amount_earned_month_combined_org_tax').parentElement.style.display = "none";
             } else if (this.set_combined_org === "current_org_minus_tax") {
-                btnLabel.innerHTML = "Viewing current org stats (after taxes) >";
+                btnLabel.innerHTML = "Viewing current org stats (after taxes) <span class='sm-right-arrowhead'>➤</span>";
                 document.querySelector('#hours_paid_today_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_total_work_combined_org').parentElement.style.display = "none";
                 document.querySelector('#hours_today_current_org').parentElement.style.display = "block";
@@ -814,7 +814,7 @@ export default {
             grid-column: 1 / 5;
             grid-row: 2 / 3;
             a {
-                display: block;
+                display: inline-block;
                 cursor: pointer;
                 margin-bottom: 5px;
                 &:last-child {
