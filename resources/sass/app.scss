@@ -214,7 +214,16 @@ table.clean-table {
 }
 
 // Small arrowhead
-.sm-right-arrowhead {
-    font-size: 12px !important;
-    padding-left: 3px;
+a {
+    .sm-right-arrowhead {
+        font-size: 12px;
+        padding-left: 3px;
+        transition: .3s;
+    }
+    &:hover {
+        .sm-right-arrowhead {
+            padding-left: 6px;
+            transition: .3s;
+        }
+    }
 }
