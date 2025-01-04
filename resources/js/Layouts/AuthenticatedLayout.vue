@@ -215,8 +215,8 @@ const showingNavigationDropdown = ref(false);
                     </div>
                     <!-- Stats view setting -->
                     <div class="stats-view-btns">
-                        <a as="button" @click="toggleStats" class="btn-stats-toggle"><i class="fas fa-eye" style="margin-right: 5px;"></i> <span>Show Statistics</span></a>
                         <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
+                        <a as="button" @click="toggleStats" class="btn-stats-toggle"><i class="fas fa-eye" style="margin-right: 5px;"></i> <span>Show Statistics</span></a>
                     </div>
                 </section>
                 <slot />
@@ -912,7 +912,8 @@ export default {
                 grid-row: 4 / 5;
             }
             .stats-view-btns a.btn-stats-view {
-                display: none;
+                display: none; // Hide initially
+                margin-bottom: 20px;
             }
         }
     }
