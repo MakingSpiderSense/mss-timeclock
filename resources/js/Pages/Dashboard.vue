@@ -22,7 +22,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 <!-- "Enter Manual Time" -->
                 <div class="manual-entry">
                     <div id="manual-time-display"></div>
-                    <a href="#" @click="modalEnterManualTime">Enter Manual Time</a>
+                    <a href="#" @click="modalEnterManualTime"><i class="fas fa-clock"></i> Enter Manual Time</a>
                     <InputError class="mt-2" :message="form.errors.manualTime" />
                 </div>
             </div>
@@ -538,6 +538,14 @@ export default {
 <!-- Styling -->
 <style lang="scss" scoped>
 @import "../../sass/app.scss";
+.current-category {
+    margin-bottom: 10px;
+}
+.manual-entry {
+    i {
+        margin-right: 5px;
+    }
+}
 .clockin-form-input {
     display: flex;
     justify-content: space-between;

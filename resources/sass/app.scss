@@ -41,7 +41,10 @@ h3 {
 
 // Links
 a {
-  color: $color1;
+    color: $color1;
+    &:hover {
+        color: darken($color1, 7%);
+    }
 }
 
 // Buttons

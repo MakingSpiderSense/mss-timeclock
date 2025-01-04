@@ -67,7 +67,7 @@ const showingNavigationDropdown = ref(false);
                 <ul>
                     <li>
                         <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            <i class="fas fa-clock" style="margin-right: 12px;"></i> Clock In/Out
+                            <i class="fas fa-stopwatch" style="margin-right: 14px;"></i> Clock In/Out
                         </NavLink>
                     </li>
                     <li>
@@ -699,6 +699,7 @@ export default {
                     width: 100%;
                     &:hover {
                         background-color: $light-gray;
+                        color: $black;
                     }
                 }
                 i {
