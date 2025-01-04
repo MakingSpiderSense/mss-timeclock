@@ -67,7 +67,7 @@ const showingNavigationDropdown = ref(false);
                 <ul>
                     <li>
                         <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Clock In/Out
+                            <i class="fas fa-clock" style="margin-right: 12px;"></i> Clock In/Out
                         </NavLink>
                     </li>
                     <li>
@@ -75,7 +75,7 @@ const showingNavigationDropdown = ref(false);
                         <Dropdown align="left" width="48">
                             <template #trigger>
                                 <button>
-                                    Manage
+                                    <i class="fas fa-briefcase" style="margin-right: 12px;"></i> Manage
                                     <!-- Down chevron -->
                                     <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -104,7 +104,7 @@ const showingNavigationDropdown = ref(false);
                         <Dropdown align="left" width="48">
                             <template #trigger>
                                 <button>
-                                    Reports
+                                    <i class="fas fa-folder-open" ></i>Reports
                                     <!-- Down chevron -->
                                     <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -700,6 +700,10 @@ export default {
                     &:hover {
                         background-color: $light-gray;
                     }
+                }
+                i {
+                    margin-right: 10px;
+                    font-size: 16px;
                 }
             }
             a, button {
