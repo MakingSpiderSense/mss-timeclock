@@ -215,7 +215,7 @@ const showingNavigationDropdown = ref(false);
                     </div>
                     <!-- Stats view setting -->
                     <div class="stats-view-btns">
-                        <a as="button" @click="toggleStats" class="btn-stats-toggle">Show Statistics</a>
+                        <a as="button" @click="toggleStats" class="btn-stats-toggle"><i class="fas fa-eye" style="margin-right: 5px;"></i> <span>Show Statistics</span></a>
                         <a as="button" @click="updateStatsView" class="btn-stats-view">Loading...</a>
                     </div>
                 </section>
@@ -341,7 +341,8 @@ export default {
             const statsToday = document.querySelector('.stats-today');
             const statsMonth = document.querySelector('.stats-month');
             const statsViewBtn = document.querySelector('a.btn-stats-view');
-            const btnStatsToggle = document.querySelector('.btn-stats-toggle');
+            const btnStatsToggle = document.querySelector('.btn-stats-toggle span');
+            const btnStatsIcon = document.querySelector('.btn-stats-toggle i');
             const timeOnClock = document.querySelector('#timeOnClock');
             if (btnStatsToggle.innerHTML === "Show Statistics") {
                 statsToday.style.maxHeight = "500px";
@@ -349,12 +350,16 @@ export default {
                 statsMonth.style.marginTop = "20px";
                 statsViewBtn.style.display = "block";
                 btnStatsToggle.innerHTML = "Hide Statistics";
+                btnStatsIcon.classList.remove('fa-eye');
+                btnStatsIcon.classList.add('fa-eye-slash');
             } else {
                 statsToday.style.maxHeight = "0px";
                 statsMonth.style.maxHeight = "0px";
                 statsMonth.style.marginTop = "0px";
                 statsViewBtn.style.display = "none";
                 btnStatsToggle.innerHTML = "Show Statistics";
+                btnStatsIcon.classList.remove('fa-eye-slash');
+                btnStatsIcon.classList.add('fa-eye');
             }
         },
         // Update clockedInTime when clockedInState changes
