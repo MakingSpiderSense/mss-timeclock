@@ -1,5 +1,5 @@
 # MSS TimeClock App
 
-*This is a browser-based time clock where you can record the time spent on a project or working for a client. You can create various organizations or tasks to keep track of. Reports are created based on the data logged. Users create user profiles and can invite other users to an organization. This is a work in progress.*
+This browser-based time clock helps track time spent on projects or client work. Users can log time manually or in real-time and organize entries using customizable organizations, categories, and subcategories. Flexible rate settings at global, organization, or category levels enable accurate earnings calculations, with statistics showing daily and monthly income. Users can create profiles, invite others to join organizations, and set daily goals with a built-in goal tracker. Categories and subcategories can be hidden when no longer needed. Designed for seamless use on both desktop and mobile devices.
 
-**Note:** This is a personal project and I am not accepting pull requests at this time.
+**Note:** _This is a personal project and is public for portfolio purposes. Commercial use is not allowed without explicit permission._
