@@ -30,6 +30,7 @@ class User extends Authenticatable
         'global_rate',
         'simple_tax_rate',
         'display_before_tax',
+        'recent_subcategories',
     ];
 
     /**
