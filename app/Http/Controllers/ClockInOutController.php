@@ -139,8 +139,31 @@ class ClockInOutController extends Controller
             'notes' => $request->notes,
         ]);
 
-        // Get name of organization based on the user's auth()->user()->active_org_id
+        // Store category info in recent_subcategories
+        // Retrieve the user's current recent subcategories
+        $recent = auth()->user()->recent_subcategories ?? [];
+        // Ensure it's an array (in case it's stored as JSON string)
+        if (!is_array($recent)) {
+            $recent = json_decode($recent, true);
+        }
+        // Create the new entry (subcategory, category, organization)
         $org_id = auth()->user()->active_org_id;
+        $newEntry = [
+            'subcategory_id' => $subcategory_id,
+            'category_id' => $category_id,
+            'org_id' => $org_id
+        ];
+        // Remove duplicate if it exists
+        $recent = array_filter($recent, function ($item) use ($subcategory_id) {
+            return $item['subcategory_id'] !== $subcategory_id;
+        });
+        // Add new entry to the front
+        array_unshift($recent, $newEntry);
+        // Keep only the latest 5
+        $recent = array_slice($recent, 0, 5);
+        // Save back to the user record
+        auth()->user()->update(['recent_subcategories' => json_encode($recent)]);
+
         // Look up the organization name based on the org_id
         $org_name = Organization::where('id', $org_id)->first()->name;
 
