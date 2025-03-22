@@ -183,7 +183,7 @@ export default {
         },
         // Check if we should show the recent options
         showRecentOptions() {
-            return !this.clockedInState && this.form.category.trim() === '';
+            return !this.clockedInState && form.category.trim() === '';
         },
     },
     methods: {
