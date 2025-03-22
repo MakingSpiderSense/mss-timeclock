@@ -17,8 +17,8 @@ class Category extends Model
     public function organization()
     {
         // Sets up relationship with Organization model.
-        // "A category has one organization."
-        return $this->hasOne(Organization::class);
+        // "A category belongs to an organization."
+        return $this->belongsTo(Organization::class, 'org_id');
     }
 
     public function subcategory()
