@@ -31,6 +31,7 @@ class ClockInOutController extends Controller
         foreach ($categories as $category) {
             $category->subcategories = Subcategory::where('category_id', $category->id)->orderBy('name')->get();
         }
+
         // Get the user's hidden categories
         $hidden_categories = HiddenCategory::where('user_id', auth()->user()->id)->get();
         // Filter the categories and subcategories based on hidden categories.
@@ -46,10 +47,23 @@ class ClockInOutController extends Controller
             // If the category is marked as hidden for the user, it is excluded from the filtered list
             return $hidden_categories->where('category_id', $category->id)->whereNull('subcategory_id')->count() === 0;
         });
+
+        // Get the most recent subcategories used by the user
+        $recentSubcategoryIds = auth()->user()->recent_subcategories ?? [];
+        if (!is_array($recentSubcategoryIds)) {
+            $recentSubcategoryIds = json_decode($recentSubcategoryIds, true);
+        }
+        $recentSubcategories = Subcategory::with('category.organization')
+            ->whereIn('id', $recentSubcategoryIds)
+            ->get()
+            ->sortBy(fn($item) => array_search($item->id, $recentSubcategoryIds)) // Ensure database order is preserved
+            ->values(); // Reset keys after sorting
+
         // Inertia render dashboard view with categories and subcategories
         return inertia('Dashboard', [
             'categoriesObj' => $categories,
             'filteredCategoriesObj' => $filteredCategories,
+            'recentSubcategories' => $recentSubcategories,
         ]);
     }
 
