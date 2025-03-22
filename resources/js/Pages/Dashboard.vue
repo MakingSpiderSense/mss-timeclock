@@ -69,10 +69,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <!-- Recent Subcategory Dropdown Select -->
                             <div v-if="showRecentOptions" class="mb-4">
                                 <div style="padding-top: 24px"></div>
-                                <select class="border-gray-300 shadow-sm rounded-md w-full" id="recent_subcategory">
-                                    <option selected value>-- Select a recent subcategory --</option>
-                                    <option v-for="subcategory in recentSubcategories" :key="subcategory.id">
-                                        {{ subcategory.category.organization.name }} → {{ subcategory.category.name }} → {{ subcategory.name }}
+                                <select class="border-gray-300 shadow-sm rounded-md w-full" id="recent_subcategory" @change="handleRecentSelection">
+                                    <option selected value>-- Select --</option>
+                                    <option v-for="recent in recentSubcategories" :key="recent.id">
+                                        {{ recent.category.organization.name }} → {{ recent.category.name }} → {{ recent.name }}
                                     </option>
                                 </select>
                             </div>
@@ -205,6 +205,7 @@ export default {
             let subcategoryExists = false;
             const newCategory = form.category;
             const newSubCategory = form.subcategory ? form.subcategory : "Other";
+            console.log(`Category: ${newCategory}, Subcategory: ${newSubCategory}`); // Leave this here for debugging
             // Exit if no category is entered
             if (newCategory == "") {
                 console.warn("Please enter a category.");
@@ -435,6 +436,31 @@ export default {
                 subcategoryOptions.value = "";
             }
             form.subcategory = "";
+        },
+        async handleRecentSelection(event) {
+            const categoryInput = document.getElementById("category");
+            const selectedIndex = event.target.selectedIndex;
+            const selectedOption = this.recentSubcategories[selectedIndex - 1]; // Skip the placeholder
+            if (!selectedOption) return;
+            const currentOrgId = this.$page.props.auth.user.active_org_id;
+            const selectedOrgId = selectedOption.category.organization.id;
+            // Same org? Just update form
+            if (selectedOrgId === currentOrgId) {
+                form.category = selectedOption.category.name;
+                categoryInput.value = selectedOption.category.name;
+                this.updateSubcategoryOptions();
+                form.subcategory = selectedOption.name;
+            } else {
+                // Switch org, then autofill after navigation
+                this.$inertia.post(`/organization/active/${selectedOrgId}`, {}, {
+                    onSuccess: () => {
+                        form.category = selectedOption.category.name;
+                        categoryInput.value = selectedOption.category.name;
+                        this.updateSubcategoryOptions();
+                        form.subcategory = selectedOption.name;
+                    },
+                });
+            }
         },
         // Autocomplete function
         autocomplete(inp, arr) {
