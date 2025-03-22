@@ -454,6 +454,7 @@ export default {
                 // Switch org, then autofill after navigation
                 this.$inertia.post(`/organization/active/${selectedOrgId}`, {}, {
                     onSuccess: () => {
+                        document.querySelector('select[name="organization"]').value = selectedOrgId;
                         form.category = selectedOption.category.name;
                         categoryInput.value = selectedOption.category.name;
                         this.updateSubcategoryOptions();
