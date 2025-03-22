@@ -58,26 +58,37 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </div>
                     <!-- Column 2 -->
                     <div>
-                        <!-- Subcategory Text Input -->
+                        <!-- Subcategory / Recent Mode -->
                         <div>
-                            <InputLabel for="subcategory" value="Subcategory" />
+                            <!-- Subcategory Text Input -->
+                            <InputLabel :for="showRecentOptions ? 'recent_subcategory' : 'subcategory'" :value="showRecentOptions ? 'Recent' : 'Subcategory'" />
                             <div class="autocomplete">
-                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" tabindex="3" :disabled="clockedInState" />
+                                <TextInput id="subcategory" type="text" class="mt-1 block w-full" v-model="form.subcategory" tabindex="3" :disabled="clockedInState || showRecentOptions" />
                             </div>
                             <InputError class="mt-2" :message="form.errors.subcategory" />
-                        </div>
-                        <!-- Subcategory Dropdown Select -->
-                        <div class="mb-4">
-                            <div style="padding-top: 24px"></div>
-                            <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @change="subcategoryOptionsChanged" :disabled="clockedInState">
-                                <option disabled selected value>-- Select --</option>
-                                <option v-for="subcategory in filteredSubcategoriesArray" v-bind:key="subcategory">{{ subcategory }}</option>
-                            </select>
-                            <InputError class="mt-2" :message="form.errors.subcategory_options" />
-                        </div>
-                        <!-- "Hide Subcategory" button -->
-                        <div v-if="isSubcategoryFound">
-                            <a href="#" @click="hideCategory('subcategory')">Hide Subcategory</a>
+                            <!-- Recent Subcategory Dropdown Select -->
+                            <div v-if="showRecentOptions" class="mb-4">
+                                <div style="padding-top: 24px"></div>
+                                <select class="border-gray-300 shadow-sm rounded-md w-full" id="recent_subcategory" @change="handleRecentSelection">
+                                    <option selected value>-- Select --</option>
+                                    <option v-for="recent in recentSubcategories" :key="recent.id">
+                                        {{ recent.category.organization.name }} → {{ recent.category.name }} → {{ recent.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Normal Subcategory Dropdown Select -->
+                            <div v-else class="mb-4">
+                                <div style="padding-top: 24px"></div>
+                                <select class="border-gray-300 shadow-sm rounded-md" name="subcategory_options" id="subcategory_options" tabindex="4" @change="subcategoryOptionsChanged" :disabled="clockedInState">
+                                    <option disabled selected value>-- Select --</option>
+                                    <option v-for="subcategory in filteredSubcategoriesArray" v-bind:key="subcategory">{{ subcategory }}</option>
+                                </select>
+                                <InputError class="mt-2" :message="form.errors.subcategory_options" />
+                            </div>
+                            <!-- "Hide Subcategory" button -->
+                            <div v-if="isSubcategoryFound">
+                                <a href="#" @click="hideCategory('subcategory')">Hide Subcategory</a>
+                            </div>
                         </div>
                     </div>
                     <!-- Column 3 -->
@@ -132,6 +143,7 @@ export default {
     props: {
         categoriesObj: Object,
         filteredCategoriesObj: Object,
+        recentSubcategories: Array,
     },
     data() {
         return {
@@ -168,6 +180,10 @@ export default {
     computed: {
         clockInOutButton() {
             return this.clockedInState ? 'Clock Out' : 'Clock In';
+        },
+        // Check if we should show the recent options
+        showRecentOptions() {
+            return !this.clockedInState && form.category.trim() === '';
         },
     },
     methods: {
@@ -414,8 +430,37 @@ export default {
         // Clear the subcategory input
         clearSubcategoryInput() {
             document.getElementById("subcategory").value = "";
-            document.getElementById("subcategory_options").value = "";
+            const subcategoryOptions = document.getElementById("subcategory_options");
+            if (subcategoryOptions) {
+                subcategoryOptions.value = "";
+            }
             form.subcategory = "";
+        },
+        async handleRecentSelection(event) {
+            const categoryInput = document.getElementById("category");
+            const selectedIndex = event.target.selectedIndex;
+            const selectedOption = this.recentSubcategories[selectedIndex - 1]; // Skip the placeholder
+            if (!selectedOption) return;
+            const currentOrgId = this.$page.props.auth.user.active_org_id;
+            const selectedOrgId = selectedOption.category.organization.id;
+            // Same org? Just update form
+            if (selectedOrgId === currentOrgId) {
+                form.category = selectedOption.category.name;
+                categoryInput.value = selectedOption.category.name;
+                this.updateSubcategoryOptions();
+                form.subcategory = selectedOption.name;
+            } else {
+                // Switch org, then autofill after navigation
+                this.$inertia.post(`/organization/active/${selectedOrgId}`, {}, {
+                    onSuccess: () => {
+                        document.querySelector('select[name="organization"]').value = selectedOrgId;
+                        form.category = selectedOption.category.name;
+                        categoryInput.value = selectedOption.category.name;
+                        this.updateSubcategoryOptions();
+                        form.subcategory = selectedOption.name;
+                    },
+                });
+            }
         },
         // Autocomplete function
         autocomplete(inp, arr) {

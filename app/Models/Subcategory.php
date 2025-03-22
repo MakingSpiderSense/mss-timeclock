@@ -18,8 +18,8 @@ class Subcategory extends Model
     public function category()
     {
         // Sets up relationship with Category model.
-        // "A subcategory has one category."
-        return $this->hasOne(Category::class);
+        // "A subcategory belongs to a category."
+        return $this->belongsTo(Category::class);
     }
 
     public function temp_logs()

@@ -31,6 +31,7 @@ class ClockInOutController extends Controller
         foreach ($categories as $category) {
             $category->subcategories = Subcategory::where('category_id', $category->id)->orderBy('name')->get();
         }
+
         // Get the user's hidden categories
         $hidden_categories = HiddenCategory::where('user_id', auth()->user()->id)->get();
         // Filter the categories and subcategories based on hidden categories.
@@ -46,10 +47,23 @@ class ClockInOutController extends Controller
             // If the category is marked as hidden for the user, it is excluded from the filtered list
             return $hidden_categories->where('category_id', $category->id)->whereNull('subcategory_id')->count() === 0;
         });
+
+        // Get the most recent subcategories used by the user
+        $recentSubcategoryIds = auth()->user()->recent_subcategories ?? [];
+        if (!is_array($recentSubcategoryIds)) {
+            $recentSubcategoryIds = json_decode($recentSubcategoryIds, true);
+        }
+        $recentSubcategories = Subcategory::with('category.organization')
+            ->whereIn('id', $recentSubcategoryIds)
+            ->get()
+            ->sortBy(fn($item) => array_search($item->id, $recentSubcategoryIds)) // Ensure database order is preserved
+            ->values(); // Reset keys after sorting
+
         // Inertia render dashboard view with categories and subcategories
         return inertia('Dashboard', [
             'categoriesObj' => $categories,
             'filteredCategoriesObj' => $filteredCategories,
+            'recentSubcategories' => $recentSubcategories,
         ]);
     }
 
@@ -139,9 +153,26 @@ class ClockInOutController extends Controller
             'notes' => $request->notes,
         ]);
 
-        // Get name of organization based on the user's auth()->user()->active_org_id
-        $org_id = auth()->user()->active_org_id;
+        // Store category info in recent_subcategories
+        // Retrieve the user's current recent subcategories
+        $recent = auth()->user()->recent_subcategories ?? [];
+        // Ensure it's an array (in case it's stored as a JSON string)
+        if (!is_array($recent)) {
+            $recent = json_decode($recent, true);
+        }
+        // Remove duplicate if it exists
+        $recent = array_filter($recent, function ($id) use ($subcategory_id) {
+            return $id !== $subcategory_id;
+        });
+        // Add new subcategory ID to the front
+        array_unshift($recent, $subcategory_id);
+        // Keep only the latest 5
+        $recent = array_slice($recent, 0, 5);
+        // Save back to the user record
+        auth()->user()->update(['recent_subcategories' => json_encode($recent)]);
+
         // Look up the organization name based on the org_id
+        $org_id = auth()->user()->active_org_id;
         $org_name = Organization::where('id', $org_id)->first()->name;
 
         // Redirect to dashboard with success message, "Clocked into [organization name] → [category name] → [subcategory name] successfully."
