@@ -205,7 +205,6 @@ export default {
             let subcategoryExists = false;
             const newCategory = form.category;
             const newSubCategory = form.subcategory ? form.subcategory : "Other";
-            console.log(`Category: ${newCategory}, Subcategory: ${newSubCategory}`); // Leave this here for debugging
             // Exit if no category is entered
             if (newCategory == "") {
                 console.warn("Please enter a category.");
