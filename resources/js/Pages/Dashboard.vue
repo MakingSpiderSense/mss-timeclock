@@ -429,12 +429,14 @@ export default {
         },
         // Clear the subcategory input
         clearSubcategoryInput() {
-            document.getElementById("subcategory").value = "";
-            const subcategoryOptions = document.getElementById("subcategory_options");
-            if (subcategoryOptions) {
-                subcategoryOptions.value = "";
-            }
-            form.subcategory = "";
+            setTimeout(() => {
+                document.getElementById("subcategory").value = "";
+                const subcategoryOptions = document.getElementById("subcategory_options");
+                if (subcategoryOptions) {
+                    subcategoryOptions.value = "";
+                }
+                form.subcategory = "";
+            }, 0); // This is to ensure it tries to clear after switching from the recent subcategory dropdown to the normal subcategory dropdown
         },
         async handleRecentSelection(event) {
             const categoryInput = document.getElementById("category");
