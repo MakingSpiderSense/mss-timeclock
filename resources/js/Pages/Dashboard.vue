@@ -450,7 +450,7 @@ export default {
                 form.category = selectedOption.category.name;
                 categoryInput.value = selectedOption.category.name;
                 this.updateSubcategoryOptions();
-                form.subcategory = selectedOption.name;
+                setTimeout(() => { form.subcategory = selectedOption.name; }, 0); // Wait for the subcategory options to update
             } else {
                 // Switch org, then autofill after navigation
                 this.$inertia.post(`/organization/active/${selectedOrgId}`, {}, {
@@ -459,7 +459,7 @@ export default {
                         form.category = selectedOption.category.name;
                         categoryInput.value = selectedOption.category.name;
                         this.updateSubcategoryOptions();
-                        form.subcategory = selectedOption.name;
+                        setTimeout(() => { form.subcategory = selectedOption.name; }, 0); // Wait for the subcategory options to update
                     },
                 });
             }
