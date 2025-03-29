@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Favicon -->
-        <link rel="shortcut icon" href="{{ url('img/logo-timeclock.png') }}">
+        <link rel="shortcut icon" href="{{ url('img/logo-timeclock-v1.1.png') }}">
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
