@@ -5,7 +5,7 @@
         <input class="mb-4" id="manual-time-input" type="time" @input="updateTimeDifference">
         <div class="mb-4" id="time-difference"></div>
         <!-- Quick Add Buttons -->
-        <div>
+        <div id="quick-add-buttons">
             <div class="item-group">
                 <button type="button" class="btn btn-2" @click="addTime(-15)">-15 Min</button>
                 <button type="button" class="btn btn-2" @click="addTime(15)">+15 Min</button>
@@ -80,26 +80,43 @@ export default {
             if (minutes > 0 || hours === 0) {
                 diffText += minutes + ' Min';
             }
-            timeDifferenceElement.textContent = diffText;
+            // Create HTML with text and icon
+            timeDifferenceElement.innerHTML = `${diffText} <i class="fas fa-window-close"></i>`;
+            // Add click event to the icon
+            const closeIcon = timeDifferenceElement.querySelector('.fa-window-close');
+            if (closeIcon) {
+                closeIcon.addEventListener('click', () => {
+                    timeInput.value = '';
+                    this.updateTimeDifference();
+                });
+            }
         }
     },
 }
 </script>
 
-<!-- Styling -->
-<style lang="scss" scoped>
+<!-- Styling (not scoped) -->
+<style lang="scss">
+    @import "../../sass/app.scss";
     #time-difference {
         display: inline-block;
         margin-left: 25px;
+        i.fa-window-close {
+            color: $color2;
+            margin-left: 15px;
+            cursor: pointer;
+        }
     }
-    .item-group {
-        display: inline-block;
-    }
-    .btn-2 {
-        margin-right: 10px;
-        margin-bottom: 10px;
-        :last-child {
-            margin-right: 0;
+    #quick-add-buttons {
+        .item-group {
+            display: inline-block;
+        }
+        .btn-2 {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            :last-child {
+                margin-right: 0;
+            }
         }
     }
 </style>
