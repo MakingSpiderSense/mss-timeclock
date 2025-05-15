@@ -7,8 +7,8 @@
         <!-- Quick Add Buttons -->
         <div id="quick-add-buttons">
             <div class="item-group">
-                <button type="button" class="btn btn-2" @click="addTime(-15)">-15 Min</button>
-                <button type="button" class="btn btn-2" @click="addTime(15)">+15 Min</button>
+                <button type="button" class="btn btn-2" @click="addTime(-5)">-5 Minutes</button>
+                <button type="button" class="btn btn-2" @click="addTime(5)">+5 Minutes</button>
             </div>
             <div class="item-group">
                 <button type="button" class="btn btn-2" @click="addTime(-60)">-1 Hr</button>
