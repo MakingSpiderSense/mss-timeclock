@@ -103,17 +103,13 @@ export default {
             justify-content: flex-end;
             align-items: center;
             padding: 10px 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #eeeeee;
             position: absolute;
             bottom: 0;
             width: 100%;
             .modal-close {
                 margin-left: 10px;
                 position: relative;
-                background-color: #eeeeeecc;
-                &:hover {
-                    background-color: #eeeeee;
-                }
             }
             .modal-continue {
                 margin-left: 10px;
