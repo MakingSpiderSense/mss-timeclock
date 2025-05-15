@@ -2,9 +2,10 @@
 <template>
     <div>
         <div class="mb-4">Enter a manual time to use when clocking in/out. This will be override the actual time.</div>
-        <input id="manual-time-input" type="time">
+        <input class="mb-4" id="manual-time-input" type="time">
+        <div class="mb-4" id="time-difference"></div>
         <!-- Quick Add Buttons -->
-        <div class="mt-4">
+        <div>
             <div class="item-group">
                 <button type="button" class="btn btn-2" @click="addTime(-15)">-15 Min</button>
                 <button type="button" class="btn btn-2" @click="addTime(15)">+15 Min</button>
@@ -36,6 +37,10 @@ export default {
 
 <!-- Styling -->
 <style lang="scss" scoped>
+    #time-difference {
+        display: inline-block;
+        margin-left: 25px;
+    }
     .item-group {
         display: inline-block;
     }
