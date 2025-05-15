@@ -25,11 +25,29 @@ export default {
     methods: {
         addTime(timeToAdd) {
             const timeInput = document.getElementById('manual-time-input');
-            const now = new Date();
-            now.setMinutes(now.getMinutes() + timeToAdd);
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            timeInput.value = `${hours}:${minutes}`;
+            // If there's no current value, start with current time
+            if (!timeInput.value) {
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                timeInput.value = `${hours}:${minutes}`;
+            }
+            // Parse the current input value
+            const [hours, minutes] = timeInput.value.split(':').map(Number);
+            // Convert to total minutes, add the new time, then convert back
+            let totalMinutes = hours * 60 + minutes + timeToAdd;
+            // Handle negative times by wrapping around 24 hours
+            while (totalMinutes < 0) {
+                totalMinutes += 24 * 60;
+            }
+            // Handle times over 24 hours by wrapping
+            totalMinutes = totalMinutes % (24 * 60);
+            // Calculate new hours and minutes
+            const newHours = Math.floor(totalMinutes / 60).toString().padStart(2, '0');
+            const newMinutes = (totalMinutes % 60).toString().padStart(2, '0');
+            // Update the input value
+            timeInput.value = `${newHours}:${newMinutes}`;
+            // Update the time difference display
             this.updateTimeDifference();
         },
         updateTimeDifference() {
