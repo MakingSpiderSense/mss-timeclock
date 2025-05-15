@@ -14,6 +14,7 @@ $font_body: $nunito;
 $color1: #5f56ff;
 $color1-light: #dedcff;
 $color2: #009FBD; // Modals, etc
+$color2-light: #ddf1f5;
 $color3: #F9E2AF; // Not used at this time
 $black: #1B2F33;
 $white: white;
@@ -77,6 +78,13 @@ a {
         color: $white;
     }
 }
+.btn-2, .modal-close {
+    background-color: #eeeeeecc;
+    color: $color2;
+    &:hover {
+        background-color: $color2-light;
+    }
+}
 
 // Forms
 main input {
@@ -94,16 +102,15 @@ select, input, textarea {
 }
 // Forms: Autocomplete
 .autocomplete {
-    /*the container must be positioned relative:*/
     position: relative;
 }
 .autocomplete-items {
-    position: absolute;
     border: 1px solid #d4d4d4;
     border-bottom: none;
     border-top: none;
     z-index: 99;
-    /*position the autocomplete items to be the same width as the container:*/
+    // Position the autocomplete items to be the same width as the container
+    position: absolute;
     top: 100%;
     left: 0;
     right: 0;
@@ -115,11 +122,10 @@ select, input, textarea {
     border-bottom: 1px solid #d4d4d4;
 }
 .autocomplete-items div:hover {
-    /*when hovering an item:*/
     background-color: #e9e9e9;
 }
 .autocomplete-active {
-    /*when navigating through the items using the arrow keys:*/
+    // When navigating through the items using the arrow keys
     background-color: DodgerBlue !important;
     color: #ffffff;
 }
