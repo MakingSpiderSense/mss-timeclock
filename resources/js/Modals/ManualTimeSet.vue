@@ -11,8 +11,12 @@
                 <button type="button" class="btn btn-2" @click="addTime(5)">+5 Minutes</button>
             </div>
             <div class="item-group">
-                <button type="button" class="btn btn-2" @click="addTime(-60)">-1 Hr</button>
-                <button type="button" class="btn btn-2" @click="addTime(60)">+1 Hr</button>
+                <button type="button" class="btn btn-2" @click="addTime(-15)">-15 Minutes</button>
+                <button type="button" class="btn btn-2" @click="addTime(15)">+15 Minutes</button>
+            </div>
+            <div class="item-group">
+                <button type="button" class="btn btn-2" @click="addTime(-60)">-1 Hour</button>
+                <button type="button" class="btn btn-2" @click="addTime(60)">+1 Hour</button>
             </div>
         </div>
     </div>
@@ -110,10 +114,14 @@ export default {
     #quick-add-buttons {
         .item-group {
             display: inline-block;
+            width: 100%;
+            display: flex;
         }
         .btn-2 {
+            font-size: 14px;
             margin-right: 10px;
             margin-bottom: 10px;
+            flex-basis: 50%;
             :last-child {
                 margin-right: 0;
             }
