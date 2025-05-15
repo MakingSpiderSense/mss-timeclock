@@ -116,14 +116,14 @@ export default {
             display: inline-block;
             width: 100%;
             display: flex;
-        }
-        .btn-2 {
-            font-size: 14px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            flex-basis: 50%;
-            :last-child {
-                margin-right: 0;
+            .btn-2 {
+                font-size: 14px;
+                margin-right: 10px;
+                margin-bottom: 10px;
+                flex-basis: 50%;
+                :last-child {
+                    margin-right: 0;
+                }
             }
         }
     }
