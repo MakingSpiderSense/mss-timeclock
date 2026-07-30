@@ -166,8 +166,6 @@ export default {
             clockedInState: usePage().props.value.auth.clocked_in,
             clockedInCategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.category.name : '',
             clockedInSubcategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '',
-            isCategoryFound: false,
-            isSubcategoryFound: false,
             notesHistory: [], // Cache the notes history for the current subcategory
             historyIndex: -1, // Index for cycling through notes history
             historySubcategoryId: null, // Cache the subcategory ID for cycling notes history
@@ -190,6 +188,12 @@ export default {
         this.clockedInSubcategory = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '';
     },
     computed: {
+        isCategoryFound() {
+            return this.categoriesArray.includes(form.category);
+        },
+        isSubcategoryFound() {
+            return this.subcategoriesArray.includes(form.subcategory);
+        },
         clockInOutButton() {
             return this.clockedInState ? 'Clock Out' : 'Clock In';
         },
@@ -455,16 +459,6 @@ export default {
         },
 
         /**
-         * Inputs updated
-         *
-         * Checks if the currently typed category and subcategory exist in the known lists.
-         */
-        inputsUpdated() {
-            this.isCategoryFound = this.categoriesArray.includes(form.category);
-            this.isSubcategoryFound = this.subcategoriesArray.includes(form.subcategory);
-        },
-
-        /**
          * Update category options
          *
          * Refreshes the list of available categories and subcategories based on the organization data.
@@ -517,8 +511,7 @@ export default {
         updateSubcategoryOptions() {
             // Clear the subcategory input
             this.clearSubcategoryInput();
-            const category = document.getElementById("category").value;
-            this.isCategoryFound = this.categoriesArray.includes(category);
+            const category = form.category;
             if (this.categoriesArray.includes(category)) {
                 // If so, filter the categoriesFullArray array to get the subcategories array of the selected category
                 this.subcategoriesArray = this.categoriesFullArray.filter(value => value[0] === category)[0][1];
@@ -543,7 +536,6 @@ export default {
         categoryOptionsChanged() {
             const categoryInput = document.getElementById("category");
             const categoryOptions = document.getElementById("category_options");
-            this.isCategoryFound = this.categoriesArray.includes(categoryInput);
             if (categoryOptions.value) {
                 form.category = categoryOptions.value;
                 categoryInput.value = categoryOptions.value;
@@ -564,7 +556,6 @@ export default {
          */
         subcategoryOptionsChanged() {
             const subcategoryOptions = document.getElementById("subcategory_options");
-            this.isSubcategoryFound = this.subcategoriesArray.includes(subcategoryOptions.value);
             if (subcategoryOptions.value) {
                 form.subcategory = subcategoryOptions.value;
             }
@@ -654,7 +645,6 @@ export default {
             let currentFocus;
             /*execute a function when someone writes in the text field:*/
             inp.addEventListener("input", function (e) {
-                _this.inputsUpdated();
                 let a, b, i, val = this.value;
                 /*close any already open lists of autocompleted values*/
                 closeAllLists();
