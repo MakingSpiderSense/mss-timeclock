@@ -200,7 +200,14 @@ export default {
                 form.notes = "";
             }
         },
-        // Confirm creation of new category or subcategory
+
+        /**
+         * Confirm creation
+         *
+         * Asks for confirmation when creating a new category or subcategory before submitting the form.
+         *
+         * @param {Event} event The click or keydown event triggering the confirmation.
+         */
         confirmCreation(event) {
             // If already clocked in, submit and return
             if (this.clockedInState) {
@@ -255,23 +262,45 @@ export default {
                 submit();
             }
         },
-        // Cancel clock in
+
+        /**
+         * Cancel clock in
+         *
+         * Cancels the current clock-in attempt and resets the state.
+         *
+         * @param {Event} e The event object from the click.
+         */
         cancelClockIn(e) {
             e.preventDefault();
             form.post(route('cancel-clock-in'));
         },
-        // Clear the manual time field
+
+        /**
+         * Clear manual time
+         *
+         * Resets the manual time form field and clears the display text.
+         */
         clearManualTime() {
             form.manualTime = '';
             document.getElementById("manual-time-display").innerHTML = '';
         },
-        // Pull in the notes from the clock in record
+
+        /**
+         * Get notes
+         *
+         * Retrieves the notes from the database record and populates the notes input field.
+         */
         getNotes() {
             const notesDB = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.notes : "";
             const notesInput = document.getElementById("notes");
             notesInput.value = notesDB;
         },
-        // When "Enter Manual Time" is clicked, display the modal
+
+        /**
+         * Show manual time modal
+         *
+         * Opens the modal dialog to allow the user to enter a specific time for their log.
+         */
         modalEnterManualTime() {
             document.querySelector('.modal').style.display = 'flex';
             document.querySelector('.modal-title').innerHTML = "Enter Manual Time";
@@ -284,6 +313,12 @@ export default {
             };
             // When "Save" is clicked, update the manual time
             modalFooter.querySelector('button').addEventListener('click', saveTime);
+
+            /**
+             * Save manual time
+             *
+             * Processes the user-entered time, converts it to UTC, and updates the form.
+             */
             function saveTime() {
                 const manualTime = document.getElementById("manual-time-input").value;
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
@@ -316,11 +351,26 @@ export default {
                 document.querySelector('.modal').style.display = 'none';
                 modalFooter.removeEventListener('click', saveTime);
             }
+            /**
+             * Format to two digits
+             *
+             * Ensures that a number is represented with at least two digits by padding with a leading zero if necessary.
+             *
+             * @param {number} n The number to format.
+             * @returns {string} The two-digit string representation.
+             */
             function twoDigits(n) {
                 return ("0" + n).slice(-2);
             }
         },
-        // Hide Category or Subcategory
+
+        /**
+         * Hide category or subcategory
+         *
+         * Marks a category or subcategory as hidden after user confirmation.
+         *
+         * @param {string} type The level to hide, either "category" or "subcategory".
+         */
         hideCategory(type) {
             const category = form.category;
             const subcategory = form.subcategory;
@@ -331,13 +381,22 @@ export default {
                 form.post(route('hide-category', type));
             }
         },
-        // Runs when the category or subcategory inputs are updated
+
+        /**
+         * Inputs updated
+         *
+         * Checks if the currently typed category and subcategory exist in the known lists.
+         */
         inputsUpdated() {
             this.isCategoryFound = this.categoriesArray.includes(form.category);
             this.isSubcategoryFound = this.subcategoriesArray.includes(form.subcategory);
         },
-        // Update category select list
-        // Note: This function is run when the page loads or when the organization is changed
+
+        /**
+         * Update category options
+         *
+         * Refreshes the list of available categories and subcategories based on the organization data.
+         */
         updateCategoryOptions() {
             // If triggered by the modal, return
             if (document.querySelector('.modal').style.display === 'flex') {
@@ -377,7 +436,12 @@ export default {
             this.autocomplete(document.getElementById("category"), this.categoriesArray);
             this.autocomplete(document.getElementById("subcategory"), this.subcategoriesArray);
         },
-        // When category is changed, update the subcategory select list
+
+        /**
+         * Update subcategory options
+         *
+         * Filters the available subcategories based on the currently selected category.
+         */
         updateSubcategoryOptions() {
             // Clear the subcategory input
             this.clearSubcategoryInput();
@@ -398,7 +462,12 @@ export default {
             }
             this.autocomplete(document.getElementById("subcategory"), this.subcategoriesArray);
         },
-        // When #category_options is changed, update form.category and subcategory options
+
+        /**
+         * Category options changed
+         *
+         * Updates the form and subcategory options when a category is selected from the dropdown.
+         */
         categoryOptionsChanged() {
             const categoryInput = document.getElementById("category");
             const categoryOptions = document.getElementById("category_options");
@@ -415,7 +484,12 @@ export default {
                 clockInButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         },
-        // When #subcategory_options is changed, update form.subcategory
+
+        /**
+         * Subcategory options changed
+         *
+         * Updates the form data when a subcategory is selected from the dropdown.
+         */
         subcategoryOptionsChanged() {
             const subcategoryOptions = document.getElementById("subcategory_options");
             this.isSubcategoryFound = this.subcategoriesArray.includes(subcategoryOptions.value);
@@ -429,14 +503,24 @@ export default {
                 clockInButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         },
-        // Clear the category input
+
+        /**
+         * Clear category input
+         *
+         * Wipes the category text field and dropdown selection.
+         */
         clearCategoryInput() {
             document.getElementById("category").value = "";
             document.getElementById("category_options").value = "";
             form.category = "";
             this.updateSubcategoryOptions();
         },
-        // Clear the subcategory input
+
+        /**
+         * Clear subcategory input
+         *
+         * Wipes the subcategory text field and dropdown selection after a short delay.
+         */
         clearSubcategoryInput() {
             setTimeout(() => {
                 document.getElementById("subcategory").value = "";
@@ -447,6 +531,14 @@ export default {
                 form.subcategory = "";
             }, 0); // This is to ensure it tries to clear after switching from the recent subcategory dropdown to the normal subcategory dropdown
         },
+
+        /**
+         * Handle recent selection
+         *
+         * Automatically fills the form fields based on a selection from the recent subcategories list.
+         *
+         * @param {Event} event The change event from the recent subcategory dropdown.
+         */
         async handleRecentSelection(event) {
             const categoryInput = document.getElementById("category");
             const selectedIndex = event.target.selectedIndex;
@@ -473,17 +565,25 @@ export default {
                 });
             }
         },
-        // Autocomplete function
+
+        /**
+         * Autocomplete functionality
+         *
+         * Attaches autocomplete behavior to a text input using a provided array of suggestions.
+         *
+         * @param {HTMLElement} inp The input element to apply autocomplete to.
+         * @param {Array} arr The array of string suggestions to display.
+         */
         autocomplete(inp, arr) {
             // Cache the this keyword so it can be used inside the event listener
             let _this = this;
             /*the autocomplete function takes two arguments,
             the text field element and an array of possible autocompleted values:*/
-            var currentFocus;
+            let currentFocus;
             /*execute a function when someone writes in the text field:*/
             inp.addEventListener("input", function (e) {
                 _this.inputsUpdated();
-                var a, b, i, val = this.value;
+                let a, b, i, val = this.value;
                 /*close any already open lists of autocompleted values*/
                 closeAllLists();
                 if (!val) { return false; }
@@ -525,7 +625,7 @@ export default {
             });
             /*execute a function presses a key on the keyboard:*/
             inp.addEventListener("keydown", function (e) {
-                var x = document.getElementById(this.id + "autocomplete-list");
+                let x = document.getElementById(this.id + "autocomplete-list");
                 if (x) x = x.getElementsByTagName("div");
                 if (e.keyCode == 40) {
                     /*If the arrow DOWN key is pressed,
@@ -548,6 +648,14 @@ export default {
                     }
                 }
             });
+
+            /**
+             * Add active class
+             *
+             * Marks an autocomplete item as active/focused for keyboard navigation.
+             *
+             * @param {HTMLCollection} x The collection of autocomplete list items.
+             */
             function addActive(x) {
                 /*a function to classify an item as "active":*/
                 if (!x) return false;
@@ -558,17 +666,33 @@ export default {
                 /*add class "autocomplete-active":*/
                 x[currentFocus].classList.add("autocomplete-active");
             }
+
+            /**
+             * Remove active class
+             *
+             * Removes the active styling from all items in the autocomplete list.
+             *
+             * @param {HTMLCollection} x The collection of autocomplete list items to clean up.
+             */
             function removeActive(x) {
                 /*a function to remove the "active" class from all autocomplete items:*/
-                for (var i = 0; i < x.length; i++) {
+                for (let i = 0; i < x.length; i++) {
                     x[i].classList.remove("autocomplete-active");
                 }
             }
+
+            /**
+             * Close all lists
+             *
+             * Closes all autocomplete dropdown lists except for the currently active one.
+             *
+             * @param {HTMLElement} elmnt The element that was clicked, used to determine which list to keep open.
+             */
             function closeAllLists(elmnt) {
                 /*close all autocomplete lists in the document,
                 except the one passed as an argument:*/
-                var x = document.getElementsByClassName("autocomplete-items");
-                for (var i = 0; i < x.length; i++) {
+                const x = document.getElementsByClassName("autocomplete-items");
+                for (let i = 0; i < x.length; i++) {
                     if (elmnt != x[i] && elmnt != inp) {
                         x[i].parentNode.removeChild(x[i]);
                     }
@@ -579,7 +703,14 @@ export default {
                 closeAllLists(e.target);
             });
         },
-        // Keyboard shortcuts
+
+        /**
+         * Handle keyboard shortcuts
+         *
+         * Listens for specific key combinations like Alt + C to trigger actions like clocking in.
+         *
+         * @param {KeyboardEvent} event The keyboard event being handled.
+         */
         handleKeydown(event) {
             // Alt + C: Clock in/out
             if (event.altKey && event.code === 'KeyC') {
