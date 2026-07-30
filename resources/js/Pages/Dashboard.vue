@@ -97,6 +97,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <div class="mb-4">
                             <InputLabel for="notes" value="Notes" />
                             <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:109px;" tabindex="5" />
+                            <div v-if="form.notes" class="clear-notes-btn-container mt-2">
+                                <a href="#" @click.prevent="clearNotes" class="clear-notes-btn" title="Clear Notes">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
                             <InputError class="mt-2" :message="form.errors.notes" />
                         </div>
                     </div>
@@ -294,6 +299,13 @@ export default {
             const notesDB = usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.notes : "";
             const notesInput = document.getElementById("notes");
             notesInput.value = notesDB;
+        },
+
+        /**
+         * Clear notes field
+         */
+        clearNotes() {
+            form.notes = "";
         },
 
         /**
@@ -764,6 +776,19 @@ select {
         a, button {
             margin-left: 0;
         }
+    }
+}
+.clear-notes-btn {
+    background-color: $color1;
+    color: $white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: inline-block;
+    transition: 0.3s;
+    &:hover {
+        background-color: darken($color1, 10%);
+        color: $white;
     }
 }
 </style>
