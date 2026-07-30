@@ -241,6 +241,29 @@ class ClockInOutController extends Controller
         return redirect()->back()->with('message', ['success', "You have clocked out with $hours hour$hours_label_suffix and $minutes minute$minutes_label_suffix on the clock. Good work!"]);
     }
 
+    /**
+     * Get recent notes
+     *
+     * Fetches the last 5 unique non-empty notes for a specific subcategory.
+     *
+     * @param int $subcategory_id The ID of the subcategory to fetch notes for.
+     * @return \Illuminate\Http\JsonResponse The recent notes.
+     */
+    public function getRecentNotes($subcategory_id)
+    {
+        $notes = TempLog::where('user_id', auth()->user()->id)
+            ->where('subcategory_id', $subcategory_id)
+            ->whereNotNull('notes')
+            ->where('notes', '!=', '')
+            ->orderBy('created_at', 'desc')
+            ->pluck('notes')
+            ->unique()
+            ->values()
+            ->take(20);
+
+        return response()->json($notes);
+    }
+
     // Cancel clock in
     public function cancelClockIn() {
         // Check to see if they are already clocked out.

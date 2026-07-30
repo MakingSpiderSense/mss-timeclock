@@ -41,6 +41,8 @@ Route::post('/clock-in-out', [ClockInOutController::class, 'clockInOut'])->name(
 Route::post('/cancel-clock-in', [ClockInOutController::class, 'cancelClockIn'])->name('cancel-clock-in');
 // Hide Category
 Route::post('/hide-category/{type}', [ClockInOutController::class, 'hideCategory'])->name('hide-category');
+// Get Recent Notes for a subcategory
+Route::get('/recent-notes/{subcategory_id}', [ClockInOutController::class, 'getRecentNotes'])->name('recent-notes');
 
 // Add route to 'placeholder' which simply returns the string 'Placeholder page'
 Route::get('/placeholder', function () {

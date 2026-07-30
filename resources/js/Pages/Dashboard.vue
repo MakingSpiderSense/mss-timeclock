@@ -97,8 +97,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <div class="mb-4">
                             <InputLabel for="notes" value="Notes" />
                             <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:109px;" tabindex="5" />
-                            <div v-if="form.notes" class="clear-notes-btn-container mt-2">
-                                <a href="#" @click.prevent="clearNotes" class="clear-notes-btn" title="Clear Notes">
+                            <div class="notes-actions mt-2">
+                                <a v-if="isSubcategoryFound" href="#" @click.prevent="cycleNotesHistory" title="Cycle Recent Notes">
+                                    <i class="fas fa-clock-rotate-left"></i>
+                                </a>
+                                <a v-if="form.notes" href="#" @click.prevent="clearNotes" title="Clear Notes">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </div>
@@ -165,6 +168,10 @@ export default {
             clockedInSubcategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '',
             isCategoryFound: false,
             isSubcategoryFound: false,
+            notesHistory: [], // Cache the notes history for the current subcategory
+            historyIndex: -1, // Index for cycling through notes history
+            historySubcategoryId: null, // Cache the subcategory ID for cycling notes history
+            isCyclingHistory: false, // Flag to indicate if we're currently cycling through history
         }
     },
     mounted() {
@@ -190,6 +197,21 @@ export default {
         showRecentOptions() {
             return !this.clockedInState && form.category.trim() === '';
         },
+    },
+    watch: {
+        'form.notes'(newVal) {
+            // If the change wasn't triggered by our history cycling, reset the cycle
+            if (!this.isCyclingHistory) {
+                this.historyIndex = -1;
+            }
+            this.isCyclingHistory = false;
+        },
+        'form.subcategory'(newVal) {
+            // Reset history when subcategory changes
+            this.notesHistory = [];
+            this.historyIndex = -1;
+            this.historySubcategoryId = null;
+        }
     },
     methods: {
         /**
@@ -306,6 +328,44 @@ export default {
          */
         clearNotes() {
             form.notes = "";
+        },
+
+        /**
+         * Cycle notes history
+         *
+         * Fetches and cycles through the most recent notes for the selected subcategory.
+         */
+        async cycleNotesHistory() {
+            // Find the subcategory ID if not already cached
+            if (!this.historySubcategoryId) {
+                const category = this.categoriesObj.find(c => c.name === form.category);
+                if (category) {
+                    const sub = category.subcategories.find(s => s.name === (form.subcategory || 'Other'));
+                    if (sub) {
+                        this.historySubcategoryId = sub.id;
+                    }
+                }
+            }
+
+            if (!this.historySubcategoryId) return;
+
+            // Fetch history if empty
+            if (this.notesHistory.length === 0) {
+                try {
+                    const response = await fetch(route('recent-notes', this.historySubcategoryId));
+                    this.notesHistory = await response.json();
+                } catch (error) {
+                    console.error("Failed to fetch notes history:", error);
+                    return;
+                }
+            }
+
+            if (this.notesHistory.length > 0) {
+                // Increment index and wrap around
+                this.historyIndex = (this.historyIndex + 1) % this.notesHistory.length;
+                this.isCyclingHistory = true;
+                form.notes = this.notesHistory[this.historyIndex];
+            }
         },
 
         /**
@@ -778,17 +838,24 @@ select {
         }
     }
 }
-.clear-notes-btn {
-    background-color: $color1;
-    color: $white;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    display: inline-block;
-    transition: 0.3s;
-    &:hover {
-        background-color: darken($color1, 10%);
+// Notes actions
+.notes-actions {
+    display: flex;
+    gap: 8px;
+    a {
+        background-color: $color1;
         color: $white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        display: inline-block;
+        transition: 0.3s;
+        min-width: 28px;
+        text-align: center;
+        &:hover {
+            background-color: darken($color1, 10%);
+            color: $white;
+        }
     }
 }
 </style>
