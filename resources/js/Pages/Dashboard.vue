@@ -187,9 +187,18 @@ export default {
         },
     },
     methods: {
-        // Perform any actions when user clocks in or out
+        /**
+         * Change clock in/out state
+         *
+         * Updates the clocked in state and clears notes on clock out.
+         */
         changeClockInOutState() {
+            const wasClockedIn = this.clockedInState;
             this.clockedInState = usePage().props.value.auth.clocked_in;
+            // If we just clocked out, clear the notes
+            if (wasClockedIn && !this.clockedInState) {
+                form.notes = "";
+            }
         },
         // Confirm creation of new category or subcategory
         confirmCreation(event) {
