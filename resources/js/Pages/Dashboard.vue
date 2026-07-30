@@ -168,7 +168,6 @@ export default {
             clockedInSubcategory: usePage().props.value.auth.temp_log.row ? usePage().props.value.auth.temp_log.row.subcategory.name : '',
             notesHistory: [], // Cache the notes history for the current subcategory
             historyIndex: -1, // Index for cycling through notes history
-            historySubcategoryId: null, // Cache the subcategory ID for cycling notes history
             isCyclingHistory: false, // Flag to indicate if we're currently cycling through history
         }
     },
@@ -210,11 +209,28 @@ export default {
             }
             this.isCyclingHistory = false;
         },
-        'form.subcategory'(newVal) {
-            // Reset history when subcategory changes
+        async 'form.subcategory'(newVal) {
             this.notesHistory = [];
             this.historyIndex = -1;
-            this.historySubcategoryId = null;
+            if (!newVal) return;
+
+            // Find the subcategory ID to fetch history and auto-populate notes
+            const category = this.categoriesObj.find(c => c.name === form.category);
+            const subId = category?.subcategories.find(s => s.name === (newVal || 'Other'))?.id;
+            // Gate to prevent unnecessary fetches if subcategory isn't found
+            if (!subId) return;
+
+            try {
+                const response = await fetch(route('recent-notes', subId));
+                const data = await response.json();
+                this.notesHistory = data.history;
+                // Auto-populate only if the absolute latest note wasn't blank
+                if (data.latest && data.latest.trim() !== "") {
+                    form.notes = data.latest;
+                }
+            } catch (error) {
+                console.error("Failed to fetch notes history:", error);
+            }
         }
     },
     methods: {
@@ -337,33 +353,9 @@ export default {
         /**
          * Cycle notes history
          *
-         * Fetches and cycles through the most recent notes for the selected subcategory.
+         * Cycles through the unique non-empty notes for the selected subcategory.
          */
-        async cycleNotesHistory() {
-            // Find the subcategory ID if not already cached
-            if (!this.historySubcategoryId) {
-                const category = this.categoriesObj.find(c => c.name === form.category);
-                if (category) {
-                    const sub = category.subcategories.find(s => s.name === (form.subcategory || 'Other'));
-                    if (sub) {
-                        this.historySubcategoryId = sub.id;
-                    }
-                }
-            }
-
-            if (!this.historySubcategoryId) return;
-
-            // Fetch history if empty
-            if (this.notesHistory.length === 0) {
-                try {
-                    const response = await fetch(route('recent-notes', this.historySubcategoryId));
-                    this.notesHistory = await response.json();
-                } catch (error) {
-                    console.error("Failed to fetch notes history:", error);
-                    return;
-                }
-            }
-
+        cycleNotesHistory() {
             if (this.notesHistory.length > 0) {
                 // Increment index and wrap around
                 this.historyIndex = (this.historyIndex + 1) % this.notesHistory.length;

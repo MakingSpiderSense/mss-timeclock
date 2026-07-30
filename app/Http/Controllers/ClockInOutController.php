@@ -244,24 +244,23 @@ class ClockInOutController extends Controller
     /**
      * Get recent notes
      *
-     * Fetches the last 5 unique non-empty notes for a specific subcategory.
+     * Retrieves the 'history' (20 most recent notes) and 'latest' note (even if blank, "").
      *
-     * @param int $subcategory_id The ID of the subcategory to fetch notes for.
-     * @return \Illuminate\Http\JsonResponse The recent notes.
+     * @param int $subcategory_id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getRecentNotes($subcategory_id)
     {
-        $notes = TempLog::where('user_id', auth()->user()->id)
+        $raw = TempLog::where('user_id', auth()->user()->id)
             ->where('subcategory_id', $subcategory_id)
-            ->whereNotNull('notes')
-            ->where('notes', '!=', '')
             ->orderBy('created_at', 'desc')
-            ->pluck('notes')
-            ->unique()
-            ->values()
-            ->take(20);
+            ->take(20)
+            ->pluck('notes');
 
-        return response()->json($notes);
+        return response()->json([
+            'latest'  => $raw->first(),
+            'history' => $raw->filter(fn($n) => !empty(trim($n)))->unique()->values()
+        ]);
     }
 
     // Cancel clock in
