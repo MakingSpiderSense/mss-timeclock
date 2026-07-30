@@ -216,7 +216,9 @@ export default {
                 this.notesHistory = data.history;
                 // Auto-populate only if the absolute latest note wasn't blank
                 if (data.latest && data.latest.trim() !== "") {
+                    this.isCyclingHistory = true; // Prevent the notes watcher from resetting the index
                     this.form.notes = data.latest;
+                    this.historyIndex = 0; // Initialize to the first item in the history
                 }
             } catch (error) {
                 console.error("Failed to fetch notes history:", error);
