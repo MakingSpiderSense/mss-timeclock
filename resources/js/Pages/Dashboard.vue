@@ -129,24 +129,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { usePage } from '@inertiajs/inertia-vue3';
 
-const form = useForm({
-    manualTime: '',
-    org_id: '',
-    category: '',
-    subcategory: '',
-    notes: '',
-});
-const submit = () => {
-    // If the category is contains to "aycove", then alert "test"
-    if (form.category.toLowerCase().includes('aycove')) {
-        alert("Don't forget to set yourself as active/inactive in Slack!");
-    }
-    // Submit the form
-    form.post(route('clock-in-out'), {
-        onFinish: () => form.reset('manualTime', 'org_id', 'category', 'subcategory', 'notes'),
-    });
-};
-
 export default {
     props: {
         categoriesObj: Object,
@@ -155,6 +137,14 @@ export default {
     },
     data() {
         return {
+            form: useForm({
+                manualTime: '',
+                org_id: '',
+                category: '',
+                subcategory: '',
+                notes: '',
+            }),
+            org_id: null,
             categoriesArray: [],
             subcategoriesArray: [],
             filteredCategoriesArray: [],
@@ -188,17 +178,17 @@ export default {
     },
     computed: {
         isCategoryFound() {
-            return this.categoriesArray.includes(form.category);
+            return this.categoriesArray.includes(this.form.category);
         },
         isSubcategoryFound() {
-            return this.subcategoriesArray.includes(form.subcategory);
+            return this.subcategoriesArray.includes(this.form.subcategory);
         },
         clockInOutButton() {
             return this.clockedInState ? 'Clock Out' : 'Clock In';
         },
         // Check if we should show the recent options
         showRecentOptions() {
-            return !this.clockedInState && form.category.trim() === '';
+            return !this.clockedInState && this.form.category.trim() === '';
         },
     },
     watch: {
@@ -215,7 +205,7 @@ export default {
             if (!newVal) return;
 
             // Find the subcategory ID to fetch history and auto-populate notes
-            const category = this.categoriesObj.find(c => c.name === form.category);
+            const category = this.categoriesObj.find(c => c.name === this.form.category);
             const subId = category?.subcategories.find(s => s.name === (newVal || 'Other'))?.id;
             // Gate to prevent unnecessary fetches if subcategory isn't found
             if (!subId) return;
@@ -226,7 +216,7 @@ export default {
                 this.notesHistory = data.history;
                 // Auto-populate only if the absolute latest note wasn't blank
                 if (data.latest && data.latest.trim() !== "") {
-                    form.notes = data.latest;
+                    this.form.notes = data.latest;
                 }
             } catch (error) {
                 console.error("Failed to fetch notes history:", error);
@@ -234,6 +224,20 @@ export default {
         }
     },
     methods: {
+        /**
+         * Submit the form
+         */
+        submit() {
+            // If the category is contains to "aycove", then alert "test"
+            if (this.form.category.toLowerCase().includes('aycove')) {
+                alert("Don't forget to set yourself as active/inactive in Slack!");
+            }
+            // Submit the form
+            this.form.post(route('clock-in-out'), {
+                onFinish: () => this.form.reset('manualTime', 'org_id', 'category', 'subcategory', 'notes'),
+            });
+        },
+
         /**
          * Change clock in/out state
          *
@@ -244,7 +248,7 @@ export default {
             this.clockedInState = usePage().props.value.auth.clocked_in;
             // If we just clocked out, clear the notes
             if (wasClockedIn && !this.clockedInState) {
-                form.notes = "";
+                this.form.notes = "";
             }
         },
 
@@ -258,16 +262,16 @@ export default {
         confirmCreation(event) {
             // If already clocked in, submit and return
             if (this.clockedInState) {
-                submit();
+                this.submit();
                 return;
             }
             // Update the form's org_id to the current org_id
-            form.org_id = this.org_id;
+            this.form.org_id = this.org_id;
             // Otherwise, check if category and subcategory exist
             let categoryExists = false;
             let subcategoryExists = false;
-            const newCategory = form.category;
-            const newSubCategory = form.subcategory ? form.subcategory : "Other";
+            const newCategory = this.form.category;
+            const newSubCategory = this.form.subcategory ? this.form.subcategory : "Other";
             // Exit if no category is entered
             if (newCategory == "") {
                 console.warn("Please enter a category.");
@@ -290,7 +294,7 @@ export default {
             let confirmMessage = "";
             if (categoryExists && subcategoryExists) {
                 // Submit the form
-                submit();
+                this.submit();
                 return;
             } else if (categoryExists && !subcategoryExists) {
                 confirmMessage = `Are you sure you want to create the new subcategory, "${newSubCategory}"?`;
@@ -306,7 +310,7 @@ export default {
             } else {
                 console.log("Continue");
                 // Submit the form
-                submit();
+                this.submit();
             }
         },
 
@@ -319,7 +323,7 @@ export default {
          */
         cancelClockIn(e) {
             e.preventDefault();
-            form.post(route('cancel-clock-in'));
+            this.form.post(route('cancel-clock-in'));
         },
 
         /**
@@ -328,7 +332,7 @@ export default {
          * Resets the manual time form field and clears the display text.
          */
         clearManualTime() {
-            form.manualTime = '';
+            this.form.manualTime = '';
             document.getElementById("manual-time-display").innerHTML = '';
         },
 
@@ -347,7 +351,7 @@ export default {
          * Clear notes field
          */
         clearNotes() {
-            form.notes = "";
+            this.form.notes = "";
         },
 
         /**
@@ -360,7 +364,7 @@ export default {
                 // Increment index and wrap around
                 this.historyIndex = (this.historyIndex + 1) % this.notesHistory.length;
                 this.isCyclingHistory = true;
-                form.notes = this.notesHistory[this.historyIndex];
+                this.form.notes = this.notesHistory[this.historyIndex];
             }
         },
 
@@ -379,15 +383,13 @@ export default {
                 title: 'ManualTimeSet',
                 count: this.pageModal.count + 1,
             };
-            // When "Save" is clicked, update the manual time
-            modalFooter.querySelector('button').addEventListener('click', saveTime);
 
             /**
              * Save manual time
              *
              * Processes the user-entered time, converts it to UTC, and updates the form.
              */
-            function saveTime() {
+            const saveTime = () => {
                 const manualTime = document.getElementById("manual-time-input").value;
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
                 // Get the current date and time and format it (e.g. "YYYY-MM-DD HH:MM:SS")
@@ -414,11 +416,15 @@ export default {
                 // Format dateTimeUTC to "YYYY-MM-DD HH:MM:SS"
                 const dateTimeUTCFormatted = new Date(dateTimeUTC).getFullYear() + "-" + twoDigits((new Date(dateTimeUTC).getMonth() + 1)) + "-" + twoDigits(new Date(dateTimeUTC).getDate()) + " " + twoDigits(new Date(dateTimeUTC).getHours()) + ":" + twoDigits(new Date(dateTimeUTC).getMinutes()) + ":00";
                 // Set the form.manualTime to the new UTC time
-                form.manualTime = dateTimeUTCFormatted;
+                this.form.manualTime = dateTimeUTCFormatted;
                 // Close modal and remove event listener
                 document.querySelector('.modal').style.display = 'none';
                 modalFooter.removeEventListener('click', saveTime);
-            }
+            };
+
+            // When "Save" is clicked, update the manual time
+            modalFooter.querySelector('button').addEventListener('click', saveTime);
+
             /**
              * Format to two digits
              *
@@ -440,13 +446,13 @@ export default {
          * @param {string} type The level to hide, either "category" or "subcategory".
          */
         hideCategory(type) {
-            const category = form.category;
-            const subcategory = form.subcategory;
+            const category = this.form.category;
+            const subcategory = this.form.subcategory;
             const categoryTitle = type === "category" ? category : subcategory;
             let confirmMessage = `Are you sure you want to hide the ${type}, "${categoryTitle}"?`;
             if (confirm(confirmMessage)) {
                 console.log(`Hide ${type}: ${categoryTitle}`);
-                form.post(route('hide-category', type));
+                this.form.post(route('hide-category', type));
             }
         },
 
@@ -503,7 +509,7 @@ export default {
         updateSubcategoryOptions() {
             // Clear the subcategory input
             this.clearSubcategoryInput();
-            const category = form.category;
+            const category = this.form.category;
             if (this.categoriesArray.includes(category)) {
                 // If so, filter the categoriesFullArray array to get the subcategories array of the selected category
                 this.subcategoriesArray = this.categoriesFullArray.filter(value => value[0] === category)[0][1];
@@ -529,7 +535,7 @@ export default {
             const categoryInput = document.getElementById("category");
             const categoryOptions = document.getElementById("category_options");
             if (categoryOptions.value) {
-                form.category = categoryOptions.value;
+                this.form.category = categoryOptions.value;
                 categoryInput.value = categoryOptions.value;
                 this.updateSubcategoryOptions();
             }
@@ -549,7 +555,7 @@ export default {
         subcategoryOptionsChanged() {
             const subcategoryOptions = document.getElementById("subcategory_options");
             if (subcategoryOptions.value) {
-                form.subcategory = subcategoryOptions.value;
+                this.form.subcategory = subcategoryOptions.value;
             }
             // Add scrolling for mobile devices
             const clockinForm = document.querySelector('.clockin-form-input');
@@ -567,7 +573,7 @@ export default {
         clearCategoryInput() {
             document.getElementById("category").value = "";
             document.getElementById("category_options").value = "";
-            form.category = "";
+            this.form.category = "";
             this.updateSubcategoryOptions();
         },
 
@@ -583,7 +589,7 @@ export default {
                 if (subcategoryOptions) {
                     subcategoryOptions.value = "";
                 }
-                form.subcategory = "";
+                this.form.subcategory = "";
             }, 0); // This is to ensure it tries to clear after switching from the recent subcategory dropdown to the normal subcategory dropdown
         },
 
@@ -603,19 +609,19 @@ export default {
             const selectedOrgId = selectedOption.category.organization.id;
             // Same org? Just update form
             if (selectedOrgId === currentOrgId) {
-                form.category = selectedOption.category.name;
+                this.form.category = selectedOption.category.name;
                 categoryInput.value = selectedOption.category.name;
                 this.updateSubcategoryOptions();
-                setTimeout(() => { form.subcategory = selectedOption.name; }, 0); // Wait for the subcategory options to update
+                setTimeout(() => { this.form.subcategory = selectedOption.name; }, 0); // Wait for the subcategory options to update
             } else {
                 // Switch org, then autofill after navigation
                 this.$inertia.post(`/organization/active/${selectedOrgId}`, {}, {
                     onSuccess: () => {
                         document.querySelector('select[name="organization"]').value = selectedOrgId;
-                        form.category = selectedOption.category.name;
+                        this.form.category = selectedOption.category.name;
                         categoryInput.value = selectedOption.category.name;
                         this.updateSubcategoryOptions();
-                        setTimeout(() => { form.subcategory = selectedOption.name; }, 0); // Wait for the subcategory options to update
+                        setTimeout(() => { this.form.subcategory = selectedOption.name; }, 0); // Wait for the subcategory options to update
                     },
                 });
             }
