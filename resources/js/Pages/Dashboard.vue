@@ -842,9 +842,11 @@ select {
         transition: 0.3s;
         min-width: 28px;
         text-align: center;
-        &:hover {
-            background-color: darken($color1, 10%);
-            color: $white;
+        @media (hover: hover) {
+            &:hover {
+                background-color: darken($color1, 10%);
+                color: $white;
+            }
         }
     }
 }
