@@ -229,6 +229,7 @@ export default {
             // Gate to prevent unnecessary fetches if subcategory isn't found or already fetched
             if (!subId) {
                 this.lastFetchedSubId = null;
+                this.form.notes = ""; // Clear notes if subcategory isn't recognized
                 return;
             }
             if (subId === this.lastFetchedSubId) return;
@@ -242,6 +243,8 @@ export default {
                     this.isCyclingHistory = true; // Prevent the notes watcher from resetting the index
                     this.form.notes = data.latest;
                     this.historyIndex = 0; // Reset to the first item in the history
+                } else {
+                    this.form.notes = ""; // Clear notes if no history is found for subcategory
                 }
             } catch (error) {
                 console.error("Failed to fetch notes history:", error);
