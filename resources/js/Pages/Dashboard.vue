@@ -98,10 +98,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <InputLabel for="notes" value="Notes" />
                             <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:109px;" tabindex="5" />
                             <div class="notes-actions mt-2">
-                                <a v-if="notesHistory.length > 0" href="#" @click.prevent="cycleNotesHistory" title="Cycle Recent Notes">
+                                <a v-if="notesHistory.length > 0" href="#" @click.prevent="cycleNotesHistory" title="Cycle Recent Notes" aria-label="Cycle recent notes">
                                     <i class="fas fa-clock-rotate-left"></i>
                                 </a>
-                                <a v-if="form.notes" href="#" @click.prevent="clearNotes" title="Clear Notes">
+                                <a v-if="form.notes" href="#" @click.prevent="clearNotes" title="Clear Notes" aria-label="Clear notes">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </div>
