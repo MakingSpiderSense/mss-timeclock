@@ -98,7 +98,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <InputLabel for="notes" value="Notes" />
                             <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:109px;" tabindex="5" />
                             <div class="notes-actions mt-2">
-                                <a v-if="isSubcategoryFound && notesHistory.length > 0" href="#" @click.prevent="cycleNotesHistory" title="Cycle Recent Notes">
+                                <a v-if="notesHistory.length > 0" href="#" @click.prevent="cycleNotesHistory" title="Cycle Recent Notes">
                                     <i class="fas fa-clock-rotate-left"></i>
                                 </a>
                                 <a v-if="form.notes" href="#" @click.prevent="clearNotes" title="Clear Notes">
@@ -159,6 +159,7 @@ export default {
             notesHistory: [], // Cache the notes history for the current subcategory
             historyIndex: -1, // Index for cycling through notes history
             isCyclingHistory: false, // Flag to indicate if we're currently cycling through history
+            lastFetchedSubId: null, // ID of the last fetched subcategory to prevent duplicate requests
         }
     },
     mounted() {
@@ -199,33 +200,54 @@ export default {
             }
             this.isCyclingHistory = false;
         },
-        async 'form.subcategory'(newVal) {
+        'form.category'() {
+            this.getNotesHistory();
+        },
+        async 'form.subcategory'() {
+            this.getNotesHistory();
+        }
+    },
+    methods: {
+        /**
+         * Get notes history
+         *
+         * Fetches recent notes for the subcategory (defaults to "Other") and auto-populates the field.
+         */
+        async getNotesHistory() {
+            // Clear current history and reset index
             this.notesHistory = [];
             this.historyIndex = -1;
-            if (!newVal) return;
-
-            // Find the subcategory ID to fetch history and auto-populate notes
+            // Exit if no category is selected
+            if (!this.form.category) {
+                this.lastFetchedSubId = null;
+                return;
+            }
+            // Find the subcategory ID (defaults to "Other" if subcategory field is empty)
             const category = this.categoriesObj.find(c => c.name === this.form.category);
-            const subId = category?.subcategories.find(s => s.name === (newVal || 'Other'))?.id;
-            // Gate to prevent unnecessary fetches if subcategory isn't found
-            if (!subId) return;
-
+            const subName = this.form.subcategory || "Other";
+            const subId = category?.subcategories.find(s => s.name === subName)?.id;
+            // Gate to prevent unnecessary fetches if subcategory isn't found or already fetched
+            if (!subId) {
+                this.lastFetchedSubId = null;
+                return;
+            }
+            if (subId === this.lastFetchedSubId) return;
+            this.lastFetchedSubId = subId;
             try {
                 const response = await fetch(route('recent-notes', subId));
                 const data = await response.json();
                 this.notesHistory = data.history;
-                // Auto-populate only if the absolute latest note wasn't blank
+                // Auto-populate only if the latest note wasn't blank
                 if (data.latest && data.latest.trim() !== "") {
                     this.isCyclingHistory = true; // Prevent the notes watcher from resetting the index
                     this.form.notes = data.latest;
-                    this.historyIndex = 0; // Initialize to the first item in the history
+                    this.historyIndex = 0; // Reset to the first item in the history
                 }
             } catch (error) {
                 console.error("Failed to fetch notes history:", error);
             }
-        }
-    },
-    methods: {
+        },
+
         /**
          * Submit the form
          */
