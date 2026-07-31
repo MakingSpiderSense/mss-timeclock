@@ -98,7 +98,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <InputLabel for="notes" value="Notes" />
                             <Textarea id="notes" class="mt-1 w-full" v-model="form.notes" style="height:109px;" tabindex="5" />
                             <div class="notes-actions mt-2">
-                                <a v-if="isSubcategoryFound" href="#" @click.prevent="cycleNotesHistory" title="Cycle Recent Notes">
+                                <a v-if="isSubcategoryFound && notesHistory.length > 0" href="#" @click.prevent="cycleNotesHistory" title="Cycle Recent Notes">
                                     <i class="fas fa-clock-rotate-left"></i>
                                 </a>
                                 <a v-if="form.notes" href="#" @click.prevent="clearNotes" title="Clear Notes">
@@ -672,10 +672,10 @@ export default {
                             /*insert the value for the autocomplete text field:*/
                             inp.value = this.getElementsByTagName("input")[0].value;
                             if (inp.id == "category") {
-                                form.category = inp.value;
+                                _this.form.category = inp.value;
                                 _this.updateSubcategoryOptions();
                             } else if (inp.id == "subcategory") {
-                                form.subcategory = inp.value;
+                                _this.form.subcategory = inp.value;
                             }
                             /*close the list of autocompleted values,
                             (or any other open lists of autocompleted values:*/
