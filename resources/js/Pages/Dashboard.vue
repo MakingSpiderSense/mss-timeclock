@@ -419,9 +419,13 @@ export default {
             const saveTime = () => {
                 const manualDate = document.getElementById("manual-date-input").value;
                 const manualTime = document.getElementById("manual-time-input").value;
-                // Validate that a date is selected
+                // Validate that a date and time are selected
                 if (!manualDate) {
                     alert("Please select a date.");
+                    return;
+                }
+                if (!manualTime) {
+                    alert("Please select a time.");
                     return;
                 }
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
