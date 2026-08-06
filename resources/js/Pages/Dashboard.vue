@@ -414,24 +414,25 @@ export default {
             /**
              * Save manual time
              *
-             * Processes the user-entered time, converts it to UTC, and updates the form.
+             * Processes the user-entered date and time, converts it to UTC, and updates the form.
              */
             const saveTime = () => {
+                const manualDate = document.getElementById("manual-date-input").value;
                 const manualTime = document.getElementById("manual-time-input").value;
+                // Validate that a date is selected
+                if (!manualDate) {
+                    alert("Please select a date.");
+                    return;
+                }
                 const manualTimeFormatted = new Date(`2021-01-01T${manualTime}:00`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-                // Get the current date and time and format it (e.g. "YYYY-MM-DD HH:MM:SS")
-                const now = new Date();
-                const nowFormatted = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-                // Get the user's timezone
+                // Get the browser's timezone
                 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                // Update the date/time to keep the date, but change the time to the manual time
-                const nowFormattedSplit = nowFormatted.split(" ");
-                const nowFormattedDate = nowFormattedSplit[0];
+                // Combine the manual date and time into a single datetime string (e.g. "YYYY-MM-DD HH:MM:SS")
                 const manualTimeSplit = manualTime.split(":");
                 const manualTimeHours = manualTimeSplit[0];
                 const manualTimeMinutes = manualTimeSplit[1];
                 const manualTimeSeconds = "00";
-                const nowFormattedNew = `${nowFormattedDate} ${manualTimeHours}:${manualTimeMinutes}:${manualTimeSeconds}`;
+                const nowFormattedNew = `${manualDate} ${manualTimeHours}:${manualTimeMinutes}:${manualTimeSeconds}`;
                 // Display the manual time back to the user
                 const manualTimeDisplay = document.getElementById("manual-time-display");
                 manualTimeDisplay.innerHTML = `${nowFormattedNew + " " + timezone} (${manualTimeFormatted})`;
