@@ -6,11 +6,11 @@
         <div class="manual-time-inputs">
             <!-- Date -->
             <div class="mti-date">
-                <input id="manual-date-input" type="date" @input="updateTimeDifference">
+                <input id="manual-date-input" type="date" aria-label="Manual date" @input="updateTimeDifference">
             </div>
             <!-- Time -->
             <div class="mti-time">
-                <input class="mb-4" id="manual-time-input" type="time" @input="updateTimeDifference">
+                <input class="mb-4" id="manual-time-input" type="time" aria-label="Manual time" @input="updateTimeDifference">
                 <div class="mb-4" id="time-difference"></div>
             </div>
         </div>
