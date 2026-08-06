@@ -437,12 +437,14 @@ export default {
                 const manualTimeMinutes = manualTimeSplit[1];
                 const manualTimeSeconds = "00";
                 const nowFormattedNew = `${manualDate} ${manualTimeHours}:${manualTimeMinutes}:${manualTimeSeconds}`;
+                // Create ISO-8601 format for reliable cross-browser parsing
+                const isoDateTime = `${manualDate}T${manualTimeHours}:${manualTimeMinutes}:${manualTimeSeconds}`;
                 // Display the manual time back to the user
                 const manualTimeDisplay = document.getElementById("manual-time-display");
-                manualTimeDisplay.innerHTML = `${nowFormattedNew + " " + timezone} (${manualTimeFormatted})`;
+                manualTimeDisplay.innerHTML = `${manualDate} · ${manualTimeFormatted} · ${timezone}`;
                 manualTimeDisplay.title = "The currently set manual time";
                 // Convert the date to UTC
-                let dateTimeUTC = (new Date(`${nowFormattedNew}`).toUTCString());
+                let dateTimeUTC = (new Date(isoDateTime).toUTCString());
                 // Remove " GMT" from the end of dateTimeUTC
                 dateTimeUTC = dateTimeUTC.slice(0, -4);
                 // Format dateTimeUTC to "YYYY-MM-DD HH:MM:SS"
