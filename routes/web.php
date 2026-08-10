@@ -12,6 +12,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ClockInOutController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\OrganizationsController;
+use App\Http\Controllers\MonthOverviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +75,7 @@ Route::post('/rate/update', [RatesController::class, 'update'])->name('rate.upda
 
 // Reports route
 Route::get('/reports/time-log', [TimeLogController::class, 'index'])->name('reports.time-log');
+Route::get('/reports/month-overview', [MonthOverviewController::class, 'index'])->name('reports.month-overview');
 Route::get('/reports/private', [PrivateController::class, 'index'])->name('reports.private');
 
 // Stats route
