@@ -1,6 +1,7 @@
 <script setup>
 import { Head, usePage } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { initSortableTables } from '@/Utilities/table-sorting';
 </script>
 
 <template>
@@ -9,33 +10,37 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     <AuthenticatedLayout>
         <section class="page-section">
             <h2 style="margin-bottom: 25px;">Hidden Categories</h2>
-            <table id="table-sortable" class="clean-table">
-                <tr>
-                    <th @click="sortTable(0, 'text')">Organization</th>
-                    <th @click="sortTable(1, 'text')">Category</th>
-                    <th @click="sortTable(2, 'text')">Subcategory</th>
-                    <th></th>
-                </tr>
-                <tr v-for="hiddenCategory in hiddenCategories" :key="hiddenCategory.id">
-                    <td>{{ hiddenCategory.organization.name }}</td>
-                    <td>{{ hiddenCategory.category.name }}</td>
-                    <td>
-                        <span v-if="hiddenCategory.subcategory === null">
-                            * All subcategories hidden
-                        </span>
-                        <span v-else>
-                            {{ hiddenCategory.subcategory.name }}
-                        </span>
-                    </td>
-                    <!-- Unhide button -->
-                    <td>
-                        <form :action="route('settings.hidden-categories.remove', { id: hiddenCategory.id })" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" :value="csrfToken">
-                            <button type="submit" class="btn btn-unhide">Unhide</button>
-                        </form>
-                    </td>
-                </tr>
+            <table class="clean-table sortable-table">
+                <thead>
+                    <tr>
+                        <th class="sortable-string">Organization</th>
+                        <th class="sortable-string">Category</th>
+                        <th class="sortable-string">Subcategory</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="hiddenCategory in hiddenCategories" :key="hiddenCategory.id">
+                        <td>{{ hiddenCategory.organization.name }}</td>
+                        <td>{{ hiddenCategory.category.name }}</td>
+                        <td>
+                            <span v-if="hiddenCategory.subcategory === null">
+                                * All subcategories hidden
+                            </span>
+                            <span v-else>
+                                {{ hiddenCategory.subcategory.name }}
+                            </span>
+                        </td>
+                        <!-- Unhide button -->
+                        <td>
+                            <form :action="route('settings.hidden-categories.remove', { id: hiddenCategory.id })" method="POST">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" :value="csrfToken">
+                                <button type="submit" class="btn btn-unhide">Unhide</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </section>
     </AuthenticatedLayout>
@@ -44,7 +49,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 <!-- Scripts -->
 <script>
 import { usePage } from '@inertiajs/inertia-vue3';
-import { sortTable } from '../../Utilities/helpers';
+import { initSortableTables } from '@/Utilities/helpers';
 
 export default {
     data() {
@@ -54,9 +59,7 @@ export default {
         };
     },
     mounted() {
-        sortTable(2, 'text');
-        sortTable(1, 'text');
-        sortTable(0, 'text');
+        initSortableTables('sortable-table');
     },
 };
 </script>

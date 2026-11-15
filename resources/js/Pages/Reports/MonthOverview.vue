@@ -1,6 +1,7 @@
 <script setup>
 import { Head } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { initSortableTables } from '@/Utilities/table-sorting';
 </script>
 
 <template>
@@ -21,14 +22,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <div v-if="activeTab === 'subcategory'" class="tab-content">
                 <p class="tab-description">View your time logged this month organized by <strong>subcategory</strong>.
                 </p>
-                <table class="clean-table">
+                <table class="clean-table sortable-table">
                     <thead>
                         <tr>
-                            <th>Organization</th>
-                            <th>Category</th>
-                            <th>Subcategory</th>
-                            <th>Total Minutes</th>
-                            <th>Total Hours</th>
+                            <th class="sortable-string">Organization</th>
+                            <th class="sortable-string">Category</th>
+                            <th class="sortable-string">Subcategory</th>
+                            <th class="sortable-number">Total Minutes</th>
+                            <th class="sortable-number">Total Hours</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,8 +37,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <td>{{ item.organization_name }}</td>
                             <td>{{ item.category_name }}</td>
                             <td>{{ item.subcategory_name }}</td>
-                            <td>{{ item.total_minutes }}</td>
-                            <td>{{ item.total_hours }}</td>
+                            <td :data-sort-value="item.total_minutes">{{ item.total_minutes }}</td>
+                            <td :data-sort-value="item.total_hours">{{ item.total_hours }}</td>
                         </tr>
                         <tr v-if="subcategoryData.length === 0">
                             <td colspan="5" style="text-align: center;">No data for this month.</td>
@@ -49,21 +50,21 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             <!-- Category Tab -->
             <div v-if="activeTab === 'category'" class="tab-content">
                 <p class="tab-description">View your time logged this month organized by <strong>category</strong>.</p>
-                <table class="clean-table">
+                <table class="clean-table sortable-table">
                     <thead>
                         <tr>
-                            <th>Organization</th>
-                            <th>Category</th>
-                            <th>Total Minutes</th>
-                            <th>Total Hours</th>
+                            <th class="sortable-string">Organization</th>
+                            <th class="sortable-string">Category</th>
+                            <th class="sortable-number">Total Minutes</th>
+                            <th class="sortable-number">Total Hours</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in categoryData" :key="item.category_id">
                             <td>{{ item.organization_name }}</td>
                             <td>{{ item.category_name }}</td>
-                            <td>{{ item.total_minutes }}</td>
-                            <td>{{ item.total_hours }}</td>
+                            <td :data-sort-value="item.total_minutes">{{ item.total_minutes }}</td>
+                            <td :data-sort-value="item.total_hours">{{ item.total_hours }}</td>
                         </tr>
                         <tr v-if="categoryData.length === 0">
                             <td colspan="4" style="text-align: center;">No data for this month.</td>
@@ -87,6 +88,18 @@ export default {
             activeTab: 'subcategory',
         };
     },
+	mounted() {
+		// Initialize sortable tables
+		initSortableTables('sortable-table');
+	},
+	watch: {
+		activeTab() {
+			// Reinitialize sortable tables when tab changes. $nextTick just waits for the DOM to update after tab change before running functions on JavaScript's next event loop tick.
+			this.$nextTick(() => {
+				initSortableTables('sortable-table');
+			});
+		}
+	}
 };
 </script>
 
