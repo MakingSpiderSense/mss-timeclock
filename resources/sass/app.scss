@@ -183,45 +183,6 @@ select, input, textarea {
     }
 }
 
-// Clean Table
-table.clean-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 50px;
-    border: 1px solid #ddd;
-    text-align: center;
-    th, td {
-        padding: 8px 15px;
-        border: 1px solid #ddd;
-        text-align: center;
-    }
-    .notes {
-        text-align: left;
-    }
-    .price {
-        text-align: right;
-    }
-}
-@media (max-width: 1000px) {
-    table.clean-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        th, td {
-            img {
-                max-width: 50px;
-            }
-        }
-    }
-}
-
-// Sortable Table
-#table-sortable {
-    th {
-        cursor: pointer;
-    }
-}
-
 // Small arrowhead
 a {
     .sm-right-arrowhead {
@@ -236,3 +197,6 @@ a {
         }
     }
 }
+
+// Import table and tab styles
+@import './tables.scss';

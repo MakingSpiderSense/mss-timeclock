@@ -113,7 +113,7 @@ const showingNavigationDropdown = ref(false);
                             </template>
                             <!-- Dropdown Links -->
                             <template #content>
-                                <DropdownLink :href="route('placeholder')" as="button">
+                                <DropdownLink :href="route('reports.month-overview')" as="button">
                                     Month Overview
                                 </DropdownLink>
                                 <DropdownLink :href="route('placeholder')" as="button">

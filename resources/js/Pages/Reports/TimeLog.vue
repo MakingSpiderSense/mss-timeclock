@@ -6,6 +6,7 @@ import TextInput from '@/Components/TextInput.vue';
 import Textarea from '@/Components/Textarea.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { initSortableTables } from '@/Utilities/table-sorting';
 
 // const form = useForm({
 //     month: '',
@@ -23,28 +24,28 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     <AuthenticatedLayout :pageModal="pageModal">
         <section class="page-section">
             <h2 style="margin-bottom: 25px;">Time Log</h2>
-            <table class="clean-table">
+            <table class="clean-table sortable-table">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Organization</th>
-                        <th>Category</th>
-                        <th>Subcategory</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Total Time</th>
-                        <th>Notes</th>
+                        <th class="sortable-date">Date</th>
+                        <th class="sortable-string">Organization</th>
+                        <th class="sortable-string">Category</th>
+                        <th class="sortable-string">Subcategory</th>
+                        <th class="sortable-string">Time In</th>
+                        <th class="sortable-string">Time Out</th>
+                        <th class="sortable-number">Total Time</th>
+                        <th class="sortable-string">Notes</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="log in logs" :key="log.id">
-                        <td :title="`Id: ${log.id}, Org: ${log.org_id}, Category: ${log.category_id}, Subcategory: ${log.subcategory_id}`">{{ formatDate(log.clock_in) }}</td>
+                        <td :title="`Id: ${log.id}, Org: ${log.org_id}, Category: ${log.category_id}, Subcategory: ${log.subcategory_id}`" :data-sort-value="log.clock_in">{{ formatDate(log.clock_in) }}</td>
                         <td>{{ log.organization_name }}</td>
                         <td>{{ log.category_name }}</td>
                         <td>{{ log.subcategory_name }}</td>
-                        <td>{{ formatTime(log.clock_in) }}</td>
-                        <td>{{ formatTime(log.clock_out) }}</td>
-                        <td>{{ formatMinutes(log.minutes) }}</td>
+                        <td :data-sort-value="extractTimeFromDatetime(log.clock_in)">{{ formatTime(log.clock_in) }}</td>
+                        <td :data-sort-value="extractTimeFromDatetime(log.clock_out)">{{ formatTime(log.clock_out) }}</td>
+                        <td :data-sort-value="log.minutes">{{ formatMinutes(log.minutes) }}</td>
                         <td :title="log.notes">{{ formatNotes(log.notes) }}</td>
                     </tr>
                 </tbody>
@@ -94,6 +95,28 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 }
                 return '';
             },
+
+            /**
+             * Extract time from datetime
+             *
+             * Takes a date and time string and pulls out just the hours, minutes, and seconds so they can be easily compared and sorted from midnight to the end of the day.
+             * @param {string} dateString The full date and time string to extract the time from. Example: "2026-11-14 18:06:00"
+             * @returns {string} The time formatted as 24-hour HH:MM:SS, or an empty string if no date was provided. Example: "18:06:00"
+             */
+            extractTimeFromDatetime(dateString) {
+                if (dateString) {
+                    const date = new Date(dateString);
+                    const hours = date.getHours().toString().padStart(2, '0');
+                    const minutes = date.getMinutes().toString().padStart(2, '0');
+                    const seconds = date.getSeconds().toString().padStart(2, '0');
+                    return `${hours}:${minutes}:${seconds}`;
+                }
+                return '';
+            },
+        },
+        mounted() {
+            // Initialize sortable tables
+            initSortableTables('sortable-table');
         },
     }
 </script>
