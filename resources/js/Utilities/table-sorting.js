@@ -92,7 +92,12 @@ function sortTableByColumn(table, columnIndex, sortState, sortClass, showArrows 
         // Perform type-specific comparison
         if (sortType === "number") {
             // Convert to float and strip non-numeric characters for numeric comparison
-            comparison = parseFloat(aValue.replace(/[^\d.-]/g, "")) - parseFloat(bValue.replace(/[^\d.-]/g, ""));
+            const aNumber = parseFloat(aValue.replace(/[^\d.-]/g, ""));
+            const bNumber = parseFloat(bValue.replace(/[^\d.-]/g, ""));
+            // Handle cases where one of the numbers is NaN (e.g. "N/A")
+            if (Number.isNaN(aNumber)) return Number.isNaN(bNumber) ? 0 : 1;
+            if (Number.isNaN(bNumber)) return -1;
+            comparison = aNumber - bNumber;
         } else if (sortType === "date") {
             // Parse as dates and compare timestamps
             comparison = new Date(aValue) - new Date(bValue);
