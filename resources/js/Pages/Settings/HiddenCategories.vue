@@ -49,7 +49,6 @@ import { initSortableTables } from '@/Utilities/table-sorting';
 <!-- Scripts -->
 <script>
 import { usePage } from '@inertiajs/inertia-vue3';
-import { initSortableTables } from '@/Utilities/helpers';
 
 export default {
     data() {
